@@ -16,5 +16,5 @@ export default function App() {
     return <DataImport onDataLoaded={setRawData} />;
   }
 
-  return <Dashboard rawData={rawData} onReset={() => setRawData(null)} />;
+  return <Dashboard rawData={rawData} onReset={() => setRawData(null)} onDataUpdate={setRawData} />;
 }

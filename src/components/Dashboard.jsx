@@ -21,7 +21,7 @@ import PersonDetail from './PersonDetail';
 import RelationshipsView from './RelationshipsView';
 import RelationshipDetail from './RelationshipDetail';
 
-export default function Dashboard({ rawData, onReset }) {
+export default function Dashboard({ rawData, onReset, onDataUpdate }) {
   const [currentView, setCurrentView] = useState('priorities');
   const [selectedEntity, setSelectedEntity] = useState(null);
   const [navigationHistory, setNavigationHistory] = useState([]);
@@ -42,6 +42,12 @@ export default function Dashboard({ rawData, onReset }) {
 
   const handlePriorityResolved = () => {
     loadResolvedPriorities();
+  };
+
+  const handleDataUpdate = (updatedData) => {
+    if (onDataUpdate) {
+      onDataUpdate(updatedData);
+    }
   };
 
   const handleNavigation = (view) => {
@@ -83,7 +89,7 @@ export default function Dashboard({ rawData, onReset }) {
       case 'priorities':
         return <PriorityQueue rawData={rawData} resolvedPriorities={resolvedPriorities} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'priority-detail':
-        return <PriorityDetail issue={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectGoal={(g) => handleSelectEntity('goal', g)} onResolved={handlePriorityResolved} />;
+        return <PriorityDetail issue={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectGoal={(g) => handleSelectEntity('goal', g)} onResolved={handlePriorityResolved} onDataUpdate={handleDataUpdate} />;
       case 'companies':
         return <Snapshot rawData={rawData} resolvedPriorities={resolvedPriorities} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'company-detail':

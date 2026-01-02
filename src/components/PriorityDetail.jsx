@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { detectIssues } from '../lib/derivations';
 import { markPriorityResolved } from '../lib/supabase';
+import { applyResolution, getResolutionSummary } from '../lib/resolutionHandlers';
 import './PriorityDetail.css';
 
 function calculateImpact(issue, companies, rounds, goals) {
@@ -124,23 +125,34 @@ function calculateImpact(issue, companies, rounds, goals) {
   return { score: Math.min(score, 100), unlocks };
 }
 
-export default function PriorityDetail({ issue, rawData, onBack, onSelectCompany, onSelectIssue, onSelectGoal, onResolved }) {
+export default function PriorityDetail({ issue, rawData, onBack, onSelectCompany, onSelectIssue, onSelectGoal, onResolved, onDataUpdate }) {
   const [isResolving, setIsResolving] = useState(false);
   const company = (rawData.companies || []).find(c => c.id === issue.companyId);
   const companyIssues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || [], [])
     .filter(i => i.companyId === issue.companyId);
 
   const handleResolve = async () => {
-    if (!confirm('Mark this priority as resolved? This will remove it from the priority queue.')) {
+    const resolutionSummary = getResolutionSummary(issue);
+    const confirmMessage = `Resolve this priority?\n\n${resolutionSummary}\n\nThis will update the underlying data and recalculate all priorities.`;
+
+    if (!confirm(confirmMessage)) {
       return;
     }
 
     setIsResolving(true);
     try {
-      await markPriorityResolved(issue.companyId, issue.category, issue.title);
+      await markPriorityResolved(issue.companyId, issue.category, issue.title, resolutionSummary);
+
+      const updatedData = applyResolution(issue, rawData);
+
+      if (onDataUpdate) {
+        onDataUpdate(updatedData);
+      }
+
       if (onResolved) {
         onResolved();
       }
+
       onBack();
     } catch (error) {
       console.error('Failed to resolve priority:', error);
