@@ -6,7 +6,7 @@
 
 .investor-name-text {
   font-size: 1.125rem;
-  color: #0f172a;
+  color: #f8fafc;
   font-weight: 600;
 }
 
@@ -17,14 +17,15 @@
 
 .entity-info-box {
   padding: 1.5rem;
-  background: #f8fafc;
+  background: #1e293b;
+  border: 1px solid #334155;
   border-radius: 0.5rem;
 }
 
 .entity-name {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #f8fafc;
   margin-bottom: 1rem;
 }
 
@@ -42,10 +43,14 @@
 
 .entity-detail-label {
   color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
 }
 
 .entity-detail-value {
-  color: #0f172a;
+  color: #f8fafc;
   font-weight: 600;
 }
 
@@ -64,7 +69,8 @@
 
 .intro-source-box {
   padding: 1.5rem;
-  background: #f8fafc;
+  background: #1e293b;
+  border: 1px solid #334155;
   border-radius: 0.5rem;
   border-left: 3px solid #3b82f6;
 }
@@ -72,7 +78,7 @@
 .intro-source-name {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #f8fafc;
   margin-bottom: 1rem;
 }
 
@@ -90,10 +96,14 @@
 
 .intro-source-label {
   color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
 }
 
 .intro-source-value {
-  color: #0f172a;
+  color: #f8fafc;
   font-weight: 600;
   text-transform: capitalize;
 }
@@ -106,9 +116,10 @@
 
 .interaction-item {
   padding: 1rem;
-  background: #f8fafc;
+  background: #1e293b;
+  border: 1px solid #334155;
   border-radius: 0.5rem;
-  border-left: 3px solid #e2e8f0;
+  border-left: 3px solid #334155;
 }
 
 .interaction-header {

@@ -15,44 +15,46 @@
 .filter-chip {
   padding: 8px 16px;
   border-radius: 20px;
-  border: 1px solid #e5e7eb;
-  background: white;
+  border: 1px solid #334155;
+  background: #1e293b;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
-  color: #6b7280;
+  color: #94a3b8;
 }
 
 .filter-chip:hover {
   border-color: #3b82f6;
   color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
 }
 
 .filter-chip.active {
   background: #3b82f6;
-  color: white;
+  color: #f8fafc;
   border-color: #3b82f6;
 }
 
 .firms-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.5rem;
 }
 
 .firm-card {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: #1e293b;
+  border: 1px solid #334155;
   border-radius: 12px;
-  padding: 20px;
+  padding: 1.5rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .firm-card:hover {
   border-color: #3b82f6;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+  background: rgba(59, 130, 246, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   transform: translateY(-2px);
 }
 
@@ -65,21 +67,21 @@
 }
 
 .firm-name {
-  font-size: 18px;
-  font-weight: 600;
-  color: #111827;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #f8fafc;
   margin: 0;
   line-height: 1.4;
 }
 
 .firm-type-badge {
   display: inline-block;
-  padding: 4px 10px;
-  background: #f3f4f6;
-  color: #6b7280;
-  font-size: 12px;
+  padding: 0.375rem 0.875rem;
+  background: rgba(148, 163, 184, 0.15);
+  color: #94a3b8;
+  font-size: 0.875rem;
   font-weight: 500;
-  border-radius: 12px;
+  border-radius: 6px;
   white-space: nowrap;
 }
 
@@ -89,7 +91,7 @@
   gap: 12px;
   margin-bottom: 16px;
   padding-bottom: 16px;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid #334155;
 }
 
 .firm-metric {
@@ -99,24 +101,26 @@
 }
 
 .firm-metric .metric-label {
-  font-size: 13px;
-  color: #6b7280;
-  font-weight: 500;
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .firm-metric .metric-value {
-  font-size: 14px;
-  color: #111827;
+  font-size: 0.9375rem;
+  color: #f8fafc;
   font-weight: 600;
 }
 
 .firm-portfolio-summary {
   padding-top: 16px;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid #334155;
 }
 
 .portfolio-stat-label {
-  font-size: 11px;
+  font-size: 0.75rem;
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -137,15 +141,15 @@
 }
 
 .activity-value {
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 700;
   line-height: 1;
   margin-bottom: 4px;
-  color: #0f172a;
+  color: #f8fafc;
 }
 
 .activity-value.companies {
-  color: #8b5cf6;
+  color: #a855f7;
 }
 
 .activity-value.amount {
@@ -157,9 +161,9 @@
 }
 
 .activity-label {
-  font-size: 11px;
+  font-size: 0.75rem;
   color: #64748b;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -167,6 +171,6 @@
 .empty-state {
   text-align: center;
   padding: 60px 20px;
-  color: #6b7280;
+  color: #94a3b8;
   font-size: 16px;
 }
