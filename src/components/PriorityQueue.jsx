@@ -8,8 +8,8 @@ const SEVERITY_CONFIG = {
   low: { label: 'LOW', color: '#22c55e', bg: 'rgba(34, 197, 94, 0.1)' },
 };
 
-export default function PriorityQueue({ rawData, onSelectIssue, onSelectCompany }) {
-  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || []);
+export default function PriorityQueue({ rawData, resolvedPriorities = [], onSelectIssue, onSelectCompany }) {
+  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || [], resolvedPriorities);
   const companies = rawData.companies || [];
 
   const getCompanyName = (companyId) => companies.find(c => c.id === companyId)?.name || 'Unknown';

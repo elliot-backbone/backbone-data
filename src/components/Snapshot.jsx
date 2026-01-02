@@ -36,8 +36,8 @@ function calculateImpact(issue, companies, rounds, goals) {
   return score;
 }
 
-export default function Snapshot({ rawData, onSelectCompany }) {
-  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || []);
+export default function Snapshot({ rawData, resolvedPriorities = [], onSelectCompany }) {
+  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || [], resolvedPriorities);
   const companies = (rawData.companies || []).map(c => ({
     ...c,
     healthScore: calculateHealth(c, issues)

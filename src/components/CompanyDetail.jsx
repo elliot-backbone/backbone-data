@@ -2,7 +2,7 @@ import { detectIssues, calculateHealth } from '../lib/derivations';
 import './CompanyDetail.css';
 
 export default function CompanyDetail({ company, rawData, onBack, onSelectRound, onSelectGoal }) {
-  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || []);
+  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || [], []);
   const healthScore = calculateHealth(company, issues);
   const companyIssues = issues.filter(i => i.companyId === company.id);
   const companyRounds = (rawData.rounds || []).filter(r => (r.companyId || r.company_id) === company.id);

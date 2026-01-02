@@ -123,7 +123,7 @@ function calculateImpact(issue, companies, rounds, goals) {
 }
 
 export default function ImpactView({ rawData, onSelectCompany }) {
-  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || []);
+  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || [], []);
   const companies = rawData.companies || [];
   const rounds = rawData.rounds || [];
   const goals = rawData.goals || [];

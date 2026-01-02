@@ -35,7 +35,7 @@ const ISSUE_TYPE_CONFIG = {
 };
 
 export default function IssuesBreakdown({ rawData, onSelectCompany }) {
-  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || []);
+  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || [], []);
   const companies = rawData.companies || [];
 
   const issuesByType = Object.keys(ISSUE_TYPE_CONFIG).map(type => {

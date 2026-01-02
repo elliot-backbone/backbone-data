@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getResolvedPriorities } from '../lib/supabase';
 import './Dashboard.css';
 import PriorityQueue from './PriorityQueue';
 import PriorityDetail from './PriorityDetail';
@@ -24,6 +25,24 @@ export default function Dashboard({ rawData, onReset }) {
   const [currentView, setCurrentView] = useState('priorities');
   const [selectedEntity, setSelectedEntity] = useState(null);
   const [navigationHistory, setNavigationHistory] = useState([]);
+  const [resolvedPriorities, setResolvedPriorities] = useState([]);
+
+  useEffect(() => {
+    loadResolvedPriorities();
+  }, []);
+
+  const loadResolvedPriorities = async () => {
+    try {
+      const resolved = await getResolvedPriorities();
+      setResolvedPriorities(resolved);
+    } catch (error) {
+      console.error('Failed to load resolved priorities:', error);
+    }
+  };
+
+  const handlePriorityResolved = () => {
+    loadResolvedPriorities();
+  };
 
   const handleNavigation = (view) => {
     setCurrentView(view);
@@ -62,11 +81,11 @@ export default function Dashboard({ rawData, onReset }) {
   const renderContent = () => {
     switch (currentView) {
       case 'priorities':
-        return <PriorityQueue rawData={rawData} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
+        return <PriorityQueue rawData={rawData} resolvedPriorities={resolvedPriorities} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'priority-detail':
-        return <PriorityDetail issue={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectGoal={(g) => handleSelectEntity('goal', g)} />;
+        return <PriorityDetail issue={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectGoal={(g) => handleSelectEntity('goal', g)} onResolved={handlePriorityResolved} />;
       case 'companies':
-        return <Snapshot rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
+        return <Snapshot rawData={rawData} resolvedPriorities={resolvedPriorities} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'company-detail':
         return <CompanyDetail company={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectRound={(r) => handleSelectEntity('round', r)} onSelectGoal={(g) => handleSelectEntity('goal', g)} />;
       case 'goals':

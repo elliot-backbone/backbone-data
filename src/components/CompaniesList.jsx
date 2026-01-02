@@ -2,7 +2,7 @@ import { detectIssues, calculateHealth } from '../lib/derivations';
 import './CompaniesList.css';
 
 export default function CompaniesList({ rawData, onSelectCompany }) {
-  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || []);
+  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || [], []);
   const allCompanies = (rawData.companies || []).map(c => ({
     ...c,
     healthScore: calculateHealth(c, issues)

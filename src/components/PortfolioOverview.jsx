@@ -2,7 +2,7 @@ import { detectIssues, calculateHealth } from '../lib/derivations';
 import './PortfolioOverview.css';
 
 export default function PortfolioOverview({ rawData }) {
-  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || []);
+  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || [], []);
   const companies = (rawData.companies || []).map(c => ({
     ...c,
     healthScore: calculateHealth(c, issues)

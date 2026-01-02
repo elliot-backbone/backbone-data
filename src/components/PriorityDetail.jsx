@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { detectIssues } from '../lib/derivations';
+import { markPriorityResolved } from '../lib/supabase';
 import './PriorityDetail.css';
 
 function calculateImpact(issue, companies, rounds, goals) {
@@ -122,10 +124,31 @@ function calculateImpact(issue, companies, rounds, goals) {
   return { score: Math.min(score, 100), unlocks };
 }
 
-export default function PriorityDetail({ issue, rawData, onBack, onSelectCompany, onSelectIssue, onSelectGoal }) {
+export default function PriorityDetail({ issue, rawData, onBack, onSelectCompany, onSelectIssue, onSelectGoal, onResolved }) {
+  const [isResolving, setIsResolving] = useState(false);
   const company = (rawData.companies || []).find(c => c.id === issue.companyId);
-  const companyIssues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || [])
+  const companyIssues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || [], [])
     .filter(i => i.companyId === issue.companyId);
+
+  const handleResolve = async () => {
+    if (!confirm('Mark this priority as resolved? This will remove it from the priority queue.')) {
+      return;
+    }
+
+    setIsResolving(true);
+    try {
+      await markPriorityResolved(issue.companyId, issue.category, issue.title);
+      if (onResolved) {
+        onResolved();
+      }
+      onBack();
+    } catch (error) {
+      console.error('Failed to resolve priority:', error);
+      alert('Failed to resolve priority. Please try again.');
+    } finally {
+      setIsResolving(false);
+    }
+  };
 
   const { score: impactScore, unlocks } = calculateImpact(
     issue,
@@ -206,6 +229,14 @@ export default function PriorityDetail({ issue, rawData, onBack, onSelectCompany
           <span className="action-label">ACTION</span>
           {issue.suggestedAction}
         </div>
+
+        <button
+          className="resolve-btn"
+          onClick={handleResolve}
+          disabled={isResolving}
+        >
+          {isResolving ? 'Resolving...' : 'Mark as Resolved'}
+        </button>
 
         <div className="meta-grid">
           <div className="meta-item">
