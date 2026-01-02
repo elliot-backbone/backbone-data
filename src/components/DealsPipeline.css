@@ -131,6 +131,7 @@
   border-radius: 12px;
   padding: 16px;
   transition: all 0.2s;
+  cursor: pointer;
 }
 
 .deal-card:hover {

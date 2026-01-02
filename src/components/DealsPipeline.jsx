@@ -13,8 +13,8 @@ const DEAL_STAGES = [
   { key: 'dropped', label: 'Dropped', color: '#ef4444' }
 ];
 
-export default function DealsPipeline({ rawData }) {
-  const [viewMode, setViewMode] = useState('funnel');
+export default function DealsPipeline({ rawData, onSelectDeal }) {
+  const [viewMode, setViewMode] = useState('list');
   const deals = rawData.deals || [];
   const rounds = rawData.rounds || [];
   const companies = rawData.companies || [];
@@ -135,7 +135,7 @@ export default function DealsPipeline({ rawData }) {
               : null;
 
             return (
-              <div key={deal.id} className="deal-card">
+              <div key={deal.id} className="deal-card" onClick={() => onSelectDeal && onSelectDeal(deal)}>
                 <div className="deal-header">
                   <div className="deal-company">
                     <h3 className="deal-company-name">{deal.companyName}</h3>

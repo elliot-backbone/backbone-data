@@ -9,14 +9,6 @@ const ROLE_LABELS = {
   employee: 'Employee'
 };
 
-const ROLE_ICONS = {
-  founder: '👤',
-  investor: '💼',
-  operator: '⚙️',
-  advisor: '🎯',
-  employee: '👥'
-};
-
 export default function PeopleList({ rawData, onSelectPerson }) {
   const [filterRole, setFilterRole] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -93,7 +85,7 @@ export default function PeopleList({ rawData, onSelectPerson }) {
                 className={`filter-chip ${filterRole === role ? 'active' : ''}`}
                 onClick={() => setFilterRole(role)}
               >
-                {ROLE_ICONS[role]} {label} ({count})
+                {label} ({count})
               </button>
             );
           })}
@@ -110,7 +102,6 @@ export default function PeopleList({ rawData, onSelectPerson }) {
               onClick={() => onSelectPerson && onSelectPerson(person)}
             >
               <div className="person-header">
-                <div className="person-avatar">{ROLE_ICONS[person.role]}</div>
                 <div className="person-info">
                   <h3 className="person-name">
                     {person.firstName} {person.lastName}

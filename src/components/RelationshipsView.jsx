@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './RelationshipsView.css';
 
-export default function RelationshipsView({ rawData }) {
+export default function RelationshipsView({ rawData, onSelectRelationship }) {
   const [focusEntity, setFocusEntity] = useState(null);
   const companies = rawData.companies || [];
   const people = rawData.people || [];
@@ -136,8 +136,14 @@ export default function RelationshipsView({ rawData }) {
         <section className="relationships-section">
           <h2 className="section-title">Company Network Strength</h2>
           <div className="network-grid">
-            {companyStats.map(stat => (
-              <div key={stat.company.id} className="network-card">
+            {companyStats.map(stat => {
+              const firstRelationship = portfolioRelationships.find(r => r.company.id === stat.company.id);
+              return (
+              <div
+                key={stat.company.id}
+                className="network-card"
+                onClick={() => firstRelationship && onSelectRelationship && onSelectRelationship(firstRelationship)}
+              >
                 <h3 className="network-company-name">{stat.company.name}</h3>
                 <div className="network-stats">
                   <div className="network-stat">
@@ -154,7 +160,8 @@ export default function RelationshipsView({ rawData }) {
                   </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 

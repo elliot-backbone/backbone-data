@@ -99,9 +99,6 @@ export default function IssuesBreakdown({ rawData, onSelectCompany }) {
         {sortedByType.map(({ type, config, issues, count, criticalCount, highCount, mediumCount, lowCount, affectedCompanyCount }) => (
           <div key={type} className="type-card" style={{ borderLeftColor: config.color }}>
             <div className="type-header">
-              <div className="type-icon" style={{ background: `${config.color}20` }}>
-                {config.icon}
-              </div>
               <div className="type-info">
                 <h3 className="type-name">{config.label}</h3>
                 <p className="type-description">{config.description}</p>

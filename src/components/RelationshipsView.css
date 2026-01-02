@@ -68,6 +68,7 @@
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   transition: all 0.2s;
+  cursor: pointer;
 }
 
 .network-card:hover {

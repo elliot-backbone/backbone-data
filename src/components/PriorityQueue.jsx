@@ -8,7 +8,7 @@ const SEVERITY_CONFIG = {
   low: { label: 'LOW', color: '#22c55e', bg: 'rgba(34, 197, 94, 0.1)' },
 };
 
-export default function PriorityQueue({ rawData, onSelectCompany }) {
+export default function PriorityQueue({ rawData, onSelectIssue, onSelectCompany }) {
   const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || []);
   const companies = rawData.companies || [];
 
@@ -36,7 +36,7 @@ export default function PriorityQueue({ rawData, onSelectCompany }) {
           return (
             <div
               key={issue.id}
-              onClick={() => company && onSelectCompany && onSelectCompany(company)}
+              onClick={() => onSelectIssue ? onSelectIssue(issue) : (company && onSelectCompany && onSelectCompany(company))}
               className="queue-item"
               style={{ borderLeftColor: config.color }}
             >

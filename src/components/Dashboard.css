@@ -67,6 +67,31 @@
   line-height: 1;
 }
 
+.nav-section {
+  margin-top: 1.5rem;
+}
+
+.nav-section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #64748b;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.nav-item.sub {
+  padding-left: 1.5rem;
+  font-size: 0.875rem;
+}
+
+.nav-item.sub-sub {
+  padding-left: 2.5rem;
+  font-size: 0.8125rem;
+  color: #64748b;
+}
+
 .dashboard-main {
   flex: 1;
   display: flex;

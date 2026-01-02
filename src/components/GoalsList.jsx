@@ -3,6 +3,12 @@ import './GoalsList.css';
 export default function GoalsList({ rawData, onSelectGoal }) {
   const goals = rawData.goals || [];
   const companies = rawData.companies || [];
+  const portfolioCompanies = companies.filter(c => c.isPortfolio);
+
+  const portfolioGoals = goals.filter(goal => {
+    const companyId = goal.companyId || goal.company_id;
+    return portfolioCompanies.some(c => c.id === companyId);
+  });
 
   const getCompanyName = (goal) => {
     const companyId = goal.companyId || goal.company_id;
@@ -10,16 +16,16 @@ export default function GoalsList({ rawData, onSelectGoal }) {
     return company ? company.name : 'Unknown';
   };
 
-  const onTrackGoals = goals.filter(g => g.isOnTrack).length;
-  const offTrackGoals = goals.filter(g => !g.isOnTrack).length;
-  const upcomingDeadlines = goals.filter(g => {
+  const onTrackGoals = portfolioGoals.filter(g => g.isOnTrack).length;
+  const offTrackGoals = portfolioGoals.filter(g => !g.isOnTrack).length;
+  const upcomingDeadlines = portfolioGoals.filter(g => {
     const deadline = new Date(g.deadline || g.targetDate);
     const now = new Date();
     const daysUntil = (deadline - now) / (1000 * 60 * 60 * 24);
     return daysUntil <= 30 && daysUntil > 0;
   }).length;
 
-  const sortedGoals = [...goals].sort((a, b) => {
+  const sortedGoals = [...portfolioGoals].sort((a, b) => {
     if (a.isOnTrack !== b.isOnTrack) return a.isOnTrack ? 1 : -1;
     return new Date(a.deadline || a.targetDate) - new Date(b.deadline || b.targetDate);
   });
@@ -44,7 +50,7 @@ export default function GoalsList({ rawData, onSelectGoal }) {
       <div className="list-header">
         <div className="list-stats">
           <div className="stat-item">
-            <span className="stat-value">{goals.length}</span>
+            <span className="stat-value">{portfolioGoals.length}</span>
             <span className="stat-label">Total Goals</span>
           </div>
           <div className="stat-item">
@@ -86,12 +92,20 @@ export default function GoalsList({ rawData, onSelectGoal }) {
                 <div className="goal-values">
                   <div className="goal-current">
                     <span className="value-label">Current</span>
-                    <span className="value-number">{goal.currentValue}</span>
+                    <span className="value-number">
+                      {goal.metric === 'MRR' || goal.title?.toLowerCase().includes('mrr')
+                        ? `$${(parseFloat(goal.currentValue) / 1000).toFixed(1)}K`
+                        : goal.currentValue}
+                    </span>
                   </div>
                   <div className="goal-arrow">→</div>
                   <div className="goal-target">
                     <span className="value-label">Target</span>
-                    <span className="value-number">{goal.targetValue}</span>
+                    <span className="value-number">
+                      {goal.metric === 'MRR' || goal.title?.toLowerCase().includes('mrr')
+                        ? `$${(parseFloat(goal.targetValue) / 1000).toFixed(1)}K`
+                        : goal.targetValue}
+                    </span>
                   </div>
                 </div>
 

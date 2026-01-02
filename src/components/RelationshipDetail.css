@@ -1,0 +1,139 @@
+.relationship-detail {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.investor-name-text {
+  font-size: 1.125rem;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.investor-title-text {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.entity-info-box {
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 0.5rem;
+}
+
+.entity-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 1rem;
+}
+
+.entity-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.entity-detail-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+.entity-detail-label {
+  color: #64748b;
+}
+
+.entity-detail-value {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.status-info-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.stage-badge {
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.intro-source-box {
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 0.5rem;
+  border-left: 3px solid #3b82f6;
+}
+
+.intro-source-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 1rem;
+}
+
+.intro-source-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.intro-source-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+.intro-source-label {
+  color: #64748b;
+}
+
+.intro-source-value {
+  color: #0f172a;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.interactions-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.interaction-item {
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 0.5rem;
+  border-left: 3px solid #e2e8f0;
+}
+
+.interaction-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.interaction-stage {
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.interaction-round {
+  font-size: 0.875rem;
+  color: #64748b;
+  text-transform: capitalize;
+}
+
+.interaction-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: #64748b;
+}
