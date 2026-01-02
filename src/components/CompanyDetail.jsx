@@ -5,8 +5,8 @@ export default function CompanyDetail({ company, rawData, onBack }) {
   const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || []);
   const healthScore = calculateHealth(company, issues);
   const companyIssues = issues.filter(i => i.companyId === company.id);
-  const companyRounds = (rawData.rounds || []).filter(r => r.companyId === company.id);
-  const companyGoals = (rawData.goals || []).filter(g => g.companyId === company.id);
+  const companyRounds = (rawData.rounds || []).filter(r => (r.companyId || r.company_id) === company.id);
+  const companyGoals = (rawData.goals || []).filter(g => (g.companyId || g.company_id) === company.id);
 
   const getHealthColor = (score) => {
     if (score >= 80) return '#10b981';
@@ -61,7 +61,7 @@ export default function CompanyDetail({ company, rawData, onBack }) {
             </div>
             <div className="metric-box">
               <div className="metric-box-label">Runway</div>
-              <div className="metric-box-value">{company.runway} months</div>
+              <div className="metric-box-value">{company.runway.toFixed(1)} months</div>
             </div>
             <div className="metric-box">
               <div className="metric-box-label">Revenue Growth</div>
@@ -93,7 +93,7 @@ export default function CompanyDetail({ company, rawData, onBack }) {
                     </span>
                     <span className="issue-type">{issue.type}</span>
                   </div>
-                  <div className="issue-description">{issue.description}</div>
+                  <div className="issue-description">{issue.title || issue.description}</div>
                   <div className="issue-action">{issue.suggestedAction}</div>
                 </div>
               ))}
@@ -108,10 +108,10 @@ export default function CompanyDetail({ company, rawData, onBack }) {
               {companyRounds.map(round => (
                 <div key={round.id} className="round-item">
                   <div className="round-info">
-                    <div className="round-stage">{round.stage}</div>
-                    <div className="round-date">{new Date(round.closeDate).toLocaleDateString()}</div>
+                    <div className="round-stage">{round.stage || round.roundType}</div>
+                    <div className="round-date">{new Date(round.closeDate || round.targetCloseDate).toLocaleDateString()}</div>
                   </div>
-                  <div className="round-amount">${(round.amount / 1000000).toFixed(2)}M</div>
+                  <div className="round-amount">${((round.amount || round.targetAmount) / 1000000).toFixed(2)}M</div>
                 </div>
               ))}
             </div>
@@ -127,7 +127,7 @@ export default function CompanyDetail({ company, rawData, onBack }) {
               {companyGoals.map(goal => (
                 <div key={goal.id} className="goal-item">
                   <div className="goal-header">
-                    <span className="goal-metric">{goal.metric}</span>
+                    <span className="goal-metric">{goal.metric || goal.title}</span>
                     <span className={`goal-status ${goal.isOnTrack ? 'on-track' : 'off-track'}`}>
                       {goal.isOnTrack ? 'On Track' : 'Off Track'}
                     </span>
@@ -140,7 +140,7 @@ export default function CompanyDetail({ company, rawData, onBack }) {
                       Target: <strong>{goal.targetValue}</strong>
                     </div>
                     <div className="goal-deadline">
-                      Due: {new Date(goal.deadline).toLocaleDateString()}
+                      Due: {new Date(goal.deadline || goal.targetDate).toLocaleDateString()}
                     </div>
                   </div>
                 </div>

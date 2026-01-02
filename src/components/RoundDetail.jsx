@@ -1,7 +1,7 @@
 import './RoundDetail.css';
 
 export default function RoundDetail({ round, rawData, onBack }) {
-  const company = (rawData.companies || []).find(c => c.id === round.companyId);
+  const company = (rawData.companies || []).find(c => c.id === (round.companyId || round.company_id));
 
   const getStageColor = (stage) => {
     const colors = {
@@ -26,18 +26,18 @@ export default function RoundDetail({ round, rawData, onBack }) {
           <div className="detail-subtitle">
             <span
               className="stage-badge-large"
-              style={{ background: getStageColor(round.stage) }}
+              style={{ background: getStageColor(round.stage || round.roundType) }}
             >
-              {round.stage}
+              {round.stage || round.roundType}
             </span>
             <span className="round-date-large">
-              Closed {new Date(round.closeDate).toLocaleDateString()}
+              Closed {new Date(round.closeDate || round.targetCloseDate).toLocaleDateString()}
             </span>
           </div>
         </div>
         <div className="detail-amount-box">
           <div className="amount-label">Round Size</div>
-          <div className="amount-value-large">${(round.amount / 1000000).toFixed(2)}M</div>
+          <div className="amount-value-large">${((round.amount || round.targetAmount) / 1000000).toFixed(2)}M</div>
         </div>
       </div>
 
@@ -47,20 +47,20 @@ export default function RoundDetail({ round, rawData, onBack }) {
           <div className="details-grid">
             <div className="detail-item">
               <div className="detail-item-label">Lead Investor</div>
-              <div className="detail-item-value">{round.leadInvestor}</div>
+              <div className="detail-item-value">{round.leadInvestor || 'TBD'}</div>
             </div>
             <div className="detail-item">
               <div className="detail-item-label">Stage</div>
-              <div className="detail-item-value">{round.stage}</div>
+              <div className="detail-item-value">{round.stage || round.roundType}</div>
             </div>
             <div className="detail-item">
               <div className="detail-item-label">Amount Raised</div>
-              <div className="detail-item-value">${(round.amount / 1000000).toFixed(2)}M</div>
+              <div className="detail-item-value">${((round.amount || round.targetAmount) / 1000000).toFixed(2)}M</div>
             </div>
             <div className="detail-item">
               <div className="detail-item-label">Close Date</div>
               <div className="detail-item-value">
-                {new Date(round.closeDate).toLocaleDateString('en-US', {
+                {new Date(round.closeDate || round.targetCloseDate).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric'

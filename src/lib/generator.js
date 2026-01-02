@@ -146,6 +146,10 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
 
     const founder = pick(founders);
 
+    const mrr = randomInt(financials.mrr[0], financials.mrr[1]);
+    const arr = mrr * 12;
+    const runway = burn > 0 ? cash / burn : 99;
+
     companies.push({
       id: uuid(),
       name: genCompanyName(),
@@ -155,7 +159,12 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
       country: pick(COUNTRIES),
       cashOnHand: cash,
       monthlyBurn: burn,
-      mrr: randomInt(financials.mrr[0], financials.mrr[1]),
+      mrr,
+      arr,
+      runway,
+      revenueGrowthRate: randomFloat(0.05, 0.5),
+      grossMargin: randomFloat(0.4, 0.85),
+      cacPayback: randomInt(6, 36),
       stage,
       sector: pick(SECTORS),
       employeeCount: randomInt(financials.employees[0], financials.employees[1]),
@@ -183,6 +192,11 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
 
       rounds.push({
         id: uuid(),
+        companyId: company.id,
+        stage: roundType,
+        amount: target,
+        closeDate: isActive ? (coverage >= 1 ? daysAgo(randomInt(10, 90)) : daysFromNow(randomInt(30, 120))) : daysAgo(randomInt(30, 365)),
+        leadInvestor: hasLead ? `${leadInvestor.firstName} ${leadInvestor.lastName}` : 'TBD',
         company_id: company.id,
         roundType,
         targetAmount: target,
@@ -208,11 +222,15 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
 
       goals.push({
         id: uuid(),
+        companyId: company.id,
+        metric: goalType === 'fundraise' ? 'Close Series A' : goalType === 'revenue' ? `Hit $${(target/1000).toFixed(0)}k MRR` : goalType === 'hiring' ? `Hire ${target} engineers` : 'Launch v2',
+        targetValue: target.toString(),
+        currentValue: Math.round(target * Math.min(progress, 1)).toString(),
+        deadline: daysLeft > 0 ? daysFromNow(daysLeft) : daysAgo(Math.abs(daysLeft)),
+        isOnTrack: progress >= 0.8 || (progress >= 0.5 && daysLeft > 60),
         company_id: company.id,
         goalType,
         title: goalType === 'fundraise' ? 'Close Series A' : goalType === 'revenue' ? `Hit $${(target/1000).toFixed(0)}k MRR` : goalType === 'hiring' ? `Hire ${target} engineers` : 'Launch v2',
-        targetValue: target,
-        currentValue: Math.round(target * Math.min(progress, 1)),
         startDate,
         targetDate: daysLeft > 0 ? daysFromNow(daysLeft) : daysAgo(Math.abs(daysLeft)),
         lastUpdatedAt: daysAgo(randomInt(0, 14)),

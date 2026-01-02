@@ -1,7 +1,7 @@
 import './GoalDetail.css';
 
 export default function GoalDetail({ goal, rawData, onBack }) {
-  const company = (rawData.companies || []).find(c => c.id === goal.companyId);
+  const company = (rawData.companies || []).find(c => c.id === (goal.companyId || goal.company_id));
 
   const getProgressPercentage = () => {
     const current = parseFloat(goal.currentValue);
@@ -11,8 +11,9 @@ export default function GoalDetail({ goal, rawData, onBack }) {
   };
 
   const getDaysUntilDeadline = () => {
+    const deadline = goal.deadline || goal.targetDate;
     const now = new Date();
-    const target = new Date(goal.deadline);
+    const target = new Date(deadline);
     const days = Math.ceil((target - now) / (1000 * 60 * 60 * 24));
     return days;
   };
@@ -29,7 +30,7 @@ export default function GoalDetail({ goal, rawData, onBack }) {
       <div className="detail-header">
         <div className="detail-title-section">
           <div className="goal-company-link">{company?.name || 'Unknown Company'}</div>
-          <h1 className="detail-title">{goal.metric}</h1>
+          <h1 className="detail-title">{goal.metric || goal.title}</h1>
           <span className={`goal-status-badge-large ${goal.isOnTrack ? 'on-track' : 'off-track'}`}>
             {goal.isOnTrack ? 'On Track' : 'Off Track'}
           </span>
@@ -72,7 +73,7 @@ export default function GoalDetail({ goal, rawData, onBack }) {
             <div className="timeline-item">
               <div className="timeline-label">Deadline</div>
               <div className="timeline-value">
-                {new Date(goal.deadline).toLocaleDateString('en-US', {
+                {new Date(goal.deadline || goal.targetDate).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric'
@@ -116,7 +117,7 @@ export default function GoalDetail({ goal, rawData, onBack }) {
               </div>
               <div className="context-item">
                 <div className="context-label">Runway</div>
-                <div className="context-value">{company.runway} months</div>
+                <div className="context-value">{company.runway.toFixed(1)} months</div>
               </div>
             </div>
           </div>
