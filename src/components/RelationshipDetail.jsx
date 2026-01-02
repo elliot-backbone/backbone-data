@@ -45,6 +45,7 @@ export default function RelationshipDetail({ relationship, rawData, onBack }) {
         <div className="detail-title-section">
           <h1 className="detail-title">{company.name} ↔ {firm.name}</h1>
           <div className="detail-subtitle">
+            <span className="entity-id" style={{ marginRight: '0.5rem' }}>ID: {relationship.id}</span>
             <span className="investor-name-text">
               {person.firstName} {person.lastName}
             </span>

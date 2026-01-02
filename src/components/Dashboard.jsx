@@ -120,6 +120,12 @@ export default function Dashboard({ rawData, onReset, onDataUpdate }) {
         return <RelationshipsView rawData={rawData} onSelectRelationship={(r) => handleSelectEntity('relationship', r)} />;
       case 'relationship-detail':
         return <RelationshipDetail relationship={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} />;
+      case 'admin-data':
+        return <div className="admin-placeholder"><h2>Data Management</h2><p>Coming soon</p></div>;
+      case 'admin-scoring':
+        return <div className="admin-placeholder"><h2>Scoring Configuration</h2><p>Coming soon</p></div>;
+      case 'admin-team':
+        return <div className="admin-placeholder"><h2>Team Settings</h2><p>Coming soon</p></div>;
       default:
         return <PriorityQueue rawData={rawData} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
     }
@@ -190,6 +196,28 @@ export default function Dashboard({ rawData, onReset, onDataUpdate }) {
               <span className="nav-label">Relationships</span>
             </button>
           </div>
+
+          <div className="nav-section admin-section">
+            <div className="nav-section-label">Admin</div>
+            <button
+              className={`nav-item sub ${currentView === 'admin-data' ? 'active' : ''}`}
+              onClick={() => handleNavigation('admin-data')}
+            >
+              <span className="nav-label">Data</span>
+            </button>
+            <button
+              className={`nav-item sub ${currentView === 'admin-scoring' ? 'active' : ''}`}
+              onClick={() => handleNavigation('admin-scoring')}
+            >
+              <span className="nav-label">Scoring</span>
+            </button>
+            <button
+              className={`nav-item sub ${currentView === 'admin-team' ? 'active' : ''}`}
+              onClick={() => handleNavigation('admin-team')}
+            >
+              <span className="nav-label">Team</span>
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -213,6 +241,9 @@ export default function Dashboard({ rawData, onReset, onDataUpdate }) {
               {currentView === 'person-detail' && 'Person Details'}
               {currentView === 'relationships' && 'Relationship Map'}
               {currentView === 'relationship-detail' && 'Relationship Details'}
+              {currentView === 'admin-data' && 'Data Management'}
+              {currentView === 'admin-scoring' && 'Scoring Configuration'}
+              {currentView === 'admin-team' && 'Team Settings'}
             </h1>
             <button className="top-bar-btn" onClick={onReset}>
               Reset Data

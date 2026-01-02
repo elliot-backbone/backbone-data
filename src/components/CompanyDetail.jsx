@@ -32,6 +32,7 @@ export default function CompanyDetail({ company, rawData, onBack, onSelectRound,
         <div className="detail-title-section">
           <h1 className="detail-title">{company.name}</h1>
           <div className="detail-badges">
+            <span className="entity-id">ID: {company.id}</span>
             <span className="detail-badge">{company.sector}</span>
             {company.isPortfolio && <span className="detail-badge portfolio">Portfolio</span>}
           </div>

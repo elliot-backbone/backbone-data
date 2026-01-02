@@ -123,3 +123,13 @@ body {
   font-size: 13px;
   color: #e5e5e5;
 }
+
+.entity-id {
+  font-size: 0.625rem;
+  color: #94a3b8;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.5rem;
+  background: #f1f5f9;
+  border-radius: 0.25rem;
+}

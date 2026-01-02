@@ -72,6 +72,7 @@ export default function PersonDetail({ person, rawData, onBack, onSelectFirm, on
         <div className="detail-title-section">
           <h1 className="detail-title">{person.firstName} {person.lastName}</h1>
           <div className="detail-subtitle">
+            <span className="entity-id" style={{ marginRight: '0.5rem' }}>ID: {person.id}</span>
             <span className="person-title-text">{person.title}</span>
             {firm && (
               <span

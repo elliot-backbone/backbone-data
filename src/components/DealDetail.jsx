@@ -42,6 +42,7 @@ export default function DealDetail({ deal, rawData, onBack, onSelectCompany, onS
             {company?.name || 'Unknown Company'}
           </h1>
           <div className="detail-subtitle">
+            <span className="entity-id" style={{ marginRight: '0.5rem' }}>ID: {deal.id}</span>
             <span
               className="round-type-badge clickable"
               onClick={(e) => {

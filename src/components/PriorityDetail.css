@@ -253,3 +253,116 @@
   line-height: 1.4;
   flex: 1;
 }
+
+.entity-id {
+  font-size: 0.625rem;
+  color: #94a3b8;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.5rem;
+  background: #f1f5f9;
+  border-radius: 0.25rem;
+}
+
+.resolve-interstitial {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.interstitial-content {
+  max-width: 600px;
+  width: 100%;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.interstitial-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.interstitial-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+}
+
+.interstitial-subtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0 0 2rem 0;
+  line-height: 1.5;
+}
+
+.resolution-summary {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.resolution-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.resolution-text {
+  font-size: 0.95rem;
+  color: #0f172a;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.interstitial-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.interstitial-btn {
+  padding: 0.875rem 2rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.interstitial-btn.cancel {
+  background: white;
+  color: #64748b;
+  border: 2px solid #e2e8f0;
+}
+
+.interstitial-btn.cancel:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.interstitial-btn.confirm {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.interstitial-btn.confirm:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.interstitial-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

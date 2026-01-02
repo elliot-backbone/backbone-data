@@ -80,6 +80,7 @@ export default function FirmDetail({ firm, rawData, onBack, onSelectPerson, onSe
         <div className="detail-title-section">
           <h1 className="detail-title">{firm.name}</h1>
           <div className="firm-badges">
+            <span className="entity-id" style={{ marginRight: '0.5rem' }}>ID: {firm.id}</span>
             <span className="firm-type-badge-large">
               {FIRM_TYPE_LABELS[firm.firmType] || firm.firmType}
             </span>

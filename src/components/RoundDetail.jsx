@@ -60,6 +60,7 @@ export default function RoundDetail({ round, rawData, onBack, onSelectCompany, o
             {company?.name || 'Unknown Company'}
           </h1>
           <div className="detail-subtitle">
+            <span className="entity-id" style={{ marginRight: '0.5rem' }}>ID: {round.id}</span>
             <span
               className="stage-badge-large"
               style={{ background: getStageColor(round.stage || round.roundType) }}

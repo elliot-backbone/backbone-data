@@ -64,9 +64,12 @@ export default function GoalDetail({ goal, rawData, onBack }) {
         <div className="detail-title-section">
           <div className="goal-company-link">{company?.name || 'Unknown Company'}</div>
           <h1 className="detail-title">{goal.metric || goal.title}</h1>
-          <span className={`goal-status-badge-large ${goal.isOnTrack ? 'on-track' : 'off-track'}`}>
-            {goal.isOnTrack ? 'On Track' : 'Off Track'}
-          </span>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <span className="entity-id">ID: {goal.id}</span>
+            <span className={`goal-status-badge-large ${goal.isOnTrack ? 'on-track' : 'off-track'}`}>
+              {goal.isOnTrack ? 'On Track' : 'Off Track'}
+            </span>
+          </div>
         </div>
       </div>
 

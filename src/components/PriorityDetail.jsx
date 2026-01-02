@@ -127,19 +127,19 @@ function calculateImpact(issue, companies, rounds, goals) {
 
 export default function PriorityDetail({ issue, rawData, onBack, onSelectCompany, onSelectIssue, onSelectGoal, onResolved, onDataUpdate }) {
   const [isResolving, setIsResolving] = useState(false);
+  const [showResolveInterstitial, setShowResolveInterstitial] = useState(false);
   const company = (rawData.companies || []).find(c => c.id === issue.companyId);
   const companyIssues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || [], [])
     .filter(i => i.companyId === issue.companyId);
 
-  const handleResolve = async () => {
-    const resolutionSummary = getResolutionSummary(issue);
-    const confirmMessage = `Resolve this priority?\n\n${resolutionSummary}\n\nThis will update the underlying data and recalculate all priorities.`;
+  const handleResolveClick = () => {
+    setShowResolveInterstitial(true);
+  };
 
-    if (!confirm(confirmMessage)) {
-      return;
-    }
-
+  const handleConfirmResolve = async () => {
     setIsResolving(true);
+    const resolutionSummary = getResolutionSummary(issue);
+
     try {
       await markPriorityResolved(issue.companyId, issue.category, issue.title, resolutionSummary);
 
@@ -156,10 +156,13 @@ export default function PriorityDetail({ issue, rawData, onBack, onSelectCompany
       onBack();
     } catch (error) {
       console.error('Failed to resolve priority:', error);
-      alert('Failed to resolve priority. Please try again.');
-    } finally {
       setIsResolving(false);
+      setShowResolveInterstitial(false);
     }
+  };
+
+  const handleCancelResolve = () => {
+    setShowResolveInterstitial(false);
   };
 
   const { score: impactScore, unlocks } = calculateImpact(
@@ -197,6 +200,44 @@ export default function PriorityDetail({ issue, rawData, onBack, onSelectCompany
     return '#6b7280';
   };
 
+  const resolutionSummary = getResolutionSummary(issue);
+
+  if (showResolveInterstitial) {
+    return (
+      <div className="priority-detail">
+        <div className="resolve-interstitial">
+          <div className="interstitial-content">
+            <div className="interstitial-icon">⚠️</div>
+            <h2 className="interstitial-title">Confirm Resolution</h2>
+            <p className="interstitial-subtitle">This action will modify underlying data and recalculate all priorities</p>
+
+            <div className="resolution-summary">
+              <div className="resolution-label">Changes to be applied:</div>
+              <div className="resolution-text">{resolutionSummary}</div>
+            </div>
+
+            <div className="interstitial-actions">
+              <button
+                className="interstitial-btn cancel"
+                onClick={handleCancelResolve}
+                disabled={isResolving}
+              >
+                Cancel
+              </button>
+              <button
+                className="interstitial-btn confirm"
+                onClick={handleConfirmResolve}
+                disabled={isResolving}
+              >
+                {isResolving ? 'Resolving...' : 'Confirm Resolution'}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="priority-detail">
       <button className="back-btn" onClick={onBack}>
@@ -213,6 +254,7 @@ export default function PriorityDetail({ issue, rawData, onBack, onSelectCompany
             {company?.name || 'Unknown Company'}
           </div>
           <div className="header-badges-inline">
+            <span className="entity-id">ID: {issue.id}</span>
             <span
               className="badge-compact"
               style={{
@@ -244,10 +286,10 @@ export default function PriorityDetail({ issue, rawData, onBack, onSelectCompany
 
         <button
           className="resolve-btn"
-          onClick={handleResolve}
+          onClick={handleResolveClick}
           disabled={isResolving}
         >
-          {isResolving ? 'Resolving...' : 'Mark as Resolved'}
+          Mark as Resolved
         </button>
 
         <div className="meta-grid">
