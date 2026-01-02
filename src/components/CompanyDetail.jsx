@@ -1,7 +1,7 @@
 import { detectIssues, calculateHealth } from '../lib/derivations';
 import './CompanyDetail.css';
 
-export default function CompanyDetail({ company, rawData, onBack }) {
+export default function CompanyDetail({ company, rawData, onBack, onSelectRound, onSelectGoal }) {
   const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || []);
   const healthScore = calculateHealth(company, issues);
   const companyIssues = issues.filter(i => i.companyId === company.id);
@@ -106,7 +106,11 @@ export default function CompanyDetail({ company, rawData, onBack }) {
           {companyRounds.length > 0 ? (
             <div className="rounds-list">
               {companyRounds.map(round => (
-                <div key={round.id} className="round-item">
+                <div
+                  key={round.id}
+                  className="round-item clickable"
+                  onClick={() => onSelectRound && onSelectRound(round)}
+                >
                   <div className="round-info">
                     <div className="round-stage">{round.stage || round.roundType}</div>
                     <div className="round-date">{new Date(round.closeDate || round.targetCloseDate).toLocaleDateString()}</div>
@@ -125,7 +129,11 @@ export default function CompanyDetail({ company, rawData, onBack }) {
           {companyGoals.length > 0 ? (
             <div className="goals-list">
               {companyGoals.map(goal => (
-                <div key={goal.id} className="goal-item">
+                <div
+                  key={goal.id}
+                  className="goal-item clickable"
+                  onClick={() => onSelectGoal && onSelectGoal(goal)}
+                >
                   <div className="goal-header">
                     <span className="goal-metric">{goal.metric || goal.title}</span>
                     <span className={`goal-status ${goal.isOnTrack ? 'on-track' : 'off-track'}`}>

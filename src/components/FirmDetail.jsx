@@ -8,7 +8,7 @@ const FIRM_TYPE_LABELS = {
   accelerator: 'Accelerator'
 };
 
-export default function FirmDetail({ firm, rawData, onBack, onSelectPerson }) {
+export default function FirmDetail({ firm, rawData, onBack, onSelectPerson, onSelectDeal, onSelectCompany }) {
   const people = (rawData.people || []).filter(p => p.firm_id === firm.id);
   const deals = (rawData.deals || []).filter(d => d.firm_id === firm.id);
   const rounds = rawData.rounds || [];
@@ -157,11 +157,31 @@ export default function FirmDetail({ firm, rawData, onBack, onSelectPerson }) {
             <h2 className="section-title">Deals ({enrichedDeals.length})</h2>
             <div className="deals-list">
               {enrichedDeals.map(deal => (
-                <div key={deal.id} className="deal-item">
+                <div
+                  key={deal.id}
+                  className="deal-item clickable"
+                  onClick={() => onSelectDeal && onSelectDeal(deal)}
+                >
                   <div className="deal-main">
                     <div className="deal-info">
-                      <div className="deal-company-name">{deal.company?.name || 'Unknown'}</div>
-                      <div className="deal-person-name">{deal.person?.firstName} {deal.person?.lastName}</div>
+                      <div
+                        className="deal-company-name clickable-text"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deal.company && onSelectCompany && onSelectCompany(deal.company);
+                        }}
+                      >
+                        {deal.company?.name || 'Unknown'}
+                      </div>
+                      <div
+                        className="deal-person-name clickable-text"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deal.person && onSelectPerson && onSelectPerson(deal.person);
+                        }}
+                      >
+                        {deal.person?.firstName} {deal.person?.lastName}
+                      </div>
                     </div>
                     <div className="deal-stage-badge" style={{ background: getDealStageColor(deal.dealStage) }}>
                       {getDealStageLabel(deal.dealStage)}

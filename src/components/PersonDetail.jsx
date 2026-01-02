@@ -20,7 +20,7 @@ const DEAL_STAGES = [
   { key: 'dropped', label: 'Dropped' }
 ];
 
-export default function PersonDetail({ person, rawData, onBack, onSelectFirm }) {
+export default function PersonDetail({ person, rawData, onBack, onSelectFirm, onSelectDeal, onSelectCompany, onSelectRound }) {
   const firm = (rawData.firms || []).find(f => f.id === person.firm_id);
   const deals = (rawData.deals || []).filter(d => d.person_id === person.id);
   const rounds = rawData.rounds || [];
@@ -154,13 +154,33 @@ export default function PersonDetail({ person, rawData, onBack, onSelectFirm }) 
             <h2 className="section-title">Deal History ({enrichedDeals.length})</h2>
             <div className="deals-history-list">
               {enrichedDeals.map(deal => (
-                <div key={deal.id} className="deal-history-item">
+                <div
+                  key={deal.id}
+                  className="deal-history-item clickable"
+                  onClick={() => onSelectDeal && onSelectDeal(deal)}
+                >
                   <div className="deal-history-header">
-                    <div className="deal-history-company">{deal.company?.name || 'Unknown'}</div>
+                    <div
+                      className="deal-history-company clickable-text"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deal.company && onSelectCompany && onSelectCompany(deal.company);
+                      }}
+                    >
+                      {deal.company?.name || 'Unknown'}
+                    </div>
                     <span className="deal-history-stage">{deal.stageLabel}</span>
                   </div>
                   <div className="deal-history-meta">
-                    <span>{deal.round?.roundType?.replace('_', ' ') || 'Unknown Round'}</span>
+                    <span
+                      className="clickable-text"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deal.round && onSelectRound && onSelectRound(deal.round);
+                      }}
+                    >
+                      {deal.round?.roundType?.replace('_', ' ') || 'Unknown Round'}
+                    </span>
                     {deal.expectedAmount && (
                       <span>${(deal.expectedAmount / 1000000).toFixed(1)}M</span>
                     )}

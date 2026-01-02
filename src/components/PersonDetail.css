@@ -108,6 +108,16 @@
   background: #f8fafc;
   border-radius: 0.5rem;
   border-left: 3px solid #3b82f6;
+  transition: all 0.2s;
+}
+
+.deal-history-item.clickable {
+  cursor: pointer;
+}
+
+.deal-history-item.clickable:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
 }
 
 .deal-history-header {
@@ -121,6 +131,16 @@
   font-size: 1rem;
   font-weight: 600;
   color: #0f172a;
+  transition: color 0.2s;
+}
+
+.deal-history-company.clickable-text {
+  cursor: pointer;
+}
+
+.deal-history-company.clickable-text:hover {
+  color: #3b82f6;
+  text-decoration: underline;
 }
 
 .deal-history-stage {
@@ -138,6 +158,16 @@
   gap: 1rem;
   font-size: 0.875rem;
   color: #64748b;
+}
+
+.deal-history-meta .clickable-text {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.deal-history-meta .clickable-text:hover {
+  color: #3b82f6;
+  text-decoration: underline;
 }
 
 .intros-list {

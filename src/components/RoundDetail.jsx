@@ -1,6 +1,6 @@
 import './RoundDetail.css';
 
-export default function RoundDetail({ round, rawData, onBack }) {
+export default function RoundDetail({ round, rawData, onBack, onSelectCompany, onSelectDeal, onSelectFirm, onSelectPerson }) {
   const company = (rawData.companies || []).find(c => c.id === (round.companyId || round.company_id));
   const deals = (rawData.deals || []).filter(d => d.round_id === round.id);
   const firms = rawData.firms || [];
@@ -53,7 +53,12 @@ export default function RoundDetail({ round, rawData, onBack }) {
 
       <div className="detail-header">
         <div className="detail-title-section">
-          <h1 className="detail-title">{company?.name || 'Unknown Company'}</h1>
+          <h1
+            className="detail-title clickable"
+            onClick={() => company && onSelectCompany && onSelectCompany(company)}
+          >
+            {company?.name || 'Unknown Company'}
+          </h1>
           <div className="detail-subtitle">
             <span
               className="stage-badge-large"
@@ -141,11 +146,31 @@ export default function RoundDetail({ round, rawData, onBack }) {
                 const firm = firms.find(f => f.id === deal.firm_id);
                 const person = people.find(p => p.id === deal.person_id);
                 return (
-                  <div key={deal.id} className="deal-item">
+                  <div
+                    key={deal.id}
+                    className="deal-item clickable"
+                    onClick={() => onSelectDeal && onSelectDeal(deal)}
+                  >
                     <div className="deal-main">
                       <div className="deal-investor">
-                        <div className="deal-firm-name">{firm?.name || 'Unknown Firm'}</div>
-                        <div className="deal-person-name">{person?.name || 'No contact'}</div>
+                        <div
+                          className="deal-firm-name clickable-text"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            firm && onSelectFirm && onSelectFirm(firm);
+                          }}
+                        >
+                          {firm?.name || 'Unknown Firm'}
+                        </div>
+                        <div
+                          className="deal-person-name clickable-text"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            person && onSelectPerson && onSelectPerson(person);
+                          }}
+                        >
+                          {person?.name || 'No contact'}
+                        </div>
                       </div>
                       <div className="deal-stage-badge" style={{ background: getDealStageColor(deal.dealStage) }}>
                         {getDealStageLabel(deal.dealStage)}

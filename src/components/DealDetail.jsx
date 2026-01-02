@@ -12,7 +12,7 @@ const DEAL_STAGES = [
   { key: 'dropped', label: 'Dropped', color: '#ef4444' }
 ];
 
-export default function DealDetail({ deal, rawData, onBack }) {
+export default function DealDetail({ deal, rawData, onBack, onSelectCompany, onSelectPerson, onSelectFirm, onSelectRound }) {
   const round = (rawData.rounds || []).find(r => r.id === deal.round_id);
   const company = (rawData.companies || []).find(c => c.id === round?.company_id);
   const person = (rawData.people || []).find(p => p.id === deal.person_id);
@@ -35,9 +35,22 @@ export default function DealDetail({ deal, rawData, onBack }) {
 
       <div className="detail-header">
         <div className="detail-title-section">
-          <h1 className="detail-title">{company?.name || 'Unknown Company'}</h1>
+          <h1
+            className="detail-title clickable"
+            onClick={() => company && onSelectCompany && onSelectCompany(company)}
+          >
+            {company?.name || 'Unknown Company'}
+          </h1>
           <div className="detail-subtitle">
-            <span className="round-type-badge">{round?.roundType?.replace('_', ' ') || 'Unknown Round'}</span>
+            <span
+              className="round-type-badge clickable"
+              onClick={(e) => {
+                e.stopPropagation();
+                round && onSelectRound && onSelectRound(round);
+              }}
+            >
+              {round?.roundType?.replace('_', ' ') || 'Unknown Round'}
+            </span>
             <span
               className="deal-stage-badge-large"
               style={{
@@ -64,7 +77,12 @@ export default function DealDetail({ deal, rawData, onBack }) {
             <div className="investor-details-box">
               <div className="detail-row">
                 <div className="detail-row-label">Name</div>
-                <div className="detail-row-value">{person.firstName} {person.lastName}</div>
+                <div
+                  className="detail-row-value clickable"
+                  onClick={() => onSelectPerson && onSelectPerson(person)}
+                >
+                  {person.firstName} {person.lastName}
+                </div>
               </div>
               <div className="detail-row">
                 <div className="detail-row-label">Title</div>
@@ -77,7 +95,12 @@ export default function DealDetail({ deal, rawData, onBack }) {
               {firm && (
                 <div className="detail-row">
                   <div className="detail-row-label">Firm</div>
-                  <div className="detail-row-value">{firm.name}</div>
+                  <div
+                    className="detail-row-value clickable"
+                    onClick={() => onSelectFirm && onSelectFirm(firm)}
+                  >
+                    {firm.name}
+                  </div>
                 </div>
               )}
             </div>
@@ -108,7 +131,10 @@ export default function DealDetail({ deal, rawData, onBack }) {
             {introducedBy && (
               <div className="detail-row">
                 <div className="detail-row-label">Introduced By</div>
-                <div className="detail-row-value">
+                <div
+                  className="detail-row-value clickable"
+                  onClick={() => onSelectPerson && onSelectPerson(introducedBy)}
+                >
                   {introducedBy.firstName} {introducedBy.lastName}
                 </div>
               </div>

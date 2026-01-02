@@ -22,30 +22,40 @@ import RelationshipDetail from './RelationshipDetail';
 export default function Dashboard({ rawData, onReset }) {
   const [currentView, setCurrentView] = useState('priorities');
   const [selectedEntity, setSelectedEntity] = useState(null);
+  const [navigationHistory, setNavigationHistory] = useState([]);
 
   const handleNavigation = (view) => {
     setCurrentView(view);
     setSelectedEntity(null);
+    setNavigationHistory([]);
   };
 
   const handleSelectEntity = (type, entity) => {
+    setNavigationHistory(prev => [...prev, { view: currentView, entity: selectedEntity }]);
     setSelectedEntity({ type, entity });
     setCurrentView(`${type}-detail`);
   };
 
   const handleBackToList = () => {
-    const typeMap = {
-      'priority-detail': 'priorities',
-      'company-detail': 'companies',
-      'round-detail': 'rounds',
-      'goal-detail': 'goals',
-      'deal-detail': 'deals',
-      'firm-detail': 'firms',
-      'person-detail': 'people',
-      'relationship-detail': 'relationships'
-    };
-    setCurrentView(typeMap[currentView] || 'priorities');
-    setSelectedEntity(null);
+    if (navigationHistory.length > 0) {
+      const previous = navigationHistory[navigationHistory.length - 1];
+      setNavigationHistory(prev => prev.slice(0, -1));
+      setCurrentView(previous.view);
+      setSelectedEntity(previous.entity);
+    } else {
+      const typeMap = {
+        'priority-detail': 'priorities',
+        'company-detail': 'companies',
+        'round-detail': 'rounds',
+        'goal-detail': 'goals',
+        'deal-detail': 'deals',
+        'firm-detail': 'firms',
+        'person-detail': 'people',
+        'relationship-detail': 'relationships'
+      };
+      setCurrentView(typeMap[currentView] || 'priorities');
+      setSelectedEntity(null);
+    }
   };
 
   const renderContent = () => {
@@ -61,7 +71,7 @@ export default function Dashboard({ rawData, onReset }) {
       case 'companies':
         return <CompaniesList rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'company-detail':
-        return <CompanyDetail company={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} />;
+        return <CompanyDetail company={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectRound={(r) => handleSelectEntity('round', r)} onSelectGoal={(g) => handleSelectEntity('goal', g)} />;
       case 'goals':
         return <GoalsList rawData={rawData} onSelectGoal={(g) => handleSelectEntity('goal', g)} />;
       case 'goal-detail':
@@ -69,19 +79,19 @@ export default function Dashboard({ rawData, onReset }) {
       case 'rounds':
         return <RoundsList rawData={rawData} onSelectRound={(r) => handleSelectEntity('round', r)} />;
       case 'round-detail':
-        return <RoundDetail round={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} />;
+        return <RoundDetail round={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectDeal={(d) => handleSelectEntity('deal', d)} onSelectFirm={(f) => handleSelectEntity('firm', f)} onSelectPerson={(p) => handleSelectEntity('person', p)} />;
       case 'deals':
         return <DealsPipeline rawData={rawData} onSelectDeal={(d) => handleSelectEntity('deal', d)} />;
       case 'deal-detail':
-        return <DealDetail deal={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} />;
+        return <DealDetail deal={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectPerson={(p) => handleSelectEntity('person', p)} onSelectFirm={(f) => handleSelectEntity('firm', f)} onSelectRound={(r) => handleSelectEntity('round', r)} />;
       case 'firms':
         return <FirmsList rawData={rawData} onSelectFirm={(f) => handleSelectEntity('firm', f)} />;
       case 'firm-detail':
-        return <FirmDetail firm={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectPerson={(p) => handleSelectEntity('person', p)} />;
+        return <FirmDetail firm={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectPerson={(p) => handleSelectEntity('person', p)} onSelectDeal={(d) => handleSelectEntity('deal', d)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'people':
         return <PeopleList rawData={rawData} onSelectPerson={(p) => handleSelectEntity('person', p)} />;
       case 'person-detail':
-        return <PersonDetail person={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectFirm={(f) => handleSelectEntity('firm', f)} />;
+        return <PersonDetail person={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectFirm={(f) => handleSelectEntity('firm', f)} onSelectDeal={(d) => handleSelectEntity('deal', d)} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectRound={(r) => handleSelectEntity('round', r)} />;
       case 'relationships':
         return <RelationshipsView rawData={rawData} onSelectRelationship={(r) => handleSelectEntity('relationship', r)} />;
       case 'relationship-detail':
