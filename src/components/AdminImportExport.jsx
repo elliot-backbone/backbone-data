@@ -156,40 +156,9 @@ export default function AdminImportExport() {
 
       <div className="import-export-content">
         <div className="section">
-          <h4>Import from CSV</h4>
-          <div className="template-info">
-            <strong>Expected format:</strong>
-            <code>{template.headers}</code>
-            <strong>Example:</strong>
-            <code>{template.example}</code>
-          </div>
-
-          <textarea
-            value={csvText}
-            onChange={(e) => setCsvText(e.target.value)}
-            placeholder={`Paste CSV data here...\n\n${template.headers}\n${template.example}`}
-            rows={8}
-          />
-
-          <div className="import-actions">
-            <label className="file-upload-btn">
-              Choose CSV File
-              <input type="file" accept=".csv" onChange={handleFileUpload} />
-            </label>
-            <button
-              className="import-btn"
-              onClick={handleImport}
-              disabled={loading || !csvText.trim()}
-            >
-              {loading ? 'Importing...' : 'Import CSV'}
-            </button>
-          </div>
-        </div>
-
-        <div className="section">
           <h4>Import from Google Sheets</h4>
           <p className="help-text">
-            Paste a Google Sheets URL (must be publicly accessible or shared)
+            Paste a Google Sheets URL (must be publicly accessible or shared with link viewing enabled)
           </p>
           <input
             type="text"
@@ -204,6 +173,54 @@ export default function AdminImportExport() {
             disabled={loading || !googleSheetUrl.trim()}
           >
             {loading ? 'Importing...' : 'Import from Google Sheets'}
+          </button>
+          <div className="template-info">
+            <strong>Expected format:</strong>
+            <code>{template.headers}</code>
+            <strong>Example:</strong>
+            <code>{template.example}</code>
+          </div>
+        </div>
+
+        <div className="section">
+          <h4>Import from CSV File</h4>
+          <p className="help-text">
+            Upload a CSV file from your computer
+          </p>
+          <div className="import-actions">
+            <label className="file-upload-btn">
+              Choose CSV File
+              <input type="file" accept=".csv" onChange={handleFileUpload} />
+            </label>
+            {csvText && (
+              <button
+                className="import-btn"
+                onClick={handleImport}
+                disabled={loading}
+              >
+                {loading ? 'Importing...' : 'Import Loaded File'}
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="section">
+          <h4>Import from CSV Paste</h4>
+          <p className="help-text">
+            Paste CSV data directly
+          </p>
+          <textarea
+            value={csvText}
+            onChange={(e) => setCsvText(e.target.value)}
+            placeholder={`Paste CSV data here...\n\n${template.headers}\n${template.example}`}
+            rows={6}
+          />
+          <button
+            className="import-btn"
+            onClick={handleImport}
+            disabled={loading || !csvText.trim()}
+          >
+            {loading ? 'Importing...' : 'Import CSV'}
           </button>
         </div>
 
