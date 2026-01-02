@@ -1,3 +1,4 @@
+import { detectIssues } from '../lib/derivations';
 import './PriorityQueue.css';
 
 const SEVERITY_CONFIG = {
@@ -7,8 +8,12 @@ const SEVERITY_CONFIG = {
   low: { label: 'LOW', color: '#22c55e', bg: 'rgba(34, 197, 94, 0.1)' },
 };
 
-export default function PriorityQueue({ issues, companies, onSelectItem }) {
+export default function PriorityQueue({ rawData, onSelectCompany }) {
+  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || []);
+  const companies = rawData.companies || [];
+
   const getCompanyName = (companyId) => companies.find(c => c.id === companyId)?.name || 'Unknown';
+  const getCompany = (companyId) => companies.find(c => c.id === companyId);
 
   if (issues.length === 0) {
     return (
@@ -22,16 +27,16 @@ export default function PriorityQueue({ issues, companies, onSelectItem }) {
   return (
     <div className="priority-queue">
       <div className="queue-header">
-        <h2>Priority Queue</h2>
         <span className="queue-meta">{issues.length} issues · {issues.filter(i => i.severity === 'critical').length} critical</span>
       </div>
       <div className="queue-list">
         {issues.map((issue, index) => {
           const config = SEVERITY_CONFIG[issue.severity] || SEVERITY_CONFIG.medium;
+          const company = getCompany(issue.companyId);
           return (
             <div
               key={issue.id}
-              onClick={() => onSelectItem(issue)}
+              onClick={() => company && onSelectCompany && onSelectCompany(company)}
               className="queue-item"
               style={{ borderLeftColor: config.color }}
             >
@@ -48,10 +53,6 @@ export default function PriorityQueue({ issues, companies, onSelectItem }) {
                   <span className="action-arrow">→</span>
                   <span className="action-text">{issue.suggestedAction}</span>
                 </div>
-              </div>
-              <div className="item-actions">
-                <button className="action-btn primary">Act</button>
-                <button className="action-btn secondary" onClick={(e) => { e.stopPropagation(); onSelectItem(issue); }}>Why</button>
               </div>
             </div>
           );

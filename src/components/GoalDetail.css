@@ -1,0 +1,164 @@
+.goal-detail {
+  max-width: 1200px;
+}
+
+.goal-company-link {
+  font-size: 1rem;
+  color: #3b82f6;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.goal-status-badge-large {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 1rem;
+}
+
+.goal-status-badge-large.on-track {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.goal-status-badge-large.off-track {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.progress-visualization {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.progress-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.progress-stat {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.progress-stat-label {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.progress-stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.progress-stat-value.current {
+  color: #3b82f6;
+}
+
+.progress-stat-value.target {
+  color: #10b981;
+}
+
+.progress-stat-value.progress {
+  color: #f8fafc;
+}
+
+.progress-bar-large {
+  width: 100%;
+  height: 24px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.progress-fill-large {
+  height: 100%;
+  transition: width 0.3s ease;
+  border-radius: 12px;
+}
+
+.timeline-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.timeline-item {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.timeline-label {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timeline-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.timeline-value.urgent {
+  color: #f59e0b;
+}
+
+.company-context {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.context-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.context-label {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.context-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+@media (max-width: 768px) {
+  .progress-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline-info,
+  .company-context {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-stat-value {
+    font-size: 1.5rem;
+  }
+}

@@ -1,0 +1,170 @@
+.goals-list {
+  max-width: 1400px;
+}
+
+.stat-value.on-track {
+  color: #10b981;
+}
+
+.stat-value.off-track {
+  color: #ef4444;
+}
+
+.goals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 1.5rem;
+}
+
+.goal-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.goal-card:hover {
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.goal-card.off-track-card {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.goal-card.off-track-card:hover {
+  border-color: #ef4444;
+}
+
+.goal-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.goal-company {
+  font-size: 0.875rem;
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+.goal-status-badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.goal-status-badge.on-track {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.goal-status-badge.off-track {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.goal-metric-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
+  color: #f8fafc;
+}
+
+.goal-progress-section {
+  margin-bottom: 1.25rem;
+}
+
+.goal-values {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.goal-current,
+.goal-target {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.value-label {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.value-number {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.goal-arrow {
+  font-size: 1.5rem;
+  color: #64748b;
+  margin: 0 0.5rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #0f172a;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.goal-deadline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.25rem;
+  border-top: 1px solid #334155;
+  font-size: 0.875rem;
+}
+
+.deadline-text {
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.deadline-text.urgent {
+  color: #f59e0b;
+}
+
+.deadline-date {
+  color: #64748b;
+}
+
+@media (max-width: 768px) {
+  .goals-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .goal-values {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .goal-arrow {
+    transform: rotate(90deg);
+    margin: 0;
+  }
+}
