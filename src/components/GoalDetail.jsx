@@ -3,6 +3,39 @@ import './GoalDetail.css';
 export default function GoalDetail({ goal, rawData, onBack }) {
   const company = (rawData.companies || []).find(c => c.id === (goal.companyId || goal.company_id));
 
+  const formatValue = (value) => {
+    const metric = (goal.metric || goal.title || '').toLowerCase();
+    const numValue = parseFloat(value);
+
+    if (isNaN(numValue)) return value;
+
+    if (metric.includes('arr') || metric.includes('revenue') || metric.includes('mrr')) {
+      if (numValue >= 1000000) {
+        return `$${(numValue / 1000000).toFixed(2)}M`;
+      } else if (numValue >= 1000) {
+        return `$${(numValue / 1000).toFixed(0)}K`;
+      }
+      return `$${numValue.toLocaleString()}`;
+    }
+
+    if (metric.includes('burn') || metric.includes('cost')) {
+      if (numValue >= 1000) {
+        return `$${(numValue / 1000).toFixed(0)}K`;
+      }
+      return `$${numValue.toLocaleString()}`;
+    }
+
+    if (metric.includes('customer') || metric.includes('user') || metric.includes('count')) {
+      return numValue.toLocaleString();
+    }
+
+    if (metric.includes('rate') || metric.includes('growth') || metric.includes('%')) {
+      return `${numValue}%`;
+    }
+
+    return numValue.toLocaleString();
+  };
+
   const getProgressPercentage = () => {
     const current = parseFloat(goal.currentValue);
     const target = parseFloat(goal.targetValue);
@@ -44,11 +77,11 @@ export default function GoalDetail({ goal, rawData, onBack }) {
             <div className="progress-stats">
               <div className="progress-stat">
                 <div className="progress-stat-label">Current Value</div>
-                <div className="progress-stat-value current">{goal.currentValue}</div>
+                <div className="progress-stat-value current">{formatValue(goal.currentValue)}</div>
               </div>
               <div className="progress-stat">
                 <div className="progress-stat-label">Target Value</div>
-                <div className="progress-stat-value target">{goal.targetValue}</div>
+                <div className="progress-stat-value target">{formatValue(goal.targetValue)}</div>
               </div>
               <div className="progress-stat">
                 <div className="progress-stat-label">Progress</div>

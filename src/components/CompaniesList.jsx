@@ -28,16 +28,8 @@ export default function CompaniesList({ rawData, onSelectCompany }) {
       <div className="list-header">
         <div className="list-stats">
           <div className="stat-item">
-            <span className="stat-value">{companies.filter(c => c.isPortfolio).length}</span>
-            <span className="stat-label">Portfolio</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-value">{companies.filter(c => !c.isPortfolio).length}</span>
-            <span className="stat-label">Prospects</span>
-          </div>
-          <div className="stat-item">
             <span className="stat-value">{companies.length}</span>
-            <span className="stat-label">Total</span>
+            <span className="stat-label">Portfolio Companies</span>
           </div>
         </div>
       </div>

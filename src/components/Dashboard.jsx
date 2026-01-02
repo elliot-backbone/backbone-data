@@ -3,6 +3,7 @@ import './Dashboard.css';
 import PriorityQueue from './PriorityQueue';
 import PriorityDetail from './PriorityDetail';
 import Snapshot from './Snapshot';
+import IssuesBreakdown from './IssuesBreakdown';
 import CompaniesList from './CompaniesList';
 import CompanyDetail from './CompanyDetail';
 import GoalsList from './GoalsList';
@@ -12,6 +13,7 @@ import RoundDetail from './RoundDetail';
 import DealsPipeline from './DealsPipeline';
 import DealDetail from './DealDetail';
 import FirmsList from './FirmsList';
+import FirmDetail from './FirmDetail';
 import PeopleList from './PeopleList';
 import PersonDetail from './PersonDetail';
 import RelationshipsView from './RelationshipsView';
@@ -38,6 +40,7 @@ export default function Dashboard({ rawData, onReset }) {
       'round-detail': 'rounds',
       'goal-detail': 'goals',
       'deal-detail': 'deals',
+      'firm-detail': 'firms',
       'person-detail': 'people',
       'relationship-detail': 'relationships'
     };
@@ -53,6 +56,8 @@ export default function Dashboard({ rawData, onReset }) {
         return <PriorityDetail issue={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} />;
       case 'snapshot':
         return <Snapshot rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
+      case 'issues':
+        return <IssuesBreakdown rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'companies':
         return <CompaniesList rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'company-detail':
@@ -71,6 +76,8 @@ export default function Dashboard({ rawData, onReset }) {
         return <DealDetail deal={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} />;
       case 'firms':
         return <FirmsList rawData={rawData} onSelectFirm={(f) => handleSelectEntity('firm', f)} />;
+      case 'firm-detail':
+        return <FirmDetail firm={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} />;
       case 'people':
         return <PeopleList rawData={rawData} onSelectPerson={(p) => handleSelectEntity('person', p)} />;
       case 'person-detail':
@@ -105,6 +112,12 @@ export default function Dashboard({ rawData, onReset }) {
               onClick={() => handleNavigation('snapshot')}
             >
               <span className="nav-label">Snapshot</span>
+            </button>
+            <button
+              className={`nav-item sub ${currentView === 'issues' ? 'active' : ''}`}
+              onClick={() => handleNavigation('issues')}
+            >
+              <span className="nav-label">Issues</span>
             </button>
             <button
               className={`nav-item sub ${currentView === 'companies' || currentView === 'company-detail' ? 'active' : ''}`}
