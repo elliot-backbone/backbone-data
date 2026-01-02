@@ -65,10 +65,8 @@ export default function Dashboard({ rawData, onReset }) {
         return <PriorityQueue rawData={rawData} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'priority-detail':
         return <PriorityDetail issue={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectGoal={(g) => handleSelectEntity('goal', g)} />;
-      case 'portfolio':
-        return <Snapshot rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'companies':
-        return <CompaniesList rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
+        return <Snapshot rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'company-detail':
         return <CompanyDetail company={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectRound={(r) => handleSelectEntity('round', r)} onSelectGoal={(g) => handleSelectEntity('goal', g)} />;
       case 'goals':
@@ -116,15 +114,8 @@ export default function Dashboard({ rawData, onReset }) {
             <span className="nav-label">Priorities</span>
           </button>
 
-          <button
-            className={`nav-item ${currentView === 'portfolio' ? 'active' : ''}`}
-            onClick={() => handleNavigation('portfolio')}
-          >
-            <span className="nav-label">Portfolio</span>
-          </button>
-
           <div className="nav-section">
-            <div className="nav-section-label">Portfolio Entities</div>
+            <div className="nav-section-label">Portfolio</div>
             <button
               className={`nav-item sub ${currentView === 'companies' || currentView === 'company-detail' ? 'active' : ''}`}
               onClick={() => handleNavigation('companies')}
@@ -183,8 +174,7 @@ export default function Dashboard({ rawData, onReset }) {
             <h1 className="page-title">
               {currentView === 'priorities' && 'Priority Queue'}
               {currentView === 'priority-detail' && 'Priority Detail'}
-              {currentView === 'portfolio' && 'Portfolio Snapshot'}
-              {currentView === 'companies' && 'Portfolio Companies'}
+              {currentView === 'companies' && 'Portfolio Snapshot'}
               {currentView === 'company-detail' && selectedEntity?.entity?.name}
               {currentView === 'goals' && 'Goals'}
               {currentView === 'goal-detail' && 'Goal Details'}
