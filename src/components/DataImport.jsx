@@ -31,16 +31,19 @@ function parseCSV(text) {
 }
 
 const CSV_TEMPLATES = {
-  companies: 'id,name,isPortfolio,stage,sector,cashOnHand,monthlyBurn,mrr,lastMaterialUpdate_at',
-  rounds: 'id,company_id,roundType,targetAmount,raisedAmount,status,startedAt,hasLead',
-  goals: 'id,company_id,goalType,title,targetValue,currentValue,targetDate,status,priority',
+  companies: 'id,name,isPortfolio,founder_id,foundedAt,country,stage,sector,cashOnHand,monthlyBurn,mrr,employeeCount,lastMaterialUpdate_at',
+  firms: 'id,name,firmType,typicalCheckMin,typicalCheckMax',
+  people: 'id,firstName,lastName,email,role,firm_id,title,lastContactedAt',
+  rounds: 'id,company_id,roundType,targetAmount,raisedAmount,status,startedAt,targetCloseDate,leadInvestor_id',
+  goals: 'id,company_id,goalType,title,targetValue,currentValue,startDate,targetDate,lastUpdatedAt',
+  deals: 'id,round_id,firm_id,person_id,dealStage,lastContactDate,introducedBy_id,expectedAmount',
 };
 
 export default function DataImport({ onDataLoaded }) {
   const [mode, setMode] = useState('generate');
   const [portfolioCount, setPortfolioCount] = useState(12);
   const [stressLevel, setStressLevel] = useState('default');
-  const [tables, setTables] = useState({ companies: '', rounds: '', goals: '' });
+  const [tables, setTables] = useState({ companies: '', firms: '', people: '', rounds: '', goals: '', deals: '' });
   const [activeTab, setActiveTab] = useState('companies');
   const [error, setError] = useState('');
 
@@ -62,7 +65,7 @@ export default function DataImport({ onDataLoaded }) {
     } catch (e) { setError('Parse error: ' + e.message); }
   };
 
-  const tabOrder = ['companies', 'rounds', 'goals'];
+  const tabOrder = ['companies', 'firms', 'people', 'rounds', 'goals', 'deals'];
 
   return (
     <div className="import-container">

@@ -132,22 +132,27 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
   const companyStages = [];
   for (let i = 0; i < portfolioCount; i++) companyStages.push(pick(['seed', 'series_a', 'series_b']));
   for (let i = portfolioCount; i < totalCompanies; i++) companyStages.push(pick(STAGES));
-  
+
   for (let i = 0; i < totalCompanies; i++) {
     const isPortfolio = i < portfolioCount;
     const stage = companyStages[i];
     const healthProfile = pickHealthProfile(isPortfolio, stressLevel);
     const profile = healthProfiles[healthProfile] || healthProfiles.stable;
     const financials = STAGE_FINANCIALS[stage];
-    
+
     const burn = randomInt(financials.burn[0], financials.burn[1]);
     const targetRunway = randomFloat(profile.runwayRange[0], profile.runwayRange[1]);
     const cash = Math.round(burn * targetRunway);
-    
+
+    const founder = pick(founders);
+
     companies.push({
       id: uuid(),
       name: genCompanyName(),
       isPortfolio,
+      founder_id: founder.id,
+      foundedAt: daysAgo(randomInt(365, 2000)),
+      country: pick(COUNTRIES),
       cashOnHand: cash,
       monthlyBurn: burn,
       mrr: randomInt(financials.mrr[0], financials.mrr[1]),
@@ -155,7 +160,6 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
       sector: pick(SECTORS),
       employeeCount: randomInt(financials.employees[0], financials.employees[1]),
       lastMaterialUpdate_at: daysAgo(randomInt(profile.activityDays[0], profile.activityDays[1])),
-      _healthProfile: healthProfile
     });
   }
 
@@ -174,6 +178,9 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
       const isActive = r === numRounds - 1 && Math.random() > 0.3;
       const coverage = isActive ? randomFloat(0.1, 0.9) : (Math.random() > 0.2 ? 1.0 : randomFloat(0.5, 1.0));
       
+      const hasLead = coverage > 0.3 || Math.random() > 0.5;
+      const leadInvestor = hasLead ? pick(investors) : null;
+
       rounds.push({
         id: uuid(),
         company_id: company.id,
@@ -183,7 +190,7 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
         status: isActive ? pick(['active', 'closing']) : (coverage >= 1 ? 'closed' : 'abandoned'),
         startedAt: daysAgo(randomInt(60, 300)),
         targetCloseDate: isActive ? daysFromNow(randomInt(30, 120)) : daysAgo(randomInt(30, 365)),
-        hasLead: coverage > 0.3 || Math.random() > 0.5,
+        leadInvestor_id: leadInvestor?.id || null,
       });
     }
   }
@@ -197,7 +204,8 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
       const target = goalType === 'fundraise' ? randomInt(1000000, 20000000) : goalType === 'revenue' ? randomInt(10000, 500000) : goalType === 'hiring' ? randomInt(2, 20) : 100;
       const progress = randomFloat(0.1, 1.2);
       const daysLeft = randomInt(-30, 180);
-      
+      const startDate = daysAgo(randomInt(30, 180));
+
       goals.push({
         id: uuid(),
         company_id: company.id,
@@ -205,12 +213,41 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
         title: goalType === 'fundraise' ? 'Close Series A' : goalType === 'revenue' ? `Hit $${(target/1000).toFixed(0)}k MRR` : goalType === 'hiring' ? `Hire ${target} engineers` : 'Launch v2',
         targetValue: target,
         currentValue: Math.round(target * Math.min(progress, 1)),
+        startDate,
         targetDate: daysLeft > 0 ? daysFromNow(daysLeft) : daysAgo(Math.abs(daysLeft)),
-        status: progress >= 1 ? 'completed' : daysLeft < 0 ? 'at_risk' : progress < 0.3 && daysLeft < 30 ? 'at_risk' : 'active',
-        priority: pick(['critical', 'high', 'high', 'medium', 'medium', 'low']),
+        lastUpdatedAt: daysAgo(randomInt(0, 14)),
       });
     }
   }
 
-  return { companies, firms, people, rounds, goals };
+  // Generate Deals
+  const deals = [];
+  for (const round of rounds) {
+    const dealCountForRound = round.status === 'active' ? randomInt(8, 15) : round.status === 'closing' ? randomInt(5, 12) : randomInt(3, 8);
+
+    for (let d = 0; d < dealCountForRound && deals.length < dealCount; d++) {
+      const investor = pick(investors);
+      const stage = round.status === 'closed' ? pick(['closed', 'committed']) : pick(DEAL_STAGES);
+      const recency = stage === 'closed' || stage === 'committed' ? randomInt(30, 180) :
+                      stage === 'dropped' ? randomInt(45, 120) :
+                      stage === 'diligence' || stage === 'term_sheet' ? randomInt(0, 7) :
+                      stage === 'meeting_held' ? randomInt(3, 21) :
+                      stage === 'meeting_scheduled' ? randomInt(0, 7) :
+                      stage === 'contacted' ? randomInt(7, 30) :
+                      randomInt(14, 60);
+
+      deals.push({
+        id: uuid(),
+        round_id: round.id,
+        firm_id: investor.firm_id,
+        person_id: investor.id,
+        dealStage: stage,
+        lastContactDate: daysAgo(recency),
+        introducedBy_id: Math.random() > 0.3 ? pick(people).id : null,
+        expectedAmount: stage === 'term_sheet' || stage === 'committed' || stage === 'closed' ? randomInt(50000, Math.round(round.targetAmount * 0.4)) : null,
+      });
+    }
+  }
+
+  return { companies, firms, people, rounds, goals, deals };
 }

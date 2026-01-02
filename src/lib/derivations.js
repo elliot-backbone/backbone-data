@@ -94,7 +94,7 @@ export function detectIssues(companies, rounds, goals) {
       });
     }
 
-    if (!round.hasLead && round.daysOpen > 30) {
+    if (!round.leadInvestor_id && round.daysOpen > 30) {
       issues.push({
         id: `issue-${issueId++}`,
         companyId: company.id,
@@ -103,30 +103,51 @@ export function detectIssues(companies, rounds, goals) {
         urgencyScore: Math.round(40 + round.daysOpen * 0.3),
         title: `${round.roundType} needs lead, ${round.daysOpen}d open`,
         suggestedAction: 'Focus on lead-capable firms',
-        triggerCondition: `hasLead=false && daysOpen=${round.daysOpen} > 30`,
+        triggerCondition: `leadInvestor_id=null && daysOpen=${round.daysOpen} > 30`,
       });
     }
   }
 
   // Goal-level issues
   for (const goal of goals) {
-    if (goal.status !== 'active' && goal.status !== 'at_risk') continue;
     const company = enrichedCompanies.find(c => c.id === goal.company_id);
     if (!company?.isPortfolio) continue;
 
     const progress = goal.targetValue > 0 ? goal.currentValue / goal.targetValue : 0;
     const daysToDeadline = goal.targetDate ? Math.floor((new Date(goal.targetDate) - Date.now()) / 86400000) : null;
+    const daysSinceUpdate = goal.lastUpdatedAt ? Math.floor((Date.now() - new Date(goal.lastUpdatedAt)) / 86400000) : 999;
 
-    if (goal.status === 'at_risk' || (daysToDeadline !== null && daysToDeadline < 30 && progress < 0.7)) {
+    // Compute status (derived, not stored)
+    const isCompleted = progress >= 1;
+    const isAtRisk = !isCompleted && (daysToDeadline !== null && daysToDeadline < 0 || (daysToDeadline < 30 && progress < 0.3));
+    const isStalled = !isCompleted && daysSinceUpdate > 21;
+
+    if (isCompleted) continue;
+
+    if (isAtRisk || (daysToDeadline !== null && daysToDeadline < 30 && progress < 0.7)) {
+      const severity = daysToDeadline < 0 ? 'high' : progress < 0.3 ? 'high' : 'medium';
       issues.push({
         id: `issue-${issueId++}`,
         companyId: company.id,
         type: 'goal_risk',
-        severity: goal.priority === 'critical' ? 'high' : 'medium',
-        urgencyScore: Math.round(50 + (1 - progress) * 30),
+        severity,
+        urgencyScore: Math.round(50 + (1 - progress) * 30 + Math.max(0, 30 - daysToDeadline)),
         title: `${goal.title}: ${(progress * 100).toFixed(0)}% complete, ${daysToDeadline}d left`,
         suggestedAction: 'Review blockers and acceleration options',
-        triggerCondition: `progress=${progress.toFixed(2)} < 0.7`,
+        triggerCondition: `progress=${progress.toFixed(2)} < 0.7 && daysToDeadline=${daysToDeadline} < 30`,
+      });
+    }
+
+    if (isStalled) {
+      issues.push({
+        id: `issue-${issueId++}`,
+        companyId: company.id,
+        type: 'goal_risk',
+        severity: 'medium',
+        urgencyScore: Math.round(40 + daysSinceUpdate),
+        title: `${goal.title}: No update in ${daysSinceUpdate} days`,
+        suggestedAction: 'Check in on progress and blockers',
+        triggerCondition: `daysSinceUpdate=${daysSinceUpdate} > 21`,
       });
     }
   }
