@@ -1,7 +1,7 @@
 .landing {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  color: #f8fafc;
+  background: linear-gradient(135deg, var(--backbone-black) 0%, var(--backbone-dark) 100%);
+  color: var(--backbone-white);
 }
 
 .landing-nav {
@@ -9,9 +9,9 @@
   top: 0;
   left: 0;
   right: 0;
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(10, 10, 11, 0.8);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  border-bottom: 1px solid var(--backbone-charcoal);
   z-index: 100;
 }
 
@@ -31,8 +31,8 @@
 
 .landing-nav-btn {
   background: transparent;
-  border: 1.5px solid #3b82f6;
-  color: #3b82f6;
+  border: 1.5px solid var(--backbone-purple);
+  color: var(--backbone-purple);
   padding: 0.625rem 1.5rem;
   border-radius: 8px;
   font-size: 0.9375rem;
@@ -42,8 +42,8 @@
 }
 
 .landing-nav-btn:hover {
-  background: #3b82f6;
-  color: #ffffff;
+  background: var(--backbone-purple);
+  color: var(--backbone-white);
   transform: translateY(-1px);
 }
 
@@ -65,7 +65,7 @@
   line-height: 1.1;
   margin: 0 0 1.5rem;
   letter-spacing: -0.03em;
-  background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
+  background: linear-gradient(135deg, var(--backbone-white) 0%, var(--backbone-light) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -74,7 +74,7 @@
 .hero-subtitle {
   font-size: 1.25rem;
   line-height: 1.6;
-  color: #cbd5e1;
+  color: var(--backbone-light);
   margin: 0 0 3rem;
   max-width: 700px;
   margin-left: auto;
@@ -82,8 +82,8 @@
 }
 
 .hero-cta {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--backbone-purple) 0%, var(--backbone-purple-dim) 100%);
+  color: var(--backbone-white);
   border: none;
   padding: 1rem 2.5rem;
   font-size: 1.125rem;
@@ -91,12 +91,12 @@
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
 }
 
 .hero-cta:hover {
   transform: translateY(-2px);
-  box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
 }
 
 .hero-cta:active {
@@ -105,9 +105,9 @@
 
 .features {
   padding: 6rem 2rem;
-  background: rgba(30, 41, 59, 0.5);
-  border-top: 1px solid rgba(148, 163, 184, 0.1);
-  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  background: rgba(17, 17, 19, 0.5);
+  border-top: 1px solid var(--backbone-charcoal);
+  border-bottom: 1px solid var(--backbone-charcoal);
 }
 
 .features-content {
@@ -119,8 +119,8 @@
 }
 
 .feature-card {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: rgba(10, 10, 11, 0.6);
+  border: 1px solid var(--backbone-charcoal);
   border-radius: 12px;
   padding: 2.5rem;
   transition: all 0.3s ease;
@@ -128,7 +128,7 @@
 
 .feature-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(59, 130, 246, 0.3);
+  border-color: var(--backbone-purple);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
@@ -142,14 +142,14 @@
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0 0 1rem;
-  color: #f8fafc;
+  color: var(--backbone-white);
   line-height: 1.3;
 }
 
 .feature-description {
   font-size: 1rem;
   line-height: 1.6;
-  color: #94a3b8;
+  color: var(--backbone-silver);
   margin: 0;
 }
 
@@ -170,20 +170,20 @@
   font-weight: 800;
   line-height: 1.2;
   margin: 0 0 1.5rem;
-  color: #f8fafc;
+  color: var(--backbone-white);
   letter-spacing: -0.02em;
 }
 
 .cta-text {
   font-size: 1.125rem;
   line-height: 1.6;
-  color: #cbd5e1;
+  color: var(--backbone-light);
   margin: 0 0 2.5rem;
 }
 
 .cta-button {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--backbone-green) 0%, var(--backbone-green-dim) 100%);
+  color: var(--backbone-white);
   border: none;
   padding: 1rem 2.5rem;
   font-size: 1.125rem;
@@ -191,12 +191,12 @@
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 212, 170, 0.3);
 }
 
 .cta-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 15px 40px rgba(0, 212, 170, 0.4);
 }
 
 .cta-button:active {
@@ -205,8 +205,8 @@
 
 .landing-footer {
   padding: 3rem 2rem;
-  border-top: 1px solid rgba(148, 163, 184, 0.1);
-  background: rgba(15, 23, 42, 0.8);
+  border-top: 1px solid var(--backbone-charcoal);
+  background: rgba(10, 10, 11, 0.8);
 }
 
 .footer-content {
@@ -217,7 +217,7 @@
 
 .footer-text {
   font-size: 0.875rem;
-  color: #64748b;
+  color: var(--backbone-gray);
   margin: 0;
 }
 
