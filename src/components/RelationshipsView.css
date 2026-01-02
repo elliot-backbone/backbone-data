@@ -14,22 +14,22 @@
   flex-direction: column;
   align-items: center;
   padding: 20px 32px;
-  background: white;
+  background: #1e293b;
   border-radius: 12px;
-  border: 2px solid #e5e7eb;
+  border: 1px solid #334155;
 }
 
 .header-stat .stat-value {
-  font-size: 36px;
+  font-size: 2rem;
   font-weight: 700;
-  color: #111827;
+  color: #f8fafc;
   line-height: 1;
   margin-bottom: 8px;
 }
 
 .header-stat .stat-label {
-  font-size: 13px;
-  color: #6b7280;
+  font-size: 0.875rem;
+  color: #64748b;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -43,16 +43,16 @@
 }
 
 .relationships-section {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: #1e293b;
+  border: 1px solid #334155;
   border-radius: 12px;
   padding: 24px;
 }
 
 .section-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #111827;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f8fafc;
   margin: 0 0 20px 0;
 }
 
@@ -64,8 +64,8 @@
 
 .network-card {
   padding: 16px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background: #0f172a;
+  border: 1px solid #334155;
   border-radius: 10px;
   transition: all 0.2s;
   cursor: pointer;
@@ -73,14 +73,14 @@
 
 .network-card:hover {
   border-color: #3b82f6;
-  background: white;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+  background: rgba(59, 130, 246, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .network-company-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: #111827;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f8fafc;
   margin: 0 0 12px 0;
 }
 
@@ -97,7 +97,7 @@
 }
 
 .network-stat-value {
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #3b82f6;
   line-height: 1;
@@ -105,9 +105,9 @@
 }
 
 .network-stat-label {
-  font-size: 11px;
-  color: #6b7280;
-  font-weight: 500;
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -123,16 +123,16 @@
   align-items: center;
   gap: 16px;
   padding: 16px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background: #0f172a;
+  border: 1px solid #334155;
   border-radius: 10px;
   transition: all 0.2s;
 }
 
 .investor-row:hover {
   border-color: #3b82f6;
-  background: white;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+  background: rgba(59, 130, 246, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .investor-rank {
@@ -140,7 +140,7 @@
   height: 36px;
   border-radius: 50%;
   background: #3b82f6;
-  color: white;
+  color: #f8fafc;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -155,15 +155,15 @@
 }
 
 .investor-name {
-  font-size: 15px;
-  font-weight: 600;
-  color: #111827;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #f8fafc;
   margin-bottom: 4px;
 }
 
 .investor-firm {
-  font-size: 13px;
-  color: #6b7280;
+  font-size: 0.875rem;
+  color: #94a3b8;
 }
 
 .investor-stats {
@@ -178,9 +178,9 @@
 }
 
 .investor-stat-value {
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 700;
-  color: #111827;
+  color: #f8fafc;
   line-height: 1;
   margin-bottom: 4px;
 }
@@ -190,9 +190,9 @@
 }
 
 .investor-stat-label {
-  font-size: 10px;
-  color: #6b7280;
-  font-weight: 500;
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -205,16 +205,16 @@
 
 .intro-source-card {
   padding: 16px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background: #0f172a;
+  border: 1px solid #334155;
   border-radius: 10px;
   transition: all 0.2s;
 }
 
 .intro-source-card:hover {
-  border-color: #8b5cf6;
-  background: white;
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+  border-color: #a855f7;
+  background: rgba(168, 85, 247, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .intro-source-header {
@@ -223,15 +223,15 @@
   gap: 12px;
   margin-bottom: 12px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #334155;
 }
 
 .intro-source-rank {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #8b5cf6;
-  color: white;
+  background: #a855f7;
+  color: #f8fafc;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -246,15 +246,15 @@
 }
 
 .intro-source-name {
-  font-size: 15px;
-  font-weight: 600;
-  color: #111827;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #f8fafc;
   margin-bottom: 4px;
 }
 
 .intro-source-meta {
-  font-size: 12px;
-  color: #6b7280;
+  font-size: 0.75rem;
+  color: #94a3b8;
 }
 
 .intro-source-stats {
@@ -270,17 +270,17 @@
 }
 
 .intro-stat-value {
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 700;
-  color: #8b5cf6;
+  color: #a855f7;
   line-height: 1;
   margin-bottom: 4px;
 }
 
 .intro-stat-label {
-  font-size: 10px;
-  color: #6b7280;
-  font-weight: 500;
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   text-align: center;

@@ -9,9 +9,9 @@
   align-items: center;
   gap: 3rem;
   padding: 2rem;
-  background: white;
+  background: #1e293b;
   border-radius: 1rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #334155;
   margin-bottom: 2rem;
 }
 
@@ -29,7 +29,7 @@
 .mini-stat-value {
   font-size: 2rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #f8fafc;
 }
 
 .mini-stat-label {
@@ -37,6 +37,7 @@
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: 600;
   margin-top: 0.25rem;
 }
 
@@ -47,8 +48,8 @@
 }
 
 .snapshot-section {
-  background: white;
-  border: 1px solid #e2e8f0;
+  background: #1e293b;
+  border: 1px solid #334155;
   border-radius: 0.75rem;
   padding: 1.5rem;
 }
@@ -89,13 +90,16 @@
 .alert-value {
   font-size: 2rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #f8fafc;
 }
 
 .alert-label {
   font-size: 0.875rem;
-  color: #64748b;
+  color: #94a3b8;
   margin-top: 0.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .health-distribution-grid {
@@ -107,7 +111,8 @@
 .health-dist-item {
   text-align: center;
   padding: 1rem;
-  background: #f8fafc;
+  background: #0f172a;
+  border: 1px solid #334155;
   border-radius: 0.5rem;
 }
 
@@ -138,6 +143,7 @@
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: 600;
 }
 
 .full-width {
@@ -154,7 +160,8 @@
   display: flex;
   gap: 1rem;
   padding: 1rem;
-  background: #f8fafc;
+  background: #0f172a;
+  border: 1px solid #334155;
   border-radius: 0.5rem;
   border-left: 3px solid #3b82f6;
   cursor: pointer;
@@ -162,7 +169,7 @@
 }
 
 .impact-issue-item:hover {
-  background: #f1f5f9;
+  background: rgba(59, 130, 246, 0.05);
   transform: translateX(2px);
 }
 
@@ -172,10 +179,10 @@
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  background: white;
+  background: #1e293b;
   border-radius: 0.375rem;
   font-weight: 700;
-  color: #64748b;
+  color: #94a3b8;
   flex-shrink: 0;
 }
 
@@ -201,26 +208,26 @@
 .impact-company-name {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #0f172a;
+  color: #f8fafc;
 }
 
 .impact-score {
   margin-left: auto;
   font-size: 0.75rem;
-  color: #64748b;
+  color: #94a3b8;
   font-weight: 600;
 }
 
 .impact-issue-title {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #0f172a;
+  color: #f8fafc;
   margin-bottom: 0.25rem;
 }
 
 .impact-issue-action {
   font-size: 0.8rem;
-  color: #64748b;
+  color: #94a3b8;
 }
 
 .companies-quick-grid {
@@ -231,18 +238,18 @@
 
 .company-quick-card {
   padding: 1rem;
-  background: #f8fafc;
+  background: #0f172a;
+  border: 1px solid #334155;
   border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.2s;
-  border: 1px solid transparent;
 }
 
 .company-quick-card:hover {
-  background: white;
+  background: rgba(59, 130, 246, 0.05);
   border-color: #3b82f6;
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .company-quick-header {
@@ -255,7 +262,7 @@
 .company-quick-name {
   font-size: 1rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #f8fafc;
   margin: 0;
 }
 
@@ -278,9 +285,13 @@
 
 .company-quick-metric .metric-label {
   color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
 }
 
 .company-quick-metric .metric-value {
-  color: #0f172a;
+  color: #f8fafc;
   font-weight: 600;
 }

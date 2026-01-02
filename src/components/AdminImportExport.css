@@ -12,12 +12,12 @@
   margin: 0 0 8px 0;
   font-size: 24px;
   font-weight: 600;
-  color: #fff;
+  color: #f8fafc;
 }
 
 .import-export-header p {
   margin: 0;
-  color: #999;
+  color: #94a3b8;
   font-size: 14px;
 }
 
@@ -25,7 +25,7 @@
   display: flex;
   gap: 8px;
   margin-bottom: 30px;
-  border-bottom: 1px solid #222;
+  border-bottom: 1px solid #334155;
   padding-bottom: 0;
   overflow-x: auto;
 }
@@ -34,7 +34,7 @@
   padding: 12px 20px;
   background: none;
   border: none;
-  color: #999;
+  color: #94a3b8;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
@@ -44,13 +44,13 @@
 }
 
 .entity-tab:hover {
-  color: #fff;
-  background: #1a1a1a;
+  color: #f8fafc;
+  background: #1e293b;
 }
 
 .entity-tab.active {
-  color: #fff;
-  border-bottom-color: #fff;
+  color: #f8fafc;
+  border-bottom-color: #3b82f6;
 }
 
 .import-export-content {
@@ -60,8 +60,8 @@
 }
 
 .section {
-  background: #111;
-  border: 1px solid #222;
+  background: #1e293b;
+  border: 1px solid #334155;
   border-radius: 8px;
   padding: 24px;
 }
@@ -70,7 +70,7 @@
   margin: 0 0 16px 0;
   font-size: 18px;
   font-weight: 600;
-  color: #fff;
+  color: #f8fafc;
 }
 
 .template-info {
@@ -79,20 +79,20 @@
   gap: 8px;
   margin-bottom: 16px;
   padding: 12px;
-  background: #0a0a0a;
+  background: #0f172a;
   border-radius: 6px;
   font-size: 13px;
 }
 
 .template-info strong {
-  color: #999;
+  color: #94a3b8;
   font-weight: 500;
 }
 
 .template-info code {
-  color: #fff;
+  color: #f8fafc;
   font-family: 'Courier New', monospace;
-  background: #1a1a1a;
+  background: #1e293b;
   padding: 6px 8px;
   border-radius: 4px;
   font-size: 12px;
@@ -103,10 +103,10 @@
 .section textarea {
   width: 100%;
   padding: 12px;
-  background: #0a0a0a;
-  border: 1px solid #333;
+  background: #0f172a;
+  border: 1px solid #334155;
   border-radius: 6px;
-  color: #fff;
+  color: #f8fafc;
   font-size: 13px;
   font-family: 'Courier New', monospace;
   resize: vertical;
@@ -115,31 +115,31 @@
 
 .section textarea:focus {
   outline: none;
-  border-color: #666;
-  background: #111;
+  border-color: #3b82f6;
+  background: #1e293b;
 }
 
 .help-text {
   margin: 0 0 12px 0;
-  color: #999;
+  color: #94a3b8;
   font-size: 13px;
 }
 
 .sheets-url-input {
   width: 100%;
   padding: 10px 12px;
-  background: #0a0a0a;
-  border: 1px solid #333;
+  background: #0f172a;
+  border: 1px solid #334155;
   border-radius: 6px;
-  color: #fff;
+  color: #f8fafc;
   font-size: 14px;
   margin-bottom: 12px;
 }
 
 .sheets-url-input:focus {
   outline: none;
-  border-color: #666;
-  background: #111;
+  border-color: #3b82f6;
+  background: #1e293b;
 }
 
 .import-actions {
@@ -151,8 +151,8 @@
 .file-upload-btn {
   position: relative;
   padding: 10px 20px;
-  background: #222;
-  color: #fff;
+  background: #334155;
+  color: #f8fafc;
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
@@ -162,7 +162,7 @@
 }
 
 .file-upload-btn:hover {
-  background: #333;
+  background: #475569;
 }
 
 .file-upload-btn input[type="file"] {
@@ -184,21 +184,21 @@
 }
 
 .import-btn {
-  background: #fff;
-  color: #000;
+  background: #10b981;
+  color: #f8fafc;
 }
 
 .import-btn:hover:not(:disabled) {
-  background: #e0e0e0;
+  background: #059669;
 }
 
 .export-btn {
-  background: #2a7fff;
-  color: #fff;
+  background: #3b82f6;
+  color: #f8fafc;
 }
 
 .export-btn:hover:not(:disabled) {
-  background: #1a6fee;
+  background: #60a5fa;
 }
 
 .import-btn:disabled,

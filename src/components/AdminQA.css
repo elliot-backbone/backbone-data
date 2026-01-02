@@ -15,13 +15,13 @@
   margin: 0;
   font-size: 24px;
   font-weight: 600;
-  color: #fff;
+  color: #f8fafc;
 }
 
 .refresh-btn {
   padding: 8px 16px;
-  background: #fff;
-  color: #000;
+  background: #3b82f6;
+  color: #f8fafc;
   border: none;
   border-radius: 6px;
   font-size: 14px;
@@ -31,12 +31,12 @@
 }
 
 .refresh-btn:hover {
-  background: #e0e0e0;
+  background: #60a5fa;
 }
 
 .loading {
   text-align: center;
-  color: #666;
+  color: #94a3b8;
   padding: 60px 20px;
   font-size: 16px;
 }
@@ -48,8 +48,8 @@
 }
 
 .qa-section {
-  background: #111;
-  border: 1px solid #222;
+  background: #1e293b;
+  border: 1px solid #334155;
   border-radius: 8px;
   padding: 20px;
   transition: all 0.2s;
@@ -69,14 +69,14 @@
   align-items: center;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #222;
+  border-bottom: 1px solid #334155;
 }
 
 .qa-section-header h4 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #fff;
+  color: #f8fafc;
 }
 
 .status-badge {
@@ -108,7 +108,7 @@
   display: flex;
   justify-content: space-between;
   padding: 8px 12px;
-  background: #0a0a0a;
+  background: #0f172a;
   border-radius: 6px;
   transition: all 0.2s;
 }
@@ -119,12 +119,12 @@
 }
 
 .qa-label {
-  color: #999;
+  color: #94a3b8;
   font-size: 14px;
 }
 
 .qa-value {
-  color: #fff;
+  color: #f8fafc;
   font-size: 14px;
   font-weight: 500;
 }
