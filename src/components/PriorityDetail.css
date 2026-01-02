@@ -35,6 +35,17 @@
   font-size: 0.875rem;
   color: #3b82f6;
   font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.priority-company-link:hover {
+  opacity: 0.7;
+}
+
+.header-badges {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .detail-title {
@@ -44,7 +55,8 @@
   margin: 0;
 }
 
-.priority-severity-badge-large {
+.priority-severity-badge-large,
+.impact-score-badge-large {
   display: inline-flex;
   align-items: center;
   padding: 0.5rem 1rem;
@@ -66,6 +78,10 @@
   border: 1px solid #e2e8f0;
   border-radius: 0.75rem;
   padding: 1.5rem;
+}
+
+.detail-section.full-width {
+  grid-column: 1 / -1;
 }
 
 .section-title {
@@ -180,4 +196,58 @@
 .related-title {
   font-size: 0.875rem;
   color: #334155;
+}
+
+.unlocks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.unlock-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 0.5rem;
+  border-left: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+.unlock-card:hover {
+  background: #f1f5f9;
+  transform: translateX(2px);
+}
+
+.unlock-indicator {
+  width: 4px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.unlock-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.unlock-type {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.unlock-description {
+  font-size: 0.875rem;
+  color: #0f172a;
+  line-height: 1.4;
+}
+
+.unlock-impact-label {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
 }

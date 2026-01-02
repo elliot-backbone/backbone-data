@@ -64,11 +64,7 @@ export default function Dashboard({ rawData, onReset }) {
       case 'priorities':
         return <PriorityQueue rawData={rawData} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'priority-detail':
-        return <PriorityDetail issue={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} />;
-      case 'issues':
-        return <IssuesBreakdown rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
-      case 'impact':
-        return <ImpactView rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
+        return <PriorityDetail issue={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'snapshot':
         return <Snapshot rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'companies':
@@ -116,18 +112,6 @@ export default function Dashboard({ rawData, onReset }) {
             onClick={() => handleNavigation('priorities')}
           >
             <span className="nav-label">Priorities</span>
-          </button>
-          <button
-            className={`nav-item sub ${currentView === 'issues' ? 'active' : ''}`}
-            onClick={() => handleNavigation('issues')}
-          >
-            <span className="nav-label">Issues</span>
-          </button>
-          <button
-            className={`nav-item sub-sub ${currentView === 'impact' ? 'active' : ''}`}
-            onClick={() => handleNavigation('impact')}
-          >
-            <span className="nav-label">Impact</span>
           </button>
 
           <div className="nav-section">
@@ -190,8 +174,6 @@ export default function Dashboard({ rawData, onReset }) {
             <h1 className="page-title">
               {currentView === 'priorities' && 'Priority Queue'}
               {currentView === 'priority-detail' && 'Priority Detail'}
-              {currentView === 'issues' && 'Issues Breakdown'}
-              {currentView === 'impact' && 'Impact Analysis'}
               {currentView === 'snapshot' && 'Portfolio Snapshot'}
               {currentView === 'companies' && 'Portfolio Companies'}
               {currentView === 'company-detail' && selectedEntity?.entity?.name}
