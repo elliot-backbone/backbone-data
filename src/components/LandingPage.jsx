@@ -5,7 +5,7 @@ export default function LandingPage({ onGetStarted }) {
     <div className="landing">
       <nav className="landing-nav">
         <div className="landing-nav-content">
-          <div className="landing-logo">BACKBONE</div>
+          <img src="/src/assets/backbone_white.svg" alt="Backbone" className="landing-logo" />
           <button className="landing-nav-btn" onClick={onGetStarted}>
             Get Started
           </button>

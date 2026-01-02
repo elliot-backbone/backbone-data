@@ -135,7 +135,7 @@ export default function Dashboard({ rawData, onReset, onDataUpdate }) {
     <div className="dashboard">
       <nav className="sidebar">
         <div className="sidebar-header">
-          <div className="sidebar-logo">BACKBONE</div>
+          <img src="/src/assets/backbone_white.svg" alt="Backbone" className="sidebar-logo" />
         </div>
         <div className="sidebar-nav">
           <button

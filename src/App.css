@@ -25,7 +25,7 @@
 }
 
 body {
-  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: var(--backbone-black);
   color: var(--backbone-light);
   line-height: 1.7;
