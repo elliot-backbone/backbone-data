@@ -64,7 +64,7 @@ export default function Dashboard({ rawData, onReset }) {
       case 'priorities':
         return <PriorityQueue rawData={rawData} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'priority-detail':
-        return <PriorityDetail issue={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
+        return <PriorityDetail issue={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectGoal={(g) => handleSelectEntity('goal', g)} />;
       case 'snapshot':
         return <Snapshot rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'companies':
