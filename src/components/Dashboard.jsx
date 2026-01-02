@@ -287,9 +287,6 @@ export default function Dashboard() {
               {currentView === 'admin-scoring' && 'Scoring Configuration'}
               {currentView === 'admin-team' && 'Team Settings'}
             </h1>
-            <button className="top-bar-btn" onClick={onReset}>
-              Reset Data
-            </button>
           </div>
         </header>
 
