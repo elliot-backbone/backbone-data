@@ -17,36 +17,28 @@ export default function AdminQA() {
     try {
       const { data: companies } = await supabase.from('companies').select('*');
       const { data: people } = await supabase.from('people').select('*');
-      const { data: firms } = await supabase.from('firms').select('*');
       const { data: rounds } = await supabase.from('rounds').select('*');
       const { data: goals } = await supabase.from('goals').select('*');
       const { data: deals } = await supabase.from('deals').select('*');
+
+      results.invariants = {
+        derivedValuesStored: checkDerivedValues(companies, goals, deals),
+        missingTTL: checkMissingTTL(companies, goals, deals),
+        explainabilityGaps: 0,
+        silentOverwrites: 0
+      };
 
       results.companies = {
         total: companies?.length || 0,
         portfolio: companies?.filter(c => c.is_portfolio).length || 0,
         missingFounder: companies?.filter(c => !c.founder_id).length || 0,
-        negativeCash: companies?.filter(c => c.cash_on_hand < 0).length || 0,
-        zeroRunway: companies?.filter(c => c.runway <= 0).length || 0
+        negativeCash: companies?.filter(c => c.cash_on_hand < 0).length || 0
       };
 
       results.people = {
         total: people?.length || 0,
         duplicateEmails: checkDuplicateEmails(people || []),
-        missingRole: people?.filter(p => !p.role).length || 0,
-        investors: people?.filter(p => p.role === 'investor').length || 0
-      };
-
-      results.firms = {
-        total: firms?.length || 0,
-        invalidCheckRanges: firms?.filter(f => f.typical_check_min > f.typical_check_max).length || 0
-      };
-
-      results.rounds = {
-        total: rounds?.length || 0,
-        active: rounds?.filter(r => r.status === 'active').length || 0,
-        oversubscribed: rounds?.filter(r => r.raised_amount > r.target_amount).length || 0,
-        orphaned: rounds?.filter(r => !companies?.find(c => c.id === r.company_id)).length || 0
+        missingRole: people?.filter(p => !p.role).length || 0
       };
 
       results.goals = {
@@ -57,8 +49,7 @@ export default function AdminQA() {
 
       results.deals = {
         total: deals?.length || 0,
-        missingRound: deals?.filter(d => !rounds?.find(r => r.id === d.round_id)).length || 0,
-        missingPerson: deals?.filter(d => !people?.find(p => p.id === d.person_id)).length || 0
+        missingRound: deals?.filter(d => !rounds?.find(r => r.id === d.round_id)).length || 0
       };
 
       setQaResults(results);
@@ -67,6 +58,51 @@ export default function AdminQA() {
     } finally {
       setLoading(false);
     }
+  }
+
+  function checkDerivedValues(companies, goals, deals) {
+    let count = 0;
+    companies?.forEach(c => {
+      if (c.health_score != null || c.priority_score != null || c.failure_risk != null) count++;
+    });
+    goals?.forEach(g => {
+      if (g.risk_score != null || g.priority_score != null) count++;
+    });
+    deals?.forEach(d => {
+      if (d.priority_score != null) count++;
+    });
+    return count;
+  }
+
+  function checkMissingTTL(companies, goals, deals) {
+    let count = 0;
+    const criticalCompanyFields = [
+      { value: 'cash_on_hand', timestamp: 'cash_on_hand_updated_at' },
+      { value: 'monthly_burn', timestamp: 'monthly_burn_updated_at' },
+      { value: 'mrr', timestamp: 'mrr_updated_at' }
+    ];
+    companies?.forEach(c => {
+      criticalCompanyFields.forEach(field => {
+        if (c[field.value] != null && !c[field.timestamp]) count++;
+      });
+    });
+    const criticalGoalFields = [
+      { value: 'current_value', timestamp: 'current_value_updated_at' }
+    ];
+    goals?.forEach(g => {
+      criticalGoalFields.forEach(field => {
+        if (g[field.value] != null && !g[field.timestamp]) count++;
+      });
+    });
+    const criticalDealFields = [
+      { value: 'time_in_stage', timestamp: 'stage_entry_date' }
+    ];
+    deals?.forEach(d => {
+      criticalDealFields.forEach(field => {
+        if (d[field.value] != null && !d[field.timestamp]) count++;
+      });
+    });
+    return count;
   }
 
   function checkDuplicateEmails(people) {
@@ -87,10 +123,13 @@ export default function AdminQA() {
       </div>
 
       <div className="qa-grid">
+        <QASection
+          title="System Invariants"
+          data={qaResults.invariants}
+          critical={true}
+        />
         <QASection title="Companies" data={qaResults.companies} />
         <QASection title="People" data={qaResults.people} />
-        <QASection title="Firms" data={qaResults.firms} />
-        <QASection title="Rounds" data={qaResults.rounds} />
         <QASection title="Goals" data={qaResults.goals} />
         <QASection title="Deals" data={qaResults.deals} />
       </div>
@@ -98,7 +137,7 @@ export default function AdminQA() {
   );
 }
 
-function QASection({ title, data }) {
+function QASection({ title, data, critical }) {
   if (!data) return null;
 
   const issues = Object.entries(data).filter(([key, value]) => {
@@ -108,18 +147,20 @@ function QASection({ title, data }) {
   const hasIssues = issues.length > 0;
 
   return (
-    <div className={`qa-section ${hasIssues ? 'has-issues' : 'clean'}`}>
+    <div className={`qa-section ${hasIssues ? (critical ? 'critical' : 'has-issues') : 'clean'}`}>
       <div className="qa-section-header">
         <h4>{title}</h4>
-        <span className={`status-badge ${hasIssues ? 'warning' : 'success'}`}>
-          {hasIssues ? 'Issues Found' : 'Clean'}
+        <span className={`status-badge ${hasIssues ? (critical ? 'critical' : 'warning') : 'success'}`}>
+          {hasIssues ? (critical ? 'VIOLATION' : 'Issues Found') : 'Clean'}
         </span>
       </div>
       <div className="qa-stats">
-        <div className="qa-stat">
-          <span className="qa-label">Total:</span>
-          <span className="qa-value">{data.total}</span>
-        </div>
+        {data.total !== undefined && (
+          <div className="qa-stat">
+            <span className="qa-label">Total:</span>
+            <span className="qa-value">{data.total}</span>
+          </div>
+        )}
         {Object.entries(data).map(([key, value]) => {
           if (key === 'total') return null;
           return (

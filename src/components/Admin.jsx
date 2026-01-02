@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import AdminImportExport from './AdminImportExport';
-import AdminData from './AdminData';
 import AdminQA from './AdminQA';
 import AdminAnalyze from './AdminAnalyze';
 import './Admin.css';
@@ -23,12 +22,6 @@ export default function Admin({ onClose }) {
           Import/Export
         </button>
         <button
-          className={`admin-nav-btn ${activeView === 'data' ? 'active' : ''}`}
-          onClick={() => setActiveView('data')}
-        >
-          Data
-        </button>
-        <button
           className={`admin-nav-btn ${activeView === 'qa' ? 'active' : ''}`}
           onClick={() => setActiveView('qa')}
         >
@@ -44,7 +37,6 @@ export default function Admin({ onClose }) {
 
       <div className="admin-main">
         {activeView === 'import-export' && <AdminImportExport />}
-        {activeView === 'data' && <AdminData />}
         {activeView === 'qa' && <AdminQA />}
         {activeView === 'analyze' && <AdminAnalyze />}
       </div>
