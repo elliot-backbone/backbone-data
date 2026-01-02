@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import LandingPage from './components/LandingPage';
 import DataImport from './components/DataImport';
 import PriorityQueue from './components/PriorityQueue';
 import PortfolioHealthBar from './components/PortfolioHealthBar';
@@ -6,8 +7,13 @@ import { detectIssues, calculateHealth } from './lib/derivations';
 import './App.css';
 
 export default function App() {
+  const [showLanding, setShowLanding] = useState(true);
   const [rawData, setRawData] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+
+  if (showLanding) {
+    return <LandingPage onGetStarted={() => setShowLanding(false)} />;
+  }
 
   if (!rawData) {
     return <DataImport onDataLoaded={setRawData} />;
