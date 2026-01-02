@@ -1,0 +1,165 @@
+Purpose & context
+Elliot is the Founder/Managing Partner of Backbone, a venture studio and asset management firm that operates as "an operating system for attention allocation" for venture capital portfolio management. Backbone manages approximately 12 fintech portfolio companies including XFX (cross-border payments/stablecoin settlement), Pluto (NAV financing platform), Lucius (AI-native ERP), Unvault (AI-powered jewelry appraisal), Autar (AI software maintenance), Checker (stablecoin liquidity network), Double Sharp (payment infrastructure), Nexova (merchant stablecoin payments), Lava (AI billing infrastructure), and others.
+The core mission centers on answering "What should I do next?" through sophisticated priority calculation engines that transform raw entity data into ranked action lists. Elliot works with four other partners (Matt, Justin Guilder, Jason, and Alex Pedraza) and has developed proprietary methodologies including the Internal Advisor Guide V11 (field-tested across 100+ raises), memo-first fundraising approaches, and the "60/40 Rule" for investor conversations. The venture studio focuses on embedded finance, AI-first B2B platforms, regulatory arbitrage opportunities, and alternative asset liquidity plays, with deals typically in the $5-10M range.
+Key constraints include maintaining capital efficiency over capital accumulation, systematic pipeline management through relationship capital preservation, and adherence to established North Stars principles. Success is measured through portfolio company progression, fundraising velocity, and the transition from reactive to predictive management systems.
+Current state
+Elliot is actively developing Backbone CRM V8, a sophisticated dashboard system with a 7-layer computation architecture (Raw Inputs → Pure Derivations → Trajectories → State & Goal Risk → Issue Detection → Priority Calculation → Priority Output). The system implements frozen North Stars principles: NoStoredDerivs (no derived values persisted), Health=state (internal entity condition), Risk→Goal (all risks map to specific goals), Urgency→Risk (priority driven by gaps), Portfolio=VIEW (aggregation layer), DAG (directed acyclic graph dependencies), Modularise (never monolith), and Delete>Add (ruthless elimination over feature expansion).
+Current portfolio activity includes active fundraising across multiple companies, with XFX pursuing Series A discussions, Unvault having closed their seed round with Maveron and Deciens, Pluto building distribution partnerships, and Lucius recently completing their funding round. The dashboard tracks portfolioCompanies, masterInvestors, companyInvestors, talent, and employees with sophisticated health status calculations, deal stage progressions, and relationship tracking.
+Technical development follows checkpoint-gated methodology with rigorous QA frameworks, unique versioning systems, and comprehensive handover documentation to prevent context loss across sessions.
+On the horizon
+Three North Star focuses drive immediate priorities: Contracts (closing deals with Checker/Autar, converting Lucius/Nexova to paid engagements, securing yes/no decisions on Flowstate, upselling Pluto), Pipeline building (urgently developing UK and NYC founder/operator networks), and Incubation (launching Elliot's own venture and potentially commercializing the Backbone platform as a standalone product).
+The V8 system requires completion of 16 implementation phases covering 70+ tasks, with critical gaps including 25 missing L1 derivations, all 15 L2 trajectories, undefined L3 Health components, 17 missing L4 issue conditions, and 40 L5 resolution templates. Future milestones include connecting real data sources (Google Sheets integration), building goal management UI, implementing portfolio-level views, and transitioning from reactive to predictive analytics capabilities.
+Strategic considerations include potential commercialization of the Backbone platform, expansion into UK and NYC markets, and development of an enrichment tool concept for enhanced data pipeline capabilities.
+Key learnings & principles
+V5 North Stars serve as immutable architectural principles: NoStoredDerivs ensures all computed values are ephemeral and reproducible; Health=state describes internal entity condition without prescriptive actions; Risk→Goal mandates all risks map to specific goal contexts; Urgency→Risk drives priority through gap-oriented scoring; Portfolio=VIEW treats aggregation as presentation layer; DAG requires explicit directed acyclic graph dependencies; Modularise enforces physical separation of concerns; Delete>Add prioritizes ruthless elimination over feature expansion.
+Core investment insights include the shift from consumer-focused fintech to B2B infrastructure, the importance of regulatory arbitrage opportunities (like GENIUS Act compliance), and the value of AI-first platforms over traditional software approaches. The memo-first methodology has proven essential, with memos serving as "viral weapons" that do the talking rather than lengthy email explanations.
+Operational learnings emphasize that early-stage investing is fundamentally emotional decision-making, artificial leverage through optionality creation is critical, and strategic positioning techniques like appearing undecided and attributing decisions to external parties significantly improve outcomes. The "tight 5" narrative framework (inspired by comedian routines) and 60/40 talk ratio in meetings have become standard practices.
+Approach & patterns
+Development follows a systematic checkpoint-gated methodology with comprehensive QA frameworks including ESBuild compilation checks, brace balance verification, ASCII-only encoding requirements, and anti-regression auditing. Each implementation phase requires validation gates before proceeding, with stable rollback versions maintained throughout development cycles.
+The investment approach emphasizes memo-first fundraising where sophisticated 2-page investment memos serve as primary pipeline tools, systematic relationship capital preservation through structured investor communications, and wave sequencing for fundraising strategy. Decision-making frameworks include the five-phase investor diligence process, PICE methodology (Problems, Impacts, Causes, Emotional States) from Gap Selling, and burn multiple discipline for capital efficiency.
+Communication patterns center on WhatsApp as the primary async channel with portfolio companies, structured weekly sync cadences, and reference exchange as standard diligence process. The Internal Advisor Guide V11 framework provides battle-tested guidance for founder advisory work, emphasizing practical frameworks over theoretical concepts.
+Technical architecture follows modular design principles with single concern per file, deterministic computation, config-driven behavior, and explainable decision-making. The 7-layer computation hierarchy ensures proper data flow with each layer populated from preceding layers, creating interconnected cascades where L0 changes trigger recomputation through all downstream layers.
+Tools & resources
+Primary technical stack includes React/JavaScript for dashboard development, Google Workspace integration (Drive, Gmail, Calendar) for data pipeline management, and WhatsApp MCP integration for portfolio communication analysis. Development tools include ESBuild for compilation validation, PapaParse for robust CSV processing, and comprehensive QA scripts for syntax checking and architectural compliance.
+Investment infrastructure relies on Google Sheets for dynamic data loading, standardized investment memo templates, and systematic pipeline tracking across seven portfolio companies. The Internal Advisor Guide V11 serves as the operational framework document, while project knowledge bases contain extensive documentation around portfolio companies, investment strategies, and technical specifications.
+Key information sources include Gap Selling methodology for sales process optimization, Football Manager-inspired UI/UX patterns for executive dashboard design, and established venture capital best practices adapted for the AI workforce execution model that eliminates traditional sprint planning in favor of dependency-based sequencing.
+Other instructions
+Create a new project memory every 24 hours that incorporates North Stars principles to maintain architectural consistency and prevent drift from established guidelines.
+
+Flag with me any context reset, drift, and silent reinterpretation, so I can revert if I want.
+
+Here are the North Stars — stripped of fluff, aligned to how Backbone actually works, and consistent with the principle you already articulated.
+
+⸻
+
+1. Priority Emission Is the Point of the System
+
+Every entity that can block or unlock progress must emit priorities.
+
+If something can stall a company, a round, or the portfolio:
+	•	it must surface urgency
+	•	it must rank relative to everything else
+	•	it must compete for attention
+
+If an entity cannot emit priority, it is informational noise.
+
+⸻
+
+2. Health Is Internal State, Not Vibes
+
+Only entities with internal state deserve Health scores.
+
+Health answers:
+	•	“Is this entity structurally OK given what it is?”
+
+Health is:
+	•	positive-oriented
+	•	presence-based
+	•	slow-moving
+	•	internally determined
+
+If an entity’s “health” depends primarily on external actions, it should not have a Health score. Period.
+
+⸻
+
+3. Priority Is Gap-Oriented and Action-Forcing
+
+Priority answers:
+	•	“What is missing that blocks progress right now?”
+
+Priority is:
+	•	absence-based
+	•	externally resolvable
+	•	time-sensitive
+	•	zero-sum (attention is finite)
+
+High priority does not mean unhealthy.
+It means valuable progress is currently blocked.
+
+Confusing these two is the single biggest conceptual bug you’ve been fighting.
+
+⸻
+
+4. Static Data Is a Smell
+
+Humans should input facts. The system should derive conclusions.
+
+North star rule:
+	•	If a value can be derived → it must not be manually entered
+	•	If a value changes when upstream data changes → it must be calculated
+	•	Static fields are liabilities
+
+Backbone should trend toward:
+	•	fewer inputs
+	•	more inference
+	•	less trust in humans typing numbers
+
+⸻
+
+5. From Reactive → Predictive → Preventative
+
+The system must evolve along this arc:
+	1.	Reactive
+“This is broken.”
+	2.	Predictive
+“This will break in ~45 days.”
+	3.	Preventative
+“If you do X now, you avoid Y entirely.”
+
+If Backbone is not helping you see around corners, it’s just a prettier spreadsheet.
+
+⸻
+
+6. Impact = Downstream Unlocks (Not Importance Theater)
+
+Impact is not:
+	•	another score
+	•	a rebrand of priority
+	•	subjective importance
+
+Impact is:
+	•	“If this is resolved, what else unblocks?”
+	•	portfolio-level second-order effects
+	•	downside protection quantified
+
+Ripple effect > local optimization.
+
+⸻
+
+7. Goals Are the Reference Frame
+
+Without goals:
+	•	priority is arbitrary
+	•	impact is meaningless
+	•	health has no context
+
+Goals define:
+	•	what “good” looks like
+	•	what gaps matter
+	•	what progress even means
+
+No goal → no priority signal.
+
+⸻
+
+8. The System Exists to Tell You What to Do Next
+
+Final and non-negotiable north star:
+
+Backbone is an operating system for attention allocation.
+
+If, at any moment, it cannot clearly answer:
+	•	“What should I do next?”
+	•	“Why this over everything else?”
+	•	“What happens if I don’t?”
+
+then something is either:
+	•	mis-scored
+	•	mis-modeled
+	•	or should be deleted
+
+⸻
+
+One-Line Summary
+
+Backbone exists to convert messy, multi-entity reality into a ranked, defensible, forward-looking action list — with health describing state, priority describing gaps, impact describing leverage, and goals defining truth.
