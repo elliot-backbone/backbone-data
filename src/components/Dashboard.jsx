@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getResolvedPriorities } from '../lib/supabase';
+import { getResolvedPriorities, loadAllData } from '../lib/supabase';
 import './Dashboard.css';
 import PriorityQueue from './PriorityQueue';
 import PriorityDetail from './PriorityDetail';
@@ -22,15 +22,33 @@ import RelationshipsView from './RelationshipsView';
 import RelationshipDetail from './RelationshipDetail';
 import Admin from './Admin';
 
-export default function Dashboard({ rawData, onReset, onDataUpdate }) {
+export default function Dashboard() {
   const [currentView, setCurrentView] = useState('priorities');
   const [selectedEntity, setSelectedEntity] = useState(null);
   const [navigationHistory, setNavigationHistory] = useState([]);
   const [resolvedPriorities, setResolvedPriorities] = useState([]);
+  const [rawData, setRawData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadResolvedPriorities();
+    loadData();
   }, []);
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const [data, resolved] = await Promise.all([
+        loadAllData(),
+        getResolvedPriorities()
+      ]);
+      setRawData(data);
+      setResolvedPriorities(resolved);
+    } catch (error) {
+      console.error('Failed to load data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const loadResolvedPriorities = async () => {
     try {
@@ -45,10 +63,8 @@ export default function Dashboard({ rawData, onReset, onDataUpdate }) {
     loadResolvedPriorities();
   };
 
-  const handleDataUpdate = (updatedData) => {
-    if (onDataUpdate) {
-      onDataUpdate(updatedData);
-    }
+  const handleDataUpdate = async () => {
+    await loadData();
   };
 
   const handleNavigation = (view) => {
@@ -131,6 +147,31 @@ export default function Dashboard({ rawData, onReset, onDataUpdate }) {
         return <PriorityQueue rawData={rawData} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
     }
   };
+
+  if (loading) {
+    return (
+      <div className="dashboard">
+        <div className="loading-state">
+          <div className="loading-spinner"></div>
+          <p>Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!rawData) {
+    return (
+      <div className="dashboard">
+        <div className="empty-state">
+          <h2>No Data Available</h2>
+          <p>Use Admin → Import/Export to load your data</p>
+          <button onClick={() => handleNavigation('admin-data')} className="primary-btn">
+            Open Import/Export
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard">

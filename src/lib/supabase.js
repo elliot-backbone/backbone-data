@@ -54,3 +54,37 @@ export async function unresolveIssue(companyId, issueCategory, issueTitle) {
     throw error;
   }
 }
+
+export async function loadAllData() {
+  const [
+    { data: companies, error: companiesError },
+    { data: people, error: peopleError },
+    { data: firms, error: firmsError },
+    { data: rounds, error: roundsError },
+    { data: goals, error: goalsError },
+    { data: deals, error: dealsError }
+  ] = await Promise.all([
+    supabase.from('companies').select('*'),
+    supabase.from('people').select('*'),
+    supabase.from('firms').select('*'),
+    supabase.from('rounds').select('*'),
+    supabase.from('goals').select('*'),
+    supabase.from('deals').select('*')
+  ]);
+
+  if (companiesError) console.error('Error loading companies:', companiesError);
+  if (peopleError) console.error('Error loading people:', peopleError);
+  if (firmsError) console.error('Error loading firms:', firmsError);
+  if (roundsError) console.error('Error loading rounds:', roundsError);
+  if (goalsError) console.error('Error loading goals:', goalsError);
+  if (dealsError) console.error('Error loading deals:', dealsError);
+
+  return {
+    companies: companies || [],
+    people: people || [],
+    firms: firms || [],
+    rounds: rounds || [],
+    goals: goals || [],
+    deals: deals || []
+  };
+}
