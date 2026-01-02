@@ -20,6 +20,7 @@ import PeopleList from './PeopleList';
 import PersonDetail from './PersonDetail';
 import RelationshipsView from './RelationshipsView';
 import RelationshipDetail from './RelationshipDetail';
+import Admin from './Admin';
 
 export default function Dashboard({ rawData, onReset, onDataUpdate }) {
   const [currentView, setCurrentView] = useState('priorities');
@@ -121,7 +122,7 @@ export default function Dashboard({ rawData, onReset, onDataUpdate }) {
       case 'relationship-detail':
         return <RelationshipDetail relationship={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} />;
       case 'admin-data':
-        return <div className="admin-placeholder"><h2>Data Management</h2><p>Coming soon</p></div>;
+        return <Admin onClose={() => handleNavigation('priorities')} />;
       case 'admin-scoring':
         return <div className="admin-placeholder"><h2>Scoring Configuration</h2><p>Coming soon</p></div>;
       case 'admin-team':
