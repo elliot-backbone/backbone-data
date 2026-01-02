@@ -3,10 +3,11 @@ import './CompaniesList.css';
 
 export default function CompaniesList({ rawData, onSelectCompany }) {
   const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || []);
-  const companies = (rawData.companies || []).map(c => ({
+  const allCompanies = (rawData.companies || []).map(c => ({
     ...c,
     healthScore: calculateHealth(c, issues)
   }));
+  const companies = allCompanies.filter(c => c.isPortfolio);
 
   const getHealthColor = (score) => {
     if (score >= 80) return '#10b981';

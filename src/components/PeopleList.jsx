@@ -14,7 +14,19 @@ export default function PeopleList({ rawData, onSelectPerson }) {
   const [searchTerm, setSearchTerm] = useState('');
   const people = rawData.people || [];
   const firms = rawData.firms || [];
-  const deals = rawData.deals || [];
+  const allDeals = rawData.deals || [];
+  const companies = rawData.companies || [];
+  const rounds = rawData.rounds || [];
+
+  const portfolioCompanies = companies.filter(c => c.isPortfolio);
+  const portfolioRounds = rounds.filter(round => {
+    const companyId = round.companyId || round.company_id;
+    return portfolioCompanies.some(c => c.id === companyId);
+  });
+
+  const deals = allDeals.filter(deal => {
+    return portfolioRounds.some(r => r.id === deal.round_id);
+  });
 
   const enrichedPeople = people.map(person => {
     const firm = firms.find(f => f.id === person.firm_id);

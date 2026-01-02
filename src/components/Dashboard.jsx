@@ -137,10 +137,16 @@ export default function Dashboard({ rawData, onReset }) {
               <span className="nav-label">Firms</span>
             </button>
             <button
-              className={`nav-item sub ${currentView === 'people' || currentView === 'person-detail' || currentView === 'relationships' || currentView === 'relationship-detail' ? 'active' : ''}`}
+              className={`nav-item sub ${currentView === 'people' || currentView === 'person-detail' ? 'active' : ''}`}
               onClick={() => handleNavigation('people')}
             >
               <span className="nav-label">People</span>
+            </button>
+            <button
+              className={`nav-item sub-sub ${currentView === 'relationships' || currentView === 'relationship-detail' ? 'active' : ''}`}
+              onClick={() => handleNavigation('relationships')}
+            >
+              <span className="nav-label">Network</span>
             </button>
           </div>
         </div>

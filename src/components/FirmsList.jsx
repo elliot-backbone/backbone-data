@@ -13,7 +13,19 @@ export default function FirmsList({ rawData, onSelectFirm }) {
   const [filterType, setFilterType] = useState('all');
   const firms = rawData.firms || [];
   const people = rawData.people || [];
-  const deals = rawData.deals || [];
+  const allDeals = rawData.deals || [];
+  const companies = rawData.companies || [];
+  const rounds = rawData.rounds || [];
+
+  const portfolioCompanies = companies.filter(c => c.isPortfolio);
+  const portfolioRounds = rounds.filter(round => {
+    const companyId = round.companyId || round.company_id;
+    return portfolioCompanies.some(c => c.id === companyId);
+  });
+
+  const deals = allDeals.filter(deal => {
+    return portfolioRounds.some(r => r.id === deal.round_id);
+  });
 
   const enrichedFirms = firms.map(firm => {
     const investors = people.filter(p => p.firm_id === firm.id);

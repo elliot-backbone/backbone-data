@@ -1,8 +1,14 @@
 import './RoundsList.css';
 
 export default function RoundsList({ rawData, onSelectRound }) {
-  const rounds = rawData.rounds || [];
+  const allRounds = rawData.rounds || [];
   const companies = rawData.companies || [];
+  const portfolioCompanies = companies.filter(c => c.isPortfolio);
+
+  const rounds = allRounds.filter(round => {
+    const companyId = round.companyId || round.company_id;
+    return portfolioCompanies.some(c => c.id === companyId);
+  });
 
   const getCompanyName = (round) => {
     const companyId = round.companyId || round.company_id;
