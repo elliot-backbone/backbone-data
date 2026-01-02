@@ -1,3 +1,23 @@
+:root {
+  --backbone-black: #0A0A0B;
+  --backbone-dark: #111113;
+  --backbone-charcoal: #1A1A1E;
+  --backbone-slate: #252529;
+  --backbone-gray: #3A3A42;
+  --backbone-silver: #7A7A86;
+  --backbone-light: #B8B8C4;
+  --backbone-white: #F0F0F4;
+  --backbone-purple: #8B5CF6;
+  --backbone-purple-dim: #7C3AED;
+  --backbone-purple-glow: rgba(139, 92, 246, 0.15);
+  --backbone-green: #00D4AA;
+  --backbone-green-dim: #00A88A;
+  --backbone-green-glow: rgba(0, 212, 170, 0.15);
+  --backbone-warning: #FF6B4A;
+  --backbone-caution: #FFB84D;
+  --gradient-main: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 50%, #00D4AA 100%);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -5,10 +25,13 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #0a0a0b;
-  color: #e5e5e5;
-  line-height: 1.5;
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--backbone-black);
+  color: var(--backbone-light);
+  line-height: 1.7;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .app {
@@ -125,11 +148,12 @@ body {
 }
 
 .entity-id {
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 0.625rem;
-  color: #94a3b8;
+  color: var(--backbone-purple);
   font-weight: 600;
   letter-spacing: 0.05em;
   padding: 0.25rem 0.5rem;
-  background: #f1f5f9;
+  background: var(--backbone-purple-glow);
   border-radius: 0.25rem;
 }
