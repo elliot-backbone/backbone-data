@@ -9,10 +9,12 @@ const ROLE_LABELS = {
   employee: 'Employee'
 };
 
-export default function PeopleList({ rawData, onSelectPerson }) {
-  const [filterRole, setFilterRole] = useState('all');
+export default function PeopleList({ rawData, onSelectPerson, filterToInvestors = false }) {
+  const [filterRole, setFilterRole] = useState(filterToInvestors ? 'investor' : 'all');
   const [searchTerm, setSearchTerm] = useState('');
-  const people = rawData.people || [];
+  const people = filterToInvestors
+    ? (rawData.people || []).filter(p => p.role === 'investor')
+    : (rawData.people || []);
   const firms = rawData.firms || [];
   const allDeals = rawData.deals || [];
   const companies = rawData.companies || [];

@@ -65,7 +65,7 @@ export default function Dashboard({ rawData, onReset }) {
         return <PriorityQueue rawData={rawData} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'priority-detail':
         return <PriorityDetail issue={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectGoal={(g) => handleSelectEntity('goal', g)} />;
-      case 'snapshot':
+      case 'portfolio':
         return <Snapshot rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'companies':
         return <CompaniesList rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
@@ -87,6 +87,8 @@ export default function Dashboard({ rawData, onReset }) {
         return <FirmsList rawData={rawData} onSelectFirm={(f) => handleSelectEntity('firm', f)} />;
       case 'firm-detail':
         return <FirmDetail firm={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectPerson={(p) => handleSelectEntity('person', p)} onSelectDeal={(d) => handleSelectEntity('deal', d)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
+      case 'partners':
+        return <PeopleList rawData={rawData} onSelectPerson={(p) => handleSelectEntity('person', p)} filterToInvestors={true} />;
       case 'network':
         return <PeopleList rawData={rawData} onSelectPerson={(p) => handleSelectEntity('person', p)} />;
       case 'person-detail':
@@ -114,14 +116,15 @@ export default function Dashboard({ rawData, onReset }) {
             <span className="nav-label">Priorities</span>
           </button>
 
+          <button
+            className={`nav-item ${currentView === 'portfolio' ? 'active' : ''}`}
+            onClick={() => handleNavigation('portfolio')}
+          >
+            <span className="nav-label">Portfolio</span>
+          </button>
+
           <div className="nav-section">
-            <div className="nav-section-label">Portfolio</div>
-            <button
-              className={`nav-item sub ${currentView === 'snapshot' ? 'active' : ''}`}
-              onClick={() => handleNavigation('snapshot')}
-            >
-              <span className="nav-label">Snapshot</span>
-            </button>
+            <div className="nav-section-label">Portfolio Entities</div>
             <button
               className={`nav-item sub ${currentView === 'companies' || currentView === 'company-detail' ? 'active' : ''}`}
               onClick={() => handleNavigation('companies')}
@@ -153,6 +156,12 @@ export default function Dashboard({ rawData, onReset }) {
               <span className="nav-label">Firms</span>
             </button>
             <button
+              className={`nav-item sub-sub ${currentView === 'partners' ? 'active' : ''}`}
+              onClick={() => handleNavigation('partners')}
+            >
+              <span className="nav-label">Partners</span>
+            </button>
+            <button
               className={`nav-item sub ${currentView === 'network' || currentView === 'person-detail' ? 'active' : ''}`}
               onClick={() => handleNavigation('network')}
             >
@@ -174,7 +183,7 @@ export default function Dashboard({ rawData, onReset }) {
             <h1 className="page-title">
               {currentView === 'priorities' && 'Priority Queue'}
               {currentView === 'priority-detail' && 'Priority Detail'}
-              {currentView === 'snapshot' && 'Portfolio Snapshot'}
+              {currentView === 'portfolio' && 'Portfolio Snapshot'}
               {currentView === 'companies' && 'Portfolio Companies'}
               {currentView === 'company-detail' && selectedEntity?.entity?.name}
               {currentView === 'goals' && 'Goals'}
@@ -184,6 +193,7 @@ export default function Dashboard({ rawData, onReset }) {
               {currentView === 'deals' && 'Deal Pipeline'}
               {currentView === 'deal-detail' && 'Deal Details'}
               {currentView === 'firms' && 'Firms & Investors'}
+              {currentView === 'partners' && 'Partners'}
               {currentView === 'network' && 'Network Directory'}
               {currentView === 'person-detail' && 'Person Details'}
               {currentView === 'relationships' && 'Relationship Map'}

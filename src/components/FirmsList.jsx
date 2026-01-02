@@ -33,14 +33,24 @@ export default function FirmsList({ rawData, onSelectFirm }) {
     const activeDeals = firmDeals.filter(d =>
       ['meeting_scheduled', 'meeting_held', 'diligence', 'term_sheet', 'committed'].includes(d.dealStage)
     );
-    const closedDeals = firmDeals.filter(d => d.dealStage === 'closed');
+
+    const uniquePortfolioCompanies = new Set(
+      firmDeals.map(deal => {
+        const round = portfolioRounds.find(r => r.id === deal.round_id);
+        return round ? (round.companyId || round.company_id) : null;
+      }).filter(Boolean)
+    );
+
+    const totalInvestedAmount = firmDeals.reduce((sum, deal) => {
+      return sum + (deal.committedAmount || 0);
+    }, 0);
 
     return {
       ...firm,
       investorCount: investors.length,
-      totalDeals: firmDeals.length,
-      activeDeals: activeDeals.length,
-      closedDeals: closedDeals.length
+      portfolioCompanies: uniquePortfolioCompanies.size,
+      totalInvestedAmount: totalInvestedAmount,
+      activeDeals: activeDeals.length
     };
   });
 
@@ -103,23 +113,26 @@ export default function FirmsList({ rawData, onSelectFirm }) {
                 </span>
               </div>
               <div className="firm-metric">
-                <span className="metric-label">Investors</span>
+                <span className="metric-label">Partners</span>
                 <span className="metric-value">{firm.investorCount}</span>
               </div>
             </div>
 
-            <div className="firm-activity">
-              <div className="activity-stat">
-                <span className="activity-value active">{firm.activeDeals}</span>
-                <span className="activity-label">Active</span>
-              </div>
-              <div className="activity-stat">
-                <span className="activity-value closed">{firm.closedDeals}</span>
-                <span className="activity-label">Closed</span>
-              </div>
-              <div className="activity-stat">
-                <span className="activity-value total">{firm.totalDeals}</span>
-                <span className="activity-label">Total</span>
+            <div className="firm-portfolio-summary">
+              <div className="portfolio-stat-label">Portfolio Investments</div>
+              <div className="firm-activity">
+                <div className="activity-stat">
+                  <span className="activity-value companies">{firm.portfolioCompanies}</span>
+                  <span className="activity-label">Companies</span>
+                </div>
+                <div className="activity-stat">
+                  <span className="activity-value amount">{formatCurrency(firm.totalInvestedAmount)}</span>
+                  <span className="activity-label">Invested</span>
+                </div>
+                <div className="activity-stat">
+                  <span className="activity-value active">{firm.activeDeals}</span>
+                  <span className="activity-label">Active Deals</span>
+                </div>
               </div>
             </div>
           </div>

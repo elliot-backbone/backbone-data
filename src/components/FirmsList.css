@@ -110,6 +110,20 @@
   font-weight: 600;
 }
 
+.firm-portfolio-summary {
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.portfolio-stat-label {
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
 .firm-activity {
   display: flex;
   gap: 16px;
@@ -123,27 +137,28 @@
 }
 
 .activity-value {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   line-height: 1;
   margin-bottom: 4px;
+  color: #0f172a;
+}
+
+.activity-value.companies {
+  color: #8b5cf6;
+}
+
+.activity-value.amount {
+  color: #10b981;
 }
 
 .activity-value.active {
   color: #3b82f6;
 }
 
-.activity-value.closed {
-  color: #10b981;
-}
-
-.activity-value.total {
-  color: #6b7280;
-}
-
 .activity-label {
-  font-size: 12px;
-  color: #6b7280;
+  font-size: 11px;
+  color: #64748b;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
