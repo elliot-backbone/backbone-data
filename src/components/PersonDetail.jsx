@@ -20,7 +20,7 @@ const DEAL_STAGES = [
   { key: 'dropped', label: 'Dropped' }
 ];
 
-export default function PersonDetail({ person, rawData, onBack }) {
+export default function PersonDetail({ person, rawData, onBack, onSelectFirm }) {
   const firm = (rawData.firms || []).find(f => f.id === person.firm_id);
   const deals = (rawData.deals || []).filter(d => d.person_id === person.id);
   const rounds = rawData.rounds || [];
@@ -73,7 +73,17 @@ export default function PersonDetail({ person, rawData, onBack }) {
           <h1 className="detail-title">{person.firstName} {person.lastName}</h1>
           <div className="detail-subtitle">
             <span className="person-title-text">{person.title}</span>
-            {firm && <span className="person-firm-link">{firm.name}</span>}
+            {firm && (
+              <span
+                className="person-firm-link clickable"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSelectFirm && onSelectFirm(firm);
+                }}
+              >
+                {firm.name}
+              </span>
+            )}
           </div>
           <div className="person-badges">
             <span className="role-badge-large">{ROLE_LABELS[person.role]}</span>

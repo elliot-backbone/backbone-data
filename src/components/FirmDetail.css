@@ -50,6 +50,17 @@
   border: 1px solid #334155;
   border-radius: 8px;
   padding: 1rem;
+  transition: all 0.2s;
+}
+
+.person-item.clickable {
+  cursor: pointer;
+}
+
+.person-item.clickable:hover {
+  background: #1e293b;
+  border-color: #3b82f6;
+  transform: translateY(-2px);
 }
 
 .person-name {

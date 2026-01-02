@@ -8,7 +8,7 @@ const FIRM_TYPE_LABELS = {
   accelerator: 'Accelerator'
 };
 
-export default function FirmDetail({ firm, rawData, onBack }) {
+export default function FirmDetail({ firm, rawData, onBack, onSelectPerson }) {
   const people = (rawData.people || []).filter(p => p.firm_id === firm.id);
   const deals = (rawData.deals || []).filter(d => d.firm_id === firm.id);
   const rounds = rawData.rounds || [];
@@ -139,7 +139,11 @@ export default function FirmDetail({ firm, rawData, onBack }) {
             <h2 className="section-title">People ({people.length})</h2>
             <div className="people-list">
               {people.map(person => (
-                <div key={person.id} className="person-item">
+                <div
+                  key={person.id}
+                  className="person-item clickable"
+                  onClick={() => onSelectPerson && onSelectPerson(person)}
+                >
                   <div className="person-name">{person.firstName} {person.lastName}</div>
                   <div className="person-title">{person.title}</div>
                 </div>

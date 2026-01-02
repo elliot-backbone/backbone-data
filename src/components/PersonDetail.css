@@ -40,6 +40,16 @@
   font-weight: 600;
 }
 
+.person-firm-link.clickable {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.person-firm-link.clickable:hover {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
 .contact-info-box {
   display: flex;
   flex-direction: column;

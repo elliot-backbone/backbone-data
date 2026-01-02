@@ -77,11 +77,11 @@ export default function Dashboard({ rawData, onReset }) {
       case 'firms':
         return <FirmsList rawData={rawData} onSelectFirm={(f) => handleSelectEntity('firm', f)} />;
       case 'firm-detail':
-        return <FirmDetail firm={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} />;
+        return <FirmDetail firm={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectPerson={(p) => handleSelectEntity('person', p)} />;
       case 'people':
         return <PeopleList rawData={rawData} onSelectPerson={(p) => handleSelectEntity('person', p)} />;
       case 'person-detail':
-        return <PersonDetail person={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} />;
+        return <PersonDetail person={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectFirm={(f) => handleSelectEntity('firm', f)} />;
       case 'relationships':
         return <RelationshipsView rawData={rawData} onSelectRelationship={(r) => handleSelectEntity('relationship', r)} />;
       case 'relationship-detail':
