@@ -308,33 +308,101 @@ export default function Dashboard() {
 
       <div className="dashboard-main">
         <div className="horizontal-nav">
-          <button
-            className={`horizontal-nav-item ${topNavView === 'pipeline' ? 'active' : ''}`}
-            onClick={() => {
-              setTopNavView('pipeline');
-              handleNavigation('pipeline-companies', 'pipeline');
-            }}
-          >
-            PIPELINE
-          </button>
-          <button
-            className={`horizontal-nav-item ${topNavView === 'firms' ? 'active' : ''}`}
-            onClick={() => {
-              setTopNavView('firms');
-              handleNavigation('all-firms', 'firms');
-            }}
-          >
-            FIRMS
-          </button>
-          <button
-            className={`horizontal-nav-item ${topNavView === 'people' ? 'active' : ''}`}
-            onClick={() => {
-              setTopNavView('people');
-              handleNavigation('directory', 'people');
-            }}
-          >
-            PEOPLE
-          </button>
+          <div className="horizontal-nav-section">
+            <button
+              className={`horizontal-nav-section-label clickable ${topNavView === 'pipeline' ? 'active' : ''}`}
+              onClick={() => {
+                setTopNavView('pipeline');
+                handleNavigation('pipeline-companies', 'pipeline');
+              }}
+            >
+              PIPELINE
+            </button>
+            {topNavView === 'pipeline' && (
+              <div className="horizontal-nav-submenu">
+                <button
+                  className={`horizontal-nav-subitem ${currentView === 'pipeline-companies' || currentView === 'company-detail' ? 'active' : ''}`}
+                  onClick={() => handleNavigation('pipeline-companies', 'pipeline')}
+                >
+                  Companies
+                </button>
+                <button
+                  className={`horizontal-nav-subitem ${currentView === 'pipeline-deals' || currentView === 'deal-detail' ? 'active' : ''}`}
+                  onClick={() => handleNavigation('pipeline-deals', 'pipeline')}
+                >
+                  Deals
+                </button>
+                <button
+                  className={`horizontal-nav-subitem ${currentView === 'pipeline-rounds' || currentView === 'round-detail' ? 'active' : ''}`}
+                  onClick={() => handleNavigation('pipeline-rounds', 'pipeline')}
+                >
+                  Rounds
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="horizontal-nav-section">
+            <button
+              className={`horizontal-nav-section-label clickable ${topNavView === 'firms' ? 'active' : ''}`}
+              onClick={() => {
+                setTopNavView('firms');
+                handleNavigation('all-firms', 'firms');
+              }}
+            >
+              FIRMS
+            </button>
+            {topNavView === 'firms' && (
+              <div className="horizontal-nav-submenu">
+                <button
+                  className={`horizontal-nav-subitem ${currentView === 'all-firms' || currentView === 'firm-detail' ? 'active' : ''}`}
+                  onClick={() => handleNavigation('all-firms', 'firms')}
+                >
+                  Firms
+                </button>
+                <button
+                  className={`horizontal-nav-subitem ${currentView === 'all-firms-partners' || currentView === 'person-detail' ? 'active' : ''}`}
+                  onClick={() => handleNavigation('all-firms-partners', 'firms')}
+                >
+                  Partners
+                </button>
+                <button
+                  className={`horizontal-nav-subitem ${currentView === 'all-firms-deals' ? 'active' : ''}`}
+                  onClick={() => handleNavigation('all-firms-deals', 'firms')}
+                >
+                  Deals
+                </button>
+                <button
+                  className={`horizontal-nav-subitem ${currentView === 'all-firms-rounds' ? 'active' : ''}`}
+                  onClick={() => handleNavigation('all-firms-rounds', 'firms')}
+                >
+                  Rounds
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="horizontal-nav-section">
+            <button
+              className={`horizontal-nav-section-label clickable ${topNavView === 'people' ? 'active' : ''}`}
+              onClick={() => {
+                setTopNavView('people');
+                handleNavigation('directory', 'people');
+              }}
+            >
+              PEOPLE
+            </button>
+            {topNavView === 'people' && (
+              <div className="horizontal-nav-submenu">
+                <button
+                  className={`horizontal-nav-subitem ${currentView === 'directory' ? 'active' : ''}`}
+                  onClick={() => handleNavigation('directory', 'people')}
+                >
+                  Directory
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         <header className="top-bar">

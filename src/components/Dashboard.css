@@ -130,33 +130,79 @@
   background: var(--backbone-dark);
   border-bottom: 2px solid var(--backbone-charcoal);
   display: flex;
-  gap: 0;
-  padding: 0 2rem;
+  gap: 2rem;
+  padding: 1rem 2rem;
   flex-shrink: 0;
+  align-items: flex-start;
 }
 
-.horizontal-nav-item {
-  padding: 1rem 2rem;
+.horizontal-nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.horizontal-nav-section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--backbone-gray);
+  padding: 0.5rem 1rem;
+  display: block;
+  text-align: left;
   background: transparent;
   border: none;
-  border-bottom: 3px solid transparent;
+  cursor: default;
+  white-space: nowrap;
+}
+
+.horizontal-nav-section-label.clickable {
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.horizontal-nav-section-label.clickable:hover {
+  background: var(--backbone-purple-glow);
+  color: var(--backbone-purple);
+}
+
+.horizontal-nav-section-label.clickable.active {
+  color: var(--backbone-purple);
+  font-weight: 800;
+}
+
+.horizontal-nav-submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-left: 0.5rem;
+}
+
+.horizontal-nav-subitem {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: none;
   color: var(--backbone-silver);
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: left;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-bottom: -2px;
+  border-radius: 6px;
+  white-space: nowrap;
 }
 
-.horizontal-nav-item:hover {
-  color: var(--backbone-purple);
+.horizontal-nav-subitem:hover {
   background: var(--backbone-purple-glow);
+  color: var(--backbone-purple);
 }
 
-.horizontal-nav-item.active {
+.horizontal-nav-subitem.active {
+  background: var(--backbone-purple-glow);
   color: var(--backbone-purple);
-  border-bottom-color: var(--backbone-purple);
+  font-weight: 600;
 }
 
 .top-bar {
