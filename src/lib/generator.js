@@ -108,15 +108,27 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
 
   // Generate People
   const people = [];
+  const usedEmails = new Set();
   for (let i = 0; i < personCount; i++) {
     const name = genPersonName();
     const role = i < totalCompanies * 1.5 ? 'founder' : i < totalCompanies * 2.5 ? 'investor' : pick(['operator', 'advisor', 'employee']);
     const firm = role === 'investor' ? pick(firms) : null;
+
+    let email;
+    let attempt = 0;
+    do {
+      const suffix = attempt > 0 ? attempt : '';
+      const domain = role === 'investor' && firm ? firm.name.toLowerCase().replace(/\s/g, '') : 'gmail';
+      email = `${name.firstName.toLowerCase()}.${name.lastName.toLowerCase()}${suffix}@${domain}.com`;
+      attempt++;
+    } while (usedEmails.has(email));
+    usedEmails.add(email);
+
     people.push({
       id: uuid(),
       firstName: name.firstName,
       lastName: name.lastName,
-      email: `${name.firstName.toLowerCase()}.${name.lastName.toLowerCase()}@${role === 'investor' && firm ? firm.name.toLowerCase().replace(/\s/g, '') : 'gmail'}.com`,
+      email,
       role,
       firm_id: firm?.id || null,
       title: role === 'founder' ? pick(['CEO', 'CTO', 'COO']) : role === 'investor' ? pick(['Partner', 'Principal', 'Associate']) : pick(['VP Engineering', 'Head of Product']),
