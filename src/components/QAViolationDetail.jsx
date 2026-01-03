@@ -120,13 +120,6 @@ export default function QAViolationDetail({ violation, onBack }) {
         <div className="impact-section">
           <h3>Why This Matters</h3>
           <div className="impact-content">
-            {type === 'explainabilityGaps' && (
-              <p>
-                Explainability gaps prevent the system from understanding why certain conditions exist.
-                Without timestamp metadata, derived values cannot determine when they became stale,
-                breaking the system's ability to compute priorities and surface urgent issues.
-              </p>
-            )}
             {type === 'storedDerivations' && (
               <p>
                 Stored derivations violate the NoStoredDerivs North Star. When computed values are

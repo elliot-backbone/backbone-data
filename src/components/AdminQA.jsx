@@ -24,7 +24,6 @@ export default function AdminQA() {
       const { data: goals } = await supabase.from('goals').select('*');
       const { data: deals } = await supabase.from('deals').select('*');
 
-      const explainabilityGapsDetail = checkExplainabilityGaps(companies, goals, deals);
       const storedDerivationsDetail = checkStoredDerivations(companies, goals, deals, rounds);
       const missingTTLDetail = checkMissingTTL(companies, goals, deals);
       const goalOrphansDetail = checkGoalWithoutRisk(goals, companies);
@@ -34,28 +33,12 @@ export default function AdminQA() {
         derivedValuesStored: checkDerivedValues(companies, goals, deals),
         missingTTL: missingTTLDetail.count,
         storedDerivationsFound: storedDerivationsDetail.count,
-        explainabilityGaps: explainabilityGapsDetail.count,
         portfolioNotView: portfolioMixedDetail.count,
         goalOrphans: goalOrphansDetail.count,
         silentOverwrites: 0
       };
 
       setDetailedViolations({
-        explainabilityGaps: {
-          type: 'explainabilityGaps',
-          title: 'Explainability Gaps Detected',
-          description: 'Critical entity states lack timestamp metadata, preventing the system from understanding when conditions arose and blocking priority calculation.',
-          severity: 'critical',
-          northStar: 'NoStoredDerivs + Health=state',
-          violations: explainabilityGapsDetail.violations,
-          remedy: [
-            'Add timestamp fields for all state-changing updates',
-            'Populate last_material_update_at for companies with low runway',
-            'Populate last_updated_at for overdue goals',
-            'Populate last_contact_date for deals in advanced stages',
-            'Ensure all future updates include timestamp metadata'
-          ]
-        },
         storedDerivationsFound: {
           type: 'storedDerivations',
           title: 'Stored Derivations Found',
@@ -265,66 +248,6 @@ export default function AdminQA() {
           value: g.is_on_track,
           reason: 'Stored derived value - should be computed from progress and deadline'
         });
-      }
-    });
-
-    return { count: violations.length, violations };
-  }
-
-  function checkExplainabilityGaps(companies, goals, deals) {
-    const violations = [];
-
-    companies?.forEach(c => {
-      if (c.is_portfolio && c.cash_on_hand != null && c.monthly_burn != null) {
-        const runway = c.monthly_burn > 0 ? c.cash_on_hand / c.monthly_burn : 99;
-        if (runway < 6 && !c.last_material_update_at) {
-          violations.push({
-            entityType: 'Company',
-            entityName: c.name,
-            recordId: c.id,
-            field: 'last_material_update_at',
-            value: null,
-            reason: `Low runway (${runway.toFixed(1)} months) lacks update timestamp`,
-            context: `Cash: $${(c.cash_on_hand / 1000).toFixed(0)}K, Burn: $${(c.monthly_burn / 1000).toFixed(0)}K/mo`
-          });
-        }
-      }
-    });
-
-    goals?.forEach(g => {
-      if (g.target_date && new Date(g.target_date) < new Date()) {
-        if (!g.last_updated_at || (Date.now() - new Date(g.last_updated_at)) > 14 * 86400000) {
-          const daysOverdue = Math.floor((Date.now() - new Date(g.target_date)) / 86400000);
-          violations.push({
-            entityType: 'Goal',
-            entityName: g.title || 'Untitled Goal',
-            recordId: g.id,
-            field: 'last_updated_at',
-            value: g.last_updated_at || null,
-            reason: `Overdue by ${daysOverdue} days, stale or missing update timestamp`,
-            context: `Target: ${new Date(g.target_date).toLocaleDateString()}`
-          });
-        }
-      }
-    });
-
-    deals?.forEach(d => {
-      const advancedStages = ['diligence', 'term_sheet', 'committed'];
-      if (advancedStages.includes(d.deal_stage)) {
-        if (!d.last_contact_date || (Date.now() - new Date(d.last_contact_date)) > 21 * 86400000) {
-          const daysSince = d.last_contact_date
-            ? Math.floor((Date.now() - new Date(d.last_contact_date)) / 86400000)
-            : 'never';
-          violations.push({
-            entityType: 'Deal',
-            entityName: `Deal in ${d.deal_stage}`,
-            recordId: d.id,
-            field: 'last_contact_date',
-            value: d.last_contact_date || null,
-            reason: `Advanced stage deal lacks recent contact (${daysSince === 'never' ? 'no contact' : daysSince + ' days ago'})`,
-            context: `Stage: ${d.deal_stage}`
-          });
-        }
       }
     });
 
