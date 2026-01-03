@@ -94,11 +94,11 @@ export default function Dashboard() {
       const typeMap = {
         'priority-detail': 'priorities',
         'company-detail': topNavView === 'pipeline' ? 'pipeline-companies' : 'companies',
-        'round-detail': topNavView === 'pipeline' ? 'pipeline-rounds' : (topNavView === 'firms' ? 'all-firms-rounds' : 'portfolio-rounds'),
+        'round-detail': topNavView === 'pipeline' ? 'pipeline-rounds' : (topNavView === 'firms' ? 'all-firms-rounds' : 'portfolio-firm-rounds'),
         'goal-detail': 'goals',
-        'deal-detail': topNavView === 'pipeline' ? 'pipeline-deals' : (topNavView === 'firms' ? 'all-firms-deals' : 'portfolio-deals'),
+        'deal-detail': topNavView === 'pipeline' ? 'pipeline-deals' : (topNavView === 'firms' ? 'all-firms-deals' : 'portfolio-firm-deals'),
         'firm-detail': topNavView === 'firms' ? 'all-firms' : 'portfolio-firms',
-        'person-detail': topNavView === 'firms' ? 'all-firms-partners' : 'directory',
+        'person-detail': topNavView === 'firms' ? 'all-firms-partners' : 'portfolio-partners',
         'relationship-detail': 'relationships'
       };
       setCurrentView(typeMap[currentView] || 'priorities');
@@ -139,8 +139,14 @@ export default function Dashboard() {
         return <FirmsList rawData={rawData} onSelectFirm={(f) => handleSelectEntity('firm', f)} portfolioInvestorsOnly={false} />;
       case 'firm-detail':
         return <FirmDetail firm={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectPerson={(p) => handleSelectEntity('person', p)} onSelectDeal={(d) => handleSelectEntity('deal', d)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
+      case 'portfolio-partners':
+        return <PeopleList rawData={rawData} onSelectPerson={(p) => handleSelectEntity('person', p)} filterToInvestors={true} showAllFirms={false} />;
       case 'all-firms-partners':
         return <PeopleList rawData={rawData} onSelectPerson={(p) => handleSelectEntity('person', p)} filterToInvestors={true} showAllFirms={true} />;
+      case 'portfolio-firm-deals':
+        return <DealsPipeline rawData={rawData} onSelectDeal={(d) => handleSelectEntity('deal', d)} pipelineOnly={false} showAllFirms={false} />;
+      case 'portfolio-firm-rounds':
+        return <RoundsList rawData={rawData} onSelectRound={(r) => handleSelectEntity('round', r)} showAllFirms={false} />;
       case 'all-firms-rounds':
         return <RoundsList rawData={rawData} onSelectRound={(r) => handleSelectEntity('round', r)} showAllFirms={true} />;
       case 'person-detail':
@@ -236,10 +242,28 @@ export default function Dashboard() {
 
           <div className="nav-section">
             <button
-              className={`nav-section-label clickable ${currentView === 'portfolio-firms' || currentView === 'firm-detail' ? 'active' : ''}`}
+              className={`nav-section-label clickable ${currentView === 'portfolio-firms' || currentView === 'firm-detail' || currentView === 'portfolio-partners' || currentView === 'portfolio-firm-deals' || currentView === 'portfolio-firm-rounds' ? 'active' : ''}`}
               onClick={() => handleNavigation('portfolio-firms', null)}
             >
               Firms
+            </button>
+            <button
+              className={`nav-item sub ${currentView === 'portfolio-partners' || currentView === 'person-detail' ? 'active' : ''}`}
+              onClick={() => handleNavigation('portfolio-partners', null)}
+            >
+              <span className="nav-label">Partners</span>
+            </button>
+            <button
+              className={`nav-item sub ${currentView === 'portfolio-firm-deals' ? 'active' : ''}`}
+              onClick={() => handleNavigation('portfolio-firm-deals', null)}
+            >
+              <span className="nav-label">Deals</span>
+            </button>
+            <button
+              className={`nav-item sub-sub ${currentView === 'portfolio-firm-rounds' ? 'active' : ''}`}
+              onClick={() => handleNavigation('portfolio-firm-rounds', null)}
+            >
+              <span className="nav-label">Rounds</span>
             </button>
           </div>
 
@@ -332,9 +356,12 @@ export default function Dashboard() {
               {currentView === 'portfolio-firms' && 'Portfolio Firms'}
               {currentView === 'all-firms' && 'All Firms'}
               {currentView === 'firm-detail' && selectedEntity?.entity?.name}
+              {currentView === 'portfolio-partners' && 'Portfolio Partners'}
               {currentView === 'all-firms-partners' && 'All Partners'}
               {currentView === 'person-detail' && selectedEntity?.entity?.name}
+              {currentView === 'portfolio-firm-deals' && 'Portfolio Firm Deals'}
               {currentView === 'all-firms-deals' && 'All Firm Deals'}
+              {currentView === 'portfolio-firm-rounds' && 'Portfolio Firm Rounds'}
               {currentView === 'all-firms-rounds' && 'All Firm Rounds'}
               {currentView === 'relationships' && 'Network Overview'}
               {currentView === 'directory' && 'Directory'}
