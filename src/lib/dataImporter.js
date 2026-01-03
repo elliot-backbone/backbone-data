@@ -2,16 +2,23 @@ import { supabase } from './supabase';
 import { generateDataset } from './generator';
 
 export async function clearAllData() {
-  const { error: dealsError } = await supabase.from('deals').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-  const { error: goalsError } = await supabase.from('goals').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-  const { error: roundsError } = await supabase.from('rounds').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-  const { error: companiesError } = await supabase.from('companies').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-  const { error: peopleError } = await supabase.from('people').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-  const { error: firmsError } = await supabase.from('firms').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+  const { error: dealsError } = await supabase.from('deals').delete().gte('id', '00000000-0000-0000-0000-000000000000');
+  if (dealsError) throw new Error(`Failed to clear deals: ${dealsError.message}`);
 
-  if (dealsError || goalsError || roundsError || companiesError || peopleError || firmsError) {
-    throw new Error('Failed to clear existing data');
-  }
+  const { error: goalsError } = await supabase.from('goals').delete().gte('id', '00000000-0000-0000-0000-000000000000');
+  if (goalsError) throw new Error(`Failed to clear goals: ${goalsError.message}`);
+
+  const { error: roundsError } = await supabase.from('rounds').delete().gte('id', '00000000-0000-0000-0000-000000000000');
+  if (roundsError) throw new Error(`Failed to clear rounds: ${roundsError.message}`);
+
+  const { error: companiesError } = await supabase.from('companies').delete().gte('id', '00000000-0000-0000-0000-000000000000');
+  if (companiesError) throw new Error(`Failed to clear companies: ${companiesError.message}`);
+
+  const { error: peopleError } = await supabase.from('people').delete().gte('id', '00000000-0000-0000-0000-000000000000');
+  if (peopleError) throw new Error(`Failed to clear people: ${peopleError.message}`);
+
+  const { error: firmsError } = await supabase.from('firms').delete().gte('id', '00000000-0000-0000-0000-000000000000');
+  if (firmsError) throw new Error(`Failed to clear firms: ${firmsError.message}`);
 }
 
 export async function importGeneratedData(portfolioCount = 12, stressLevel = 'default') {
