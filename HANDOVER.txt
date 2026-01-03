@@ -3,8 +3,9 @@ BACKBONE CRM V8 - DEVELOPER HANDOVER DOCUMENT
 ================================================================================
 
 Date: 2026-01-03
-Version: V8.0-STABLE-20260103
+Version: V8.1-STABLE-20260103-NAV
 Status: Stable Rollback Point
+Previous: V8.0-STABLE-20260103
 
 ================================================================================
 1. PROJECT OVERVIEW
@@ -26,7 +27,42 @@ TECH STACK:
 - Hosting: Netlify-compatible static build
 
 ================================================================================
-2. ARCHITECTURAL PRINCIPLES (FROZEN NORTH STARS)
+2. VERSION V8.1-NAV CHANGES
+================================================================================
+
+This version introduces navigation restructuring to prioritize Portfolio access:
+
+WHAT CHANGED:
+- Portfolio section now shows Health/Priorities grid by default (PortfolioOverview)
+- Click "Portfolio" to see the colored health grid
+- New "Companies" child view shows the traditional companies list
+- Deals moved under Rounds in the hierarchy (Deals are child of Rounds)
+- View state renamed: 'companies' → 'portfolio-overview', added 'companies-list'
+
+NAVIGATION STRUCTURE:
+  Portfolio (click = Health/Priorities grid)
+    ├── Companies (list view)
+    ├── Goals (list view)
+    └── Rounds (list view)
+        └── Deals (child of Rounds)
+
+WHY THIS MATTERS:
+- Portfolio section is now the entry point to portfolio health visibility
+- Consistent with "Portfolio=VIEW" North Star principle
+- Proper hierarchy: Deals belong under Rounds conceptually
+- Better information architecture for attention allocation
+
+FILES MODIFIED:
+- Dashboard.jsx (navigation rendering, view routing, back button logic)
+
+ROLLBACK PATH:
+- Previous stable version: V8.0-STABLE-20260103
+- Change view states back: 'portfolio-overview' → 'companies'
+- Remove 'companies-list' view
+- Revert navigation structure in Dashboard.jsx lines 210-241
+
+================================================================================
+3. ARCHITECTURAL PRINCIPLES (FROZEN NORTH STARS)
 ================================================================================
 
 These are IMMUTABLE design principles that must never be violated:
@@ -52,7 +88,7 @@ Modularise: Physical separation of concerns. One file = one responsibility.
 Delete>Add: Ruthless elimination over feature expansion. Question every addition.
 
 ================================================================================
-3. 7-LAYER COMPUTATION ARCHITECTURE
+4. 7-LAYER COMPUTATION ARCHITECTURE
 ================================================================================
 
 Data flows unidirectionally through these layers:
@@ -92,7 +128,7 @@ L6: Priority Output
     - "What should I do next?" answer
 
 ================================================================================
-4. DIRECTORY STRUCTURE
+5. DIRECTORY STRUCTURE
 ================================================================================
 
 /project
@@ -124,7 +160,7 @@ L6: Priority Output
 └── HANDOVER.txt              # This file
 
 ================================================================================
-5. KEY FILES EXPLAINED
+6. KEY FILES EXPLAINED
 ================================================================================
 
 Dashboard.jsx (850+ lines)
@@ -156,7 +192,7 @@ migrations/*.sql
 - Currently allows anon access for development (tighten for production)
 
 ================================================================================
-6. RUNNING THE PROJECT
+7. RUNNING THE PROJECT
 ================================================================================
 
 INSTALL DEPENDENCIES:
@@ -184,27 +220,28 @@ DATABASE SETUP:
   - RLS policies in place (currently permissive for dev)
 
 ================================================================================
-7. NAVIGATION STRUCTURE
+8. NAVIGATION STRUCTURE
 ================================================================================
 
 LEFT VERTICAL NAV:
-  Portfolio
-    ├── Overview (snapshot + health bar)
-    ├── Companies (portfolio companies list)
-    ├── Goals (company goals tracking)
-    ├── Rounds (funding rounds)
-    ├── Deals (investment deals)
-    ├── Firms (portfolio investors)
-    └── Partners (investor contacts)
-
   Priorities
     └── Queue (action priority list)
 
-  Relationships
-    └── View (talent/firm/company connections)
+  Portfolio (Health/Priorities grid view)
+    ├── Companies (portfolio companies list)
+    ├── Goals (company goals tracking)
+    └── Rounds (funding rounds)
+        └── Deals (investment deals - nested under Rounds)
 
-  Impact
-    └── View (downstream unlock analysis)
+  Firms
+    ├── Firms (portfolio investors)
+    ├── Partners (investor contacts)
+    ├── Deals (firm deals)
+    └── Rounds (firm rounds)
+
+  Network
+    ├── Relationships (talent/firm/company connections)
+    └── Directory (talent database)
 
   Admin
     ├── QA (quality assurance violations)
@@ -228,7 +265,7 @@ TOP HORIZONTAL NAV:
     └── Directory (talent database)
 
 ================================================================================
-8. DESIGN SYSTEM
+9. DESIGN SYSTEM
 ================================================================================
 
 COLORS (CSS variables in App.css):
@@ -258,7 +295,7 @@ INTERACTIONS:
   - Border radius: 6px for buttons/cards, 12px for panels
 
 ================================================================================
-9. DATABASE SCHEMA
+10. DATABASE SCHEMA
 ================================================================================
 
 portfolioCompanies
@@ -300,7 +337,7 @@ All tables have:
   - explainability fields (computed_at, computation_version)
 
 ================================================================================
-10. CURRENT STATE & KNOWN GAPS
+11. CURRENT STATE & KNOWN GAPS
 ================================================================================
 
 COMPLETED:
@@ -332,7 +369,7 @@ NOT YET IMPLEMENTED:
 ✗ WhatsApp MCP integration
 
 ================================================================================
-11. DEVELOPMENT WORKFLOW
+12. DEVELOPMENT WORKFLOW
 ================================================================================
 
 CHECKPOINT-GATED METHODOLOGY:
@@ -359,7 +396,7 @@ VERSION CONTROL:
 - CHECKPOINT.md updated at major milestones
 
 ================================================================================
-12. NEXT DEVELOPMENT PRIORITIES
+13. NEXT DEVELOPMENT PRIORITIES
 ================================================================================
 
 IMMEDIATE (Next Sprint):
@@ -387,7 +424,7 @@ LONG-TERM:
 4. Mobile-responsive design
 
 ================================================================================
-13. DEPLOYMENT
+14. DEPLOYMENT
 ================================================================================
 
 NETLIFY DEPLOYMENT:
@@ -405,7 +442,7 @@ SUPABASE:
 - RLS policies in place
 
 ================================================================================
-14. TROUBLESHOOTING
+15. TROUBLESHOOTING
 ================================================================================
 
 BUILD FAILS:
@@ -432,7 +469,7 @@ STYLING ISSUES:
 - Rebuild: npm run build
 
 ================================================================================
-15. IMPORTANT CONTACTS & RESOURCES
+16. IMPORTANT CONTACTS & RESOURCES
 ================================================================================
 
 PROJECT OWNER: Elliot (Backbone Founder/Managing Partner)
@@ -455,7 +492,7 @@ KEY DOCUMENTS:
 - Project memory (context for AI sessions)
 
 ================================================================================
-16. FINAL NOTES
+17. FINAL NOTES
 ================================================================================
 
 This codebase represents a stable checkpoint in Backbone CRM V8 development.
