@@ -78,6 +78,28 @@
   color: var(--backbone-gray);
   padding: 0.5rem 1rem;
   margin-bottom: 0.5rem;
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: default;
+}
+
+.nav-section-label.clickable {
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.nav-section-label.clickable:hover {
+  background: var(--backbone-purple-glow);
+  color: var(--backbone-purple);
+}
+
+.nav-section-label.clickable.active {
+  color: var(--backbone-purple);
+  font-weight: 800;
 }
 
 .nav-item.sub {
@@ -88,6 +110,12 @@
 .nav-item.sub-sub {
   padding-left: 2.5rem;
   font-size: 0.8125rem;
+  color: var(--backbone-silver);
+}
+
+.nav-item.sub-sub-sub {
+  padding-left: 3.5rem;
+  font-size: 0.75rem;
   color: var(--backbone-silver);
 }
 

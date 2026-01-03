@@ -4,8 +4,8 @@ import AdminQA from './AdminQA';
 import AdminAnalyze from './AdminAnalyze';
 import './Admin.css';
 
-export default function Admin({ onClose }) {
-  const [activeView, setActiveView] = useState('import-export');
+export default function Admin({ onClose, initialTab = 'import-export' }) {
+  const [activeView, setActiveView] = useState(initialTab);
 
   return (
     <div className="admin-container">

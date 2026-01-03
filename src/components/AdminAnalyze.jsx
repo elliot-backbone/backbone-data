@@ -37,7 +37,6 @@ function EnrichView() {
   return (
     <div className="analyze-subview">
       <div className="placeholder-content">
-        <div className="placeholder-icon">🔍</div>
         <h4>Data Enrichment</h4>
         <p>Enhance your data with external sources and intelligence</p>
         <ul className="feature-list">
@@ -57,7 +56,6 @@ function CalculateView() {
   return (
     <div className="analyze-subview">
       <div className="placeholder-content">
-        <div className="placeholder-icon">📊</div>
         <h4>Advanced Calculations</h4>
         <p>Run sophisticated analytics and derivations on your portfolio data</p>
         <ul className="feature-list">

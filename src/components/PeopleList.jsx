@@ -9,7 +9,7 @@ const ROLE_LABELS = {
   employee: 'Employee'
 };
 
-export default function PeopleList({ rawData, onSelectPerson, filterToInvestors = false }) {
+export default function PeopleList({ rawData, onSelectPerson, filterToInvestors = false, simpleSearch = false }) {
   const [filterRole, setFilterRole] = useState(filterToInvestors ? 'investor' : 'all');
   const [searchTerm, setSearchTerm] = useState('');
   const people = filterToInvestors
@@ -79,31 +79,33 @@ export default function PeopleList({ rawData, onSelectPerson, filterToInvestors 
       <div className="people-controls">
         <input
           type="text"
-          placeholder="Search by name, email, or firm..."
+          placeholder={simpleSearch ? "Search..." : "Search by name, email, or firm..."}
           className="search-input"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <div className="filter-chips">
-          <button
-            className={`filter-chip ${filterRole === 'all' ? 'active' : ''}`}
-            onClick={() => setFilterRole('all')}
-          >
-            All ({people.length})
-          </button>
-          {Object.entries(ROLE_LABELS).map(([role, label]) => {
-            const count = people.filter(p => p.role === role).length;
-            return (
-              <button
-                key={role}
-                className={`filter-chip ${filterRole === role ? 'active' : ''}`}
-                onClick={() => setFilterRole(role)}
-              >
-                {label} ({count})
-              </button>
-            );
-          })}
-        </div>
+        {!simpleSearch && (
+          <div className="filter-chips">
+            <button
+              className={`filter-chip ${filterRole === 'all' ? 'active' : ''}`}
+              onClick={() => setFilterRole('all')}
+            >
+              All ({people.length})
+            </button>
+            {Object.entries(ROLE_LABELS).map(([role, label]) => {
+              const count = people.filter(p => p.role === role).length;
+              return (
+                <button
+                  key={role}
+                  className={`filter-chip ${filterRole === role ? 'active' : ''}`}
+                  onClick={() => setFilterRole(role)}
+                >
+                  {label} ({count})
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <div className="people-grid">
