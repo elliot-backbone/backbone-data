@@ -159,8 +159,6 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
     const founder = pick(founders);
 
     const mrr = randomInt(financials.mrr[0], financials.mrr[1]);
-    const arr = mrr * 12;
-    const runway = burn > 0 ? cash / burn : 99;
 
     companies.push({
       id: uuid(),
@@ -172,8 +170,6 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
       cashOnHand: cash,
       monthlyBurn: burn,
       mrr,
-      arr,
-      runway,
       revenueGrowthRate: randomFloat(0.05, 0.5),
       grossMargin: randomFloat(0.4, 0.85),
       cacPayback: randomInt(6, 36),
@@ -239,7 +235,6 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
         targetValue: target.toString(),
         currentValue: Math.round(target * Math.min(progress, 1)).toString(),
         deadline: daysLeft > 0 ? daysFromNow(daysLeft) : daysAgo(Math.abs(daysLeft)),
-        isOnTrack: progress >= 0.8 || (progress >= 0.5 && daysLeft > 60),
         company_id: company.id,
         goalType,
         title: goalType === 'fundraise' ? 'Close Series A' : goalType === 'revenue' ? `Hit $${(target/1000).toFixed(0)}k MRR` : goalType === 'hiring' ? `Hire ${target} engineers` : 'Launch v2',

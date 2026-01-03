@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { deriveCompanyMetrics, deriveRoundMetrics, deriveGoalMetrics } from './derivations';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -80,11 +81,11 @@ export async function loadAllData() {
   if (dealsError) console.error('Error loading deals:', dealsError);
 
   return {
-    companies: companies || [],
+    companies: (companies || []).map(deriveCompanyMetrics),
     people: people || [],
     firms: firms || [],
-    rounds: rounds || [],
-    goals: goals || [],
+    rounds: (rounds || []).map(deriveRoundMetrics),
+    goals: (goals || []).map(deriveGoalMetrics),
     deals: deals || []
   };
 }

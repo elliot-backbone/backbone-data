@@ -1,17 +1,19 @@
 export function deriveCompanyMetrics(company) {
-  const runway = company.monthlyBurn > 0 
-    ? company.cashOnHand / company.monthlyBurn 
+  const arr = company.mrr * 12;
+
+  const runway = company.monthlyBurn > 0
+    ? company.cashOnHand / company.monthlyBurn
     : null;
-  
-  const burnMultiple = company.mrr > 0 
-    ? company.monthlyBurn / company.mrr 
+
+  const burnMultiple = company.mrr > 0
+    ? company.monthlyBurn / company.mrr
     : null;
 
   const daysSinceUpdate = company.lastMaterialUpdate_at
     ? Math.floor((Date.now() - new Date(company.lastMaterialUpdate_at)) / 86400000)
     : null;
 
-  return { ...company, runway, burnMultiple, daysSinceUpdate };
+  return { ...company, arr, runway, burnMultiple, daysSinceUpdate };
 }
 
 export function deriveRoundMetrics(round) {
@@ -19,6 +21,13 @@ export function deriveRoundMetrics(round) {
   const daysOpen = round.startedAt ? Math.floor((Date.now() - new Date(round.startedAt)) / 86400000) : 0;
   const daysToClose = round.targetCloseDate ? Math.floor((new Date(round.targetCloseDate) - Date.now()) / 86400000) : null;
   return { ...round, coverage, daysOpen, daysToClose };
+}
+
+export function deriveGoalMetrics(goal) {
+  const progress = goal.targetValue > 0 ? goal.currentValue / goal.targetValue : 0;
+  const daysToDeadline = goal.targetDate ? Math.floor((new Date(goal.targetDate) - Date.now()) / 86400000) : null;
+  const isOnTrack = progress >= 0.8 || (progress >= 0.5 && daysToDeadline > 60);
+  return { ...goal, progress, daysToDeadline, isOnTrack };
 }
 
 export function detectIssues(companies, rounds, goals, resolvedPriorities = []) {

@@ -26,7 +26,6 @@ export function applyResolution(issue, rawData) {
         const targetMultiple = 2.0;
         const newMrr = Math.round(company.monthlyBurn / targetMultiple);
         company.mrr = newMrr;
-        company.arr = newMrr * 12;
         company.lastMaterialUpdate_at = new Date().toISOString();
       }
       break;
