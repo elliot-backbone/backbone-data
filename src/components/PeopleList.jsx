@@ -79,7 +79,7 @@ export default function PeopleList({ rawData, onSelectPerson, filterToInvestors 
       <div className="people-controls">
         <input
           type="text"
-          placeholder={simpleSearch ? "Search..." : "Search by name, email, or firm..."}
+          placeholder=""
           className="search-input"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './FirmDetail.css';
 
 const FIRM_TYPE_LABELS = {
@@ -9,6 +10,7 @@ const FIRM_TYPE_LABELS = {
 };
 
 export default function FirmDetail({ firm, rawData, onBack, onSelectPerson, onSelectDeal, onSelectCompany }) {
+  const [peopleSearch, setPeopleSearch] = useState('');
   const people = (rawData.people || []).filter(p => p.firmId === firm.id);
   const deals = (rawData.deals || []).filter(d => d.firmId === firm.id);
   const rounds = rawData.rounds || [];
@@ -138,17 +140,33 @@ export default function FirmDetail({ firm, rawData, onBack, onSelectPerson, onSe
         {people.length > 0 && (
           <div className="detail-section">
             <h2 className="section-title">People ({people.length})</h2>
+            <input
+              type="text"
+              placeholder=""
+              className="search-input"
+              value={peopleSearch}
+              onChange={(e) => setPeopleSearch(e.target.value)}
+              style={{ marginBottom: '1rem', width: '100%' }}
+            />
             <div className="people-list">
-              {people.map(person => (
-                <div
-                  key={person.id}
-                  className="person-item clickable"
-                  onClick={() => onSelectPerson && onSelectPerson(person)}
-                >
-                  <div className="person-name">{person.firstName} {person.lastName}</div>
-                  <div className="person-title">{person.title}</div>
-                </div>
-              ))}
+              {people
+                .filter(person => {
+                  if (!peopleSearch) return true;
+                  const fullName = `${person.firstName} ${person.lastName}`.toLowerCase();
+                  const title = (person.title || '').toLowerCase();
+                  const search = peopleSearch.toLowerCase();
+                  return fullName.includes(search) || title.includes(search);
+                })
+                .map(person => (
+                  <div
+                    key={person.id}
+                    className="person-item clickable"
+                    onClick={() => onSelectPerson && onSelectPerson(person)}
+                  >
+                    <div className="person-name">{person.firstName} {person.lastName}</div>
+                    <div className="person-title">{person.title}</div>
+                  </div>
+                ))}
             </div>
           </div>
         )}
