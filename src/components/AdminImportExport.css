@@ -21,36 +21,154 @@
   font-size: 14px;
 }
 
-.entity-tabs {
+.entities-table {
   display: flex;
-  gap: 8px;
-  margin-bottom: 30px;
-  border-bottom: 1px solid #334155;
-  padding-bottom: 0;
-  overflow-x: auto;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.entity-tab {
-  padding: 12px 20px;
-  background: none;
-  border: none;
-  color: #94a3b8;
-  cursor: pointer;
-  font-size: 14px;
+.entity-row {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.entity-name-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.entity-name-col h4 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #f8fafc;
+  text-transform: capitalize;
+}
+
+.template-hint {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-family: 'Courier New', monospace;
+}
+
+.entity-actions-col {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.action-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.sheets-url-compact {
+  padding: 8px 12px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  color: #f8fafc;
+  font-size: 13px;
+  width: 200px;
+  transition: all 0.2s;
+}
+
+.sheets-url-compact:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.file-upload-compact {
+  position: relative;
+  padding: 8px 16px;
+  background: #334155;
+  color: #f8fafc;
+  border-radius: 6px;
+  font-size: 13px;
   font-weight: 500;
-  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.file-upload-compact:hover {
+  background: #475569;
+}
+
+.file-upload-compact input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.action-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
 }
 
-.entity-tab:hover {
+.sheets-btn {
+  background: #8b5cf6;
   color: #f8fafc;
-  background: #1e293b;
 }
 
-.entity-tab.active {
+.sheets-btn:hover:not(:disabled) {
+  background: #7c3aed;
+}
+
+.import-btn-compact {
+  background: #10b981;
   color: #f8fafc;
-  border-bottom-color: #3b82f6;
+}
+
+.import-btn-compact:hover:not(:disabled) {
+  background: #059669;
+}
+
+.export-btn-compact {
+  background: #3b82f6;
+  color: #f8fafc;
+}
+
+.export-btn-compact:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.entity-status {
+  padding-top: 0.5rem;
+  border-top: 1px solid #334155;
+}
+
+.status-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.status-text.success {
+  color: #10b981;
+}
+
+.status-text.error {
+  color: #ef4444;
 }
 
 .import-export-content {

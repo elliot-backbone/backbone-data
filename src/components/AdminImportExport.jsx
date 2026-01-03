@@ -4,95 +4,96 @@ import { parseCSV, convertToCSV, fetchGoogleSheetsCSV, CSV_TEMPLATES } from '../
 import './AdminImportExport.css';
 
 export default function AdminImportExport() {
-  const [activeEntity, setActiveEntity] = useState('companies');
-  const [csvText, setCsvText] = useState('');
-  const [googleSheetUrl, setGoogleSheetUrl] = useState('');
-  const [status, setStatus] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [googleSheetUrls, setGoogleSheetUrls] = useState({});
+  const [csvTexts, setCsvTexts] = useState({});
+  const [statuses, setStatuses] = useState({});
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState({});
 
   const entities = ['companies', 'people', 'firms', 'rounds', 'goals', 'deals'];
 
-  async function handleImport() {
-    if (!csvText.trim()) {
-      setError('Please paste CSV data');
+  async function handleImport(entity) {
+    const csvText = csvTexts[entity];
+    if (!csvText?.trim()) {
+      setErrors({ ...errors, [entity]: 'Please paste CSV data' });
       return;
     }
 
-    setLoading(true);
-    setError('');
-    setStatus('');
+    setLoading({ ...loading, [entity]: true });
+    setErrors({ ...errors, [entity]: '' });
+    setStatuses({ ...statuses, [entity]: '' });
 
     try {
       const data = parseCSV(csvText);
       if (data.length === 0) {
-        setError('No data found in CSV');
+        setErrors({ ...errors, [entity]: 'No data found in CSV' });
         return;
       }
 
       const { error: insertError } = await supabase
-        .from(activeEntity)
+        .from(entity)
         .insert(data);
 
       if (insertError) throw insertError;
 
-      setStatus(`Successfully imported ${data.length} ${activeEntity}`);
-      setCsvText('');
+      setStatuses({ ...statuses, [entity]: `Imported ${data.length} rows` });
+      setCsvTexts({ ...csvTexts, [entity]: '' });
     } catch (err) {
-      setError('Import failed: ' + err.message);
+      setErrors({ ...errors, [entity]: 'Import failed: ' + err.message });
     } finally {
-      setLoading(false);
+      setLoading({ ...loading, [entity]: false });
     }
   }
 
-  async function handleGoogleSheetsImport() {
-    if (!googleSheetUrl.trim()) {
-      setError('Please enter a Google Sheets URL');
+  async function handleGoogleSheetsImport(entity) {
+    const googleSheetUrl = googleSheetUrls[entity];
+    if (!googleSheetUrl?.trim()) {
+      setErrors({ ...errors, [entity]: 'Please enter a Google Sheets URL' });
       return;
     }
 
-    setLoading(true);
-    setError('');
-    setStatus('');
+    setLoading({ ...loading, [entity]: true });
+    setErrors({ ...errors, [entity]: '' });
+    setStatuses({ ...statuses, [entity]: '' });
 
     try {
       const csvData = await fetchGoogleSheetsCSV(googleSheetUrl);
       const data = parseCSV(csvData);
 
       if (data.length === 0) {
-        setError('No data found in Google Sheet');
+        setErrors({ ...errors, [entity]: 'No data found in Google Sheet' });
         return;
       }
 
       const { error: insertError } = await supabase
-        .from(activeEntity)
+        .from(entity)
         .insert(data);
 
       if (insertError) throw insertError;
 
-      setStatus(`Successfully imported ${data.length} ${activeEntity} from Google Sheets`);
-      setGoogleSheetUrl('');
+      setStatuses({ ...statuses, [entity]: `Imported ${data.length} rows from Sheets` });
+      setGoogleSheetUrls({ ...googleSheetUrls, [entity]: '' });
     } catch (err) {
-      setError('Google Sheets import failed: ' + err.message);
+      setErrors({ ...errors, [entity]: 'Sheets import failed: ' + err.message });
     } finally {
-      setLoading(false);
+      setLoading({ ...loading, [entity]: false });
     }
   }
 
-  async function handleExport() {
-    setLoading(true);
-    setError('');
-    setStatus('');
+  async function handleExport(entity) {
+    setLoading({ ...loading, [entity]: true });
+    setErrors({ ...errors, [entity]: '' });
+    setStatuses({ ...statuses, [entity]: '' });
 
     try {
       const { data, error: fetchError } = await supabase
-        .from(activeEntity)
+        .from(entity)
         .select('*');
 
       if (fetchError) throw fetchError;
 
       if (!data || data.length === 0) {
-        setError('No data to export');
+        setErrors({ ...errors, [entity]: 'No data to export' });
         return;
       }
 
@@ -101,145 +102,109 @@ export default function AdminImportExport() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${activeEntity}_${new Date().toISOString().split('T')[0]}.csv`;
+      a.download = `${entity}_${new Date().toISOString().split('T')[0]}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      setStatus(`Exported ${data.length} ${activeEntity}`);
+      setStatuses({ ...statuses, [entity]: `Exported ${data.length} rows` });
     } catch (err) {
-      setError('Export failed: ' + err.message);
+      setErrors({ ...errors, [entity]: 'Export failed: ' + err.message });
     } finally {
-      setLoading(false);
+      setLoading({ ...loading, [entity]: false });
     }
   }
 
-  function handleFileUpload(e) {
+  function handleFileUpload(entity, e) {
     const file = e.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      setCsvText(event.target.result);
-      setStatus('File loaded, click Import to upload to database');
+      setCsvTexts({ ...csvTexts, [entity]: event.target.result });
+      setStatuses({ ...statuses, [entity]: 'File loaded' });
     };
     reader.readAsText(file);
   }
-
-  const template = CSV_TEMPLATES[activeEntity];
 
   return (
     <div className="admin-import-export">
       <div className="import-export-header">
         <h3>Import/Export Data</h3>
-        <p>Import CSV data or export existing data for each entity type</p>
+        <p>Manage data for all entity types</p>
       </div>
 
-      <div className="entity-tabs">
-        {entities.map(entity => (
-          <button
-            key={entity}
-            className={`entity-tab ${activeEntity === entity ? 'active' : ''}`}
-            onClick={() => {
-              setActiveEntity(entity);
-              setCsvText('');
-              setGoogleSheetUrl('');
-              setError('');
-              setStatus('');
-            }}
-          >
-            {entity}
-          </button>
-        ))}
-      </div>
+      <div className="entities-table">
+        {entities.map(entity => {
+          const template = CSV_TEMPLATES[entity];
+          const isLoading = loading[entity];
+          const status = statuses[entity];
+          const error = errors[entity];
 
-      <div className="import-export-content">
-        <div className="section">
-          <h4>Import from Google Sheets</h4>
-          <p className="help-text">
-            Paste a Google Sheets URL (must be publicly accessible or shared with link viewing enabled)
-          </p>
-          <input
-            type="text"
-            value={googleSheetUrl}
-            onChange={(e) => setGoogleSheetUrl(e.target.value)}
-            placeholder="https://docs.google.com/spreadsheets/d/..."
-            className="sheets-url-input"
-          />
-          <button
-            className="import-btn"
-            onClick={handleGoogleSheetsImport}
-            disabled={loading || !googleSheetUrl.trim()}
-          >
-            {loading ? 'Importing...' : 'Import from Google Sheets'}
-          </button>
-          <div className="template-info">
-            <strong>Expected format:</strong>
-            <code>{template.headers}</code>
-            <strong>Example:</strong>
-            <code>{template.example}</code>
-          </div>
-        </div>
+          return (
+            <div key={entity} className="entity-row">
+              <div className="entity-name-col">
+                <h4>{entity}</h4>
+                <div className="template-hint">
+                  {template.headers.split(',').slice(0, 3).join(', ')}...
+                </div>
+              </div>
 
-        <div className="section">
-          <h4>Import from CSV File</h4>
-          <p className="help-text">
-            Upload a CSV file from your computer
-          </p>
-          <div className="import-actions">
-            <label className="file-upload-btn">
-              Choose CSV File
-              <input type="file" accept=".csv" onChange={handleFileUpload} />
-            </label>
-            {csvText && (
-              <button
-                className="import-btn"
-                onClick={handleImport}
-                disabled={loading}
-              >
-                {loading ? 'Importing...' : 'Import Loaded File'}
-              </button>
-            )}
-          </div>
-        </div>
+              <div className="entity-actions-col">
+                <div className="action-group">
+                  <input
+                    type="text"
+                    placeholder=""
+                    className="sheets-url-compact"
+                    value={googleSheetUrls[entity] || ''}
+                    onChange={(e) => setGoogleSheetUrls({ ...googleSheetUrls, [entity]: e.target.value })}
+                  />
+                  <button
+                    className="action-btn sheets-btn"
+                    onClick={() => handleGoogleSheetsImport(entity)}
+                    disabled={isLoading || !googleSheetUrls[entity]?.trim()}
+                  >
+                    Sheets
+                  </button>
+                </div>
 
-        <div className="section">
-          <h4>Import from CSV Paste</h4>
-          <p className="help-text">
-            Paste CSV data directly
-          </p>
-          <textarea
-            value={csvText}
-            onChange={(e) => setCsvText(e.target.value)}
-            placeholder={`Paste CSV data here...\n\n${template.headers}\n${template.example}`}
-            rows={6}
-          />
-          <button
-            className="import-btn"
-            onClick={handleImport}
-            disabled={loading || !csvText.trim()}
-          >
-            {loading ? 'Importing...' : 'Import CSV'}
-          </button>
-        </div>
+                <div className="action-group">
+                  <label className="file-upload-compact">
+                    CSV
+                    <input type="file" accept=".csv" onChange={(e) => handleFileUpload(entity, e)} />
+                  </label>
+                  {csvTexts[entity] && (
+                    <button
+                      className="action-btn import-btn-compact"
+                      onClick={() => handleImport(entity)}
+                      disabled={isLoading}
+                    >
+                      Import
+                    </button>
+                  )}
+                </div>
 
-        <div className="section">
-          <h4>Export to CSV</h4>
-          <p className="help-text">
-            Download all {activeEntity} as a CSV file
-          </p>
-          <button
-            className="export-btn"
-            onClick={handleExport}
-            disabled={loading}
-          >
-            {loading ? 'Exporting...' : `Export ${activeEntity}`}
-          </button>
-        </div>
+                <div className="action-group">
+                  <button
+                    className="action-btn export-btn-compact"
+                    onClick={() => handleExport(entity)}
+                    disabled={isLoading}
+                  >
+                    Export
+                  </button>
+                </div>
+              </div>
 
-        {status && <div className="status-msg success">{status}</div>}
-        {error && <div className="status-msg error">{error}</div>}
+              {(status || error) && (
+                <div className="entity-status">
+                  {status && <span className="status-text success">{status}</span>}
+                  {error && <span className="status-text error">{error}</span>}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
