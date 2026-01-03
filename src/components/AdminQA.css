@@ -133,6 +133,29 @@
   color: #fbbf24;
 }
 
+.qa-stat.clickable {
+  cursor: pointer;
+  position: relative;
+}
+
+.qa-stat.clickable:hover {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.4);
+  transform: translateX(2px);
+}
+
+.qa-stat.clickable .click-hint {
+  color: #94a3b8;
+  font-size: 14px;
+  margin-left: 8px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.qa-stat.clickable:hover .click-hint {
+  opacity: 1;
+}
+
 .qa-section.critical {
   border-color: rgba(239, 68, 68, 0.5);
   background: rgba(239, 68, 68, 0.05);
