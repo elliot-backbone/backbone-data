@@ -93,7 +93,7 @@ export default function Dashboard() {
     } else {
       const typeMap = {
         'priority-detail': 'priorities',
-        'company-detail': topNavView === 'pipeline' ? 'pipeline-companies' : 'companies',
+        'company-detail': topNavView === 'pipeline' ? 'pipeline-companies' : 'companies-list',
         'round-detail': topNavView === 'pipeline' ? 'pipeline-rounds' : (topNavView === 'firms' ? 'all-firms-rounds' : 'portfolio-firm-rounds'),
         'goal-detail': 'goals',
         'deal-detail': topNavView === 'pipeline' ? 'pipeline-deals' : (topNavView === 'firms' ? 'all-firms-deals' : 'portfolio-firm-deals'),
@@ -112,8 +112,10 @@ export default function Dashboard() {
         return <PriorityQueue rawData={rawData} resolvedPriorities={resolvedPriorities} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'priority-detail':
         return <PriorityDetail issue={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectGoal={(g) => handleSelectEntity('goal', g)} onResolved={handlePriorityResolved} onDataUpdate={handleDataUpdate} />;
-      case 'companies':
+      case 'portfolio-overview':
         return <PortfolioOverview rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
+      case 'companies-list':
+        return <CompaniesList rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'pipeline-companies':
         return <PipelineCompaniesList rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'company-detail':
@@ -209,31 +211,31 @@ export default function Dashboard() {
 
           <div className="nav-section">
             <button
-              className={`nav-section-label clickable ${currentView === 'companies' || currentView === 'company-detail' || currentView === 'goals' || currentView === 'goal-detail' || currentView === 'portfolio-rounds' || currentView === 'round-detail' || currentView === 'portfolio-deals' || currentView === 'deal-detail' ? 'active' : ''}`}
-              onClick={() => handleNavigation('companies', null)}
+              className={`nav-section-label clickable ${currentView === 'portfolio-overview' || currentView === 'companies-list' || currentView === 'company-detail' || currentView === 'goals' || currentView === 'goal-detail' || currentView === 'portfolio-rounds' || currentView === 'round-detail' || currentView === 'portfolio-deals' || currentView === 'deal-detail' ? 'active' : ''}`}
+              onClick={() => handleNavigation('portfolio-overview', null)}
             >
               Portfolio
             </button>
             <button
-              className={`nav-item sub ${currentView === 'companies' || currentView === 'company-detail' ? 'active' : ''}`}
-              onClick={() => handleNavigation('companies', null)}
+              className={`nav-item sub ${currentView === 'companies-list' || currentView === 'company-detail' ? 'active' : ''}`}
+              onClick={() => handleNavigation('companies-list', null)}
             >
-              <span className="nav-label">Health</span>
+              <span className="nav-label">Companies</span>
             </button>
             <button
-              className={`nav-item sub-sub ${currentView === 'goals' || currentView === 'goal-detail' ? 'active' : ''}`}
+              className={`nav-item sub ${currentView === 'goals' || currentView === 'goal-detail' ? 'active' : ''}`}
               onClick={() => handleNavigation('goals', null)}
             >
               <span className="nav-label">Goals</span>
             </button>
             <button
-              className={`nav-item sub-sub ${currentView === 'portfolio-rounds' || currentView === 'round-detail' ? 'active' : ''}`}
+              className={`nav-item sub ${currentView === 'portfolio-rounds' || currentView === 'round-detail' ? 'active' : ''}`}
               onClick={() => handleNavigation('portfolio-rounds', null)}
             >
               <span className="nav-label">Rounds</span>
             </button>
             <button
-              className={`nav-item sub-sub-sub ${currentView === 'portfolio-deals' || currentView === 'deal-detail' ? 'active' : ''}`}
+              className={`nav-item sub-sub ${currentView === 'portfolio-deals' || currentView === 'deal-detail' ? 'active' : ''}`}
               onClick={() => handleNavigation('portfolio-deals', null)}
             >
               <span className="nav-label">Deals</span>
