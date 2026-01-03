@@ -56,6 +56,16 @@ export async function unresolveIssue(companyId, issueCategory, issueTitle) {
   }
 }
 
+function toCamelCase(obj) {
+  if (!obj) return obj;
+  const camelObj = {};
+  for (const key in obj) {
+    const camelKey = key.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+    camelObj[camelKey] = obj[key];
+  }
+  return camelObj;
+}
+
 export async function loadAllData() {
   const [
     { data: companies, error: companiesError },
@@ -81,11 +91,11 @@ export async function loadAllData() {
   if (dealsError) console.error('Error loading deals:', dealsError);
 
   return {
-    companies: (companies || []).map(deriveCompanyMetrics),
-    people: people || [],
-    firms: firms || [],
-    rounds: (rounds || []).map(deriveRoundMetrics),
-    goals: (goals || []).map(deriveGoalMetrics),
-    deals: deals || []
+    companies: (companies || []).map(c => deriveCompanyMetrics(toCamelCase(c))),
+    people: (people || []).map(toCamelCase),
+    firms: (firms || []).map(toCamelCase),
+    rounds: (rounds || []).map(r => deriveRoundMetrics(toCamelCase(r))),
+    goals: (goals || []).map(g => deriveGoalMetrics(toCamelCase(g))),
+    deals: (deals || []).map(toCamelCase)
   };
 }
