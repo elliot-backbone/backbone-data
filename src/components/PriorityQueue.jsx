@@ -1,4 +1,4 @@
-import { detectIssues } from '../lib/derivations';
+import { computeAllDerivations } from '../lib/derivations';
 import './PriorityQueue.css';
 
 const SEVERITY_CONFIG = {
@@ -9,17 +9,37 @@ const SEVERITY_CONFIG = {
 };
 
 export default function PriorityQueue({ rawData, resolvedPriorities = [], onSelectIssue, onSelectCompany }) {
-  const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || [], resolvedPriorities);
-  const companies = rawData.companies || [];
+  const result = computeAllDerivations({
+    companies: rawData.companies || [],
+    rounds: rawData.rounds || [],
+    goals: rawData.goals || [],
+    investors: rawData.investors || [],
+    companyInvestors: rawData.companyInvestors || [],
+    talent: rawData.talent || [],
+    employees: rawData.employees || []
+  }, resolvedPriorities);
 
-  const getCompanyName = (companyId) => companies.find(c => c.id === companyId)?.name || 'Unknown';
-  const getCompany = (companyId) => companies.find(c => c.id === companyId);
+  const priorities = result.l6?.topPriorities || [];
+  const companies = result.l3?.companies || [];
 
-  if (issues.length === 0) {
+  const getEntity = (priority) => {
+    if (priority.entityType === 'company') {
+      return companies.find(c => c.id === priority.entityId);
+    } else if (priority.entityType === 'round') {
+      const round = result.l3?.rounds?.find(r => r.id === priority.entityId);
+      return companies.find(c => c.id === round?.companyId);
+    } else if (priority.entityType === 'goal') {
+      const goal = result.l3?.goals?.find(g => g.id === priority.entityId);
+      return companies.find(c => c.id === goal?.companyId);
+    }
+    return null;
+  };
+
+  if (priorities.length === 0) {
     return (
       <div className="priority-queue">
         <h2>Priority Queue</h2>
-        <div className="empty-state">No issues detected. All clear.</div>
+        <div className="empty-state">No priorities detected. All clear.</div>
       </div>
     );
   }
@@ -27,16 +47,20 @@ export default function PriorityQueue({ rawData, resolvedPriorities = [], onSele
   return (
     <div className="priority-queue">
       <div className="queue-header">
-        <span className="queue-meta">{issues.length} issues · {issues.filter(i => i.severity === 'critical').length} critical</span>
+        <span className="queue-meta">
+          {result.l6?.summary.totalPriorities || 0} priorities ·
+          {result.l6?.summary.criticalCount || 0} critical ·
+          Avg score: {result.l6?.summary.avgPriorityScore || 0}
+        </span>
       </div>
       <div className="queue-list">
-        {issues.map((issue, index) => {
-          const config = SEVERITY_CONFIG[issue.severity] || SEVERITY_CONFIG.medium;
-          const company = getCompany(issue.companyId);
+        {priorities.map((priority, index) => {
+          const config = SEVERITY_CONFIG[priority.severity] || SEVERITY_CONFIG.medium;
+          const entity = getEntity(priority);
           return (
             <div
-              key={issue.id}
-              onClick={() => onSelectIssue ? onSelectIssue(issue) : (company && onSelectCompany && onSelectCompany(company))}
+              key={priority.id}
+              onClick={() => onSelectIssue ? onSelectIssue(priority) : (entity && onSelectCompany && onSelectCompany(entity))}
               className="queue-item"
               style={{ borderLeftColor: config.color }}
             >
@@ -46,12 +70,25 @@ export default function PriorityQueue({ rawData, resolvedPriorities = [], onSele
                   <span className="severity-badge" style={{ color: config.color, backgroundColor: config.bg }}>
                     {config.label}
                   </span>
-                  <span className="company-name">{getCompanyName(issue.companyId)}</span>
+                  <span className="company-name">{priority.entityName}</span>
+                  <span className="priority-score" style={{
+                    color: priority.priorityScore >= 80 ? '#ef4444' :
+                           priority.priorityScore >= 60 ? '#f97316' : '#eab308',
+                    fontWeight: 600,
+                    marginLeft: 'auto'
+                  }}>
+                    {priority.priorityScore}
+                  </span>
                 </div>
-                <div className="item-title">{issue.title}</div>
+                <div className="item-title">{priority.title}</div>
                 <div className="item-action">
                   <span className="action-arrow">→</span>
-                  <span className="action-text">{issue.suggestedAction}</span>
+                  <span className="action-text">{priority.resolutionTemplate}</span>
+                </div>
+                <div className="item-metrics">
+                  <span className="metric">Impact: {priority.impactScore}</span>
+                  <span className="metric">Effort: {priority.effortScore}</span>
+                  <span className="metric">Urgency: {priority.urgencyScore}</span>
                 </div>
               </div>
             </div>
