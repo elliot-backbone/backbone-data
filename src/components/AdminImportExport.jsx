@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { parseCSV, convertToCSV, fetchGoogleSheetsCSV, CSV_TEMPLATES } from '../lib/csvUtils';
-import { clearAllData, importGeneratedData } from '../lib/dataImporter';
 import './AdminImportExport.css';
 
 export default function AdminImportExport() {
@@ -11,34 +10,8 @@ export default function AdminImportExport() {
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [portfolioCount, setPortfolioCount] = useState(12);
-  const [stressLevel, setStressLevel] = useState('default');
 
   const entities = ['companies', 'people', 'firms', 'rounds', 'goals', 'deals'];
-
-  async function handleGenerateData() {
-    if (!window.confirm('This will delete ALL existing data and generate new random data. Continue?')) {
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-    setStatus('');
-
-    try {
-      setStatus('Clearing existing data...');
-      await clearAllData();
-
-      setStatus('Generating and importing data...');
-      const counts = await importGeneratedData(portfolioCount, stressLevel);
-
-      setStatus(`Successfully generated: ${counts.companies} companies, ${counts.firms} firms, ${counts.people} people, ${counts.rounds} rounds, ${counts.goals} goals, ${counts.deals} deals`);
-    } catch (err) {
-      setError('Data generation failed: ' + err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   async function handleImport() {
     if (!csvText.trim()) {
@@ -161,45 +134,6 @@ export default function AdminImportExport() {
       <div className="import-export-header">
         <h3>Import/Export Data</h3>
         <p>Import CSV data or export existing data for each entity type</p>
-      </div>
-
-      <div className="section generator-section">
-        <h4>Generate Random Data</h4>
-        <p className="help-text">
-          Generate random portfolio data for testing. This will clear all existing data.
-        </p>
-        <div className="generator-controls">
-          <div className="control-group">
-            <label>Portfolio Companies</label>
-            <input
-              type="number"
-              min="1"
-              max="50"
-              value={portfolioCount}
-              onChange={(e) => setPortfolioCount(parseInt(e.target.value) || 12)}
-              className="number-input"
-            />
-          </div>
-          <div className="control-group">
-            <label>Stress Level</label>
-            <select
-              value={stressLevel}
-              onChange={(e) => setStressLevel(e.target.value)}
-              className="select-input"
-            >
-              <option value="default">Default</option>
-              <option value="moderate">Moderate</option>
-              <option value="high">High</option>
-            </select>
-          </div>
-          <button
-            className="generate-btn"
-            onClick={handleGenerateData}
-            disabled={loading}
-          >
-            {loading ? 'Generating...' : 'Generate & Import Data'}
-          </button>
-        </div>
       </div>
 
       <div className="entity-tabs">
