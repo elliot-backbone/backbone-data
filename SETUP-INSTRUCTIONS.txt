@@ -1,0 +1,230 @@
+================================================================================
+BACKBONE CRM V8.1 - SETUP INSTRUCTIONS
+================================================================================
+
+Version: V8.1-STABLE-20260103-NAV
+Archive: backbone-v8.1-stable.zip (139 KB)
+Date: 2026-01-03
+
+================================================================================
+WHAT'S INCLUDED
+================================================================================
+
+This archive contains a stable, production-ready version of Backbone CRM V8
+with the following:
+
+✓ Complete source code (70+ React components)
+✓ 7-layer computation architecture
+✓ Database migrations (Supabase)
+✓ Design system and assets
+✓ Documentation (HANDOVER.txt, CHECKPOINT.md)
+✓ Configuration files
+
+NOT INCLUDED (you'll need to set these up):
+✗ node_modules (run npm install)
+✗ .env file (create with your Supabase credentials)
+✗ dist/ folder (run npm run build)
+
+================================================================================
+QUICK START (5 STEPS)
+================================================================================
+
+1. EXTRACT THE ARCHIVE
+   unzip backbone-v8.1-stable.zip
+   cd project
+
+2. INSTALL DEPENDENCIES
+   npm install
+
+3. CREATE .env FILE
+   Create a file named .env in the project root with:
+
+   VITE_SUPABASE_URL=your_supabase_project_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+4. RUN DEVELOPMENT SERVER
+   npm run dev
+
+   Opens at http://localhost:5173
+
+5. BUILD FOR PRODUCTION
+   npm run build
+   npm run preview
+
+================================================================================
+SUPABASE SETUP
+================================================================================
+
+You need a Supabase project to run this application.
+
+OPTION A: Use Existing Project
+- Get your URL and anon key from Supabase dashboard
+- Run migrations from supabase/migrations/ folder
+- Update .env file
+
+OPTION B: Create New Project
+1. Go to https://supabase.com
+2. Create new project
+3. Copy project URL and anon key
+4. Apply migrations in order:
+   - 20260102215438_create_priority_resolutions.sql
+   - 20260102222325_fix_priority_resolutions_rls.sql
+   - 20260102231041_create_core_entities.sql
+   - 20260103000345_allow_anon_access.sql
+   - 20260103000407_allow_anon_priority_resolutions.sql
+   - 20260103001402_remove_stored_derivations.sql
+   - 20260103002425_add_explainability_timestamps.sql
+
+================================================================================
+PROJECT STRUCTURE
+================================================================================
+
+project/
+├── src/
+│   ├── components/          # 70+ React components
+│   ├── lib/                # Core logic and utilities
+│   ├── assets/             # SVG logos
+│   ├── App.jsx             # Root component
+│   └── main.jsx            # Entry point
+├── supabase/
+│   └── migrations/         # Database schema migrations
+├── index.html              # HTML entry point
+├── vite.config.js          # Vite configuration
+├── package.json            # Dependencies
+├── HANDOVER.txt            # Complete developer guide (480+ lines)
+├── CHECKPOINT.md           # Stable state documentation
+└── SETUP-INSTRUCTIONS.txt  # This file
+
+================================================================================
+KEY FEATURES IN THIS VERSION
+================================================================================
+
+✓ Portfolio-first navigation (Health/Priorities grid)
+✓ Dual navigation system (vertical + horizontal)
+✓ Window Manager for multi-view detail panels
+✓ Priority queue and resolution tracking
+✓ Admin panels (QA, Import/Export, Generate, Analyze)
+✓ Company, Firm, Person, Deal, Round detail views
+✓ Relationship and impact tracking
+✓ CSV import/export functionality
+✓ Synthetic data generation
+
+================================================================================
+ARCHITECTURE HIGHLIGHTS
+================================================================================
+
+7-LAYER COMPUTATION:
+L0: Raw Inputs (Supabase tables)
+L1: Pure Derivations (computed from L0)
+L2: Trajectories (time-based projections)
+L3: Health & State (entity condition)
+L4: Goal Risk & Issue Detection
+L5: Priority Calculation
+L6: Priority Output (ranked actions)
+
+FROZEN NORTH STARS:
+- NoStoredDerivs: All computed values ephemeral
+- Health=state: Internal condition only
+- Risk→Goal: All risks map to goals
+- Urgency→Risk: Priority driven by gaps
+- Portfolio=VIEW: Aggregation layer
+- DAG: Directed acyclic graph dependencies
+- Modularise: Physical separation of concerns
+- Delete>Add: Ruthless elimination
+
+================================================================================
+DOCUMENTATION
+================================================================================
+
+READ THESE FIRST:
+1. HANDOVER.txt    - 17 sections, 480+ lines, complete developer guide
+2. CHECKPOINT.md   - Version history, rollback instructions
+3. SETUP-INSTRUCTIONS.txt - This file
+
+HANDOVER.txt covers:
+- Project overview and mission
+- Architectural principles
+- 7-layer computation architecture
+- Navigation structure
+- Design system
+- Database schema
+- Development workflow
+- Deployment
+- Troubleshooting
+- And more...
+
+================================================================================
+NEXT STEPS AFTER SETUP
+================================================================================
+
+Once running, you can:
+1. Import data via Admin → Import/Export
+2. Generate synthetic data via Admin → Generate
+3. Explore portfolio companies via Portfolio → Companies
+4. View priority queue via Priorities → Queue
+5. Test multi-window system by opening multiple detail views
+
+================================================================================
+DEVELOPMENT PRIORITIES
+================================================================================
+
+IMMEDIATE:
+- Complete L1 derivations (15 remaining)
+- Implement L2 trajectory calculations
+- Build L3 Health scoring system
+- Define L4 issue detection conditions
+
+SHORT-TERM:
+- Create L5 resolution templates
+- Wire priority queue to real computations
+- Build goal management UI
+- Implement portfolio aggregation views
+
+See HANDOVER.txt section 13 for full roadmap.
+
+================================================================================
+VERSION HISTORY
+================================================================================
+
+V8.1-STABLE-20260103-NAV (Current)
+- Portfolio-first navigation
+- Health/Priorities grid default view
+- Deals nested under Rounds
+- Proper hierarchy and information architecture
+
+V8.0-STABLE-20260103 (Previous)
+- Initial stable checkpoint
+- Core navigation and routing
+- Complete design system
+
+See CHECKPOINT.md for full version history and rollback instructions.
+
+================================================================================
+IMPORTANT NOTES
+================================================================================
+
+1. NEVER commit .env to version control (contains secrets)
+2. RLS policies currently allow anon access (tighten for production)
+3. Build with "npm run build" before deploying
+4. Migrations must be applied in chronological order
+5. Follow North Stars principles for any modifications
+6. Use checkpoint-gated methodology for development
+7. Read HANDOVER.txt before making changes
+
+================================================================================
+QUICK REFERENCE COMMANDS
+================================================================================
+
+Install:        npm install
+Dev server:     npm run dev
+Build:          npm run build
+Preview build:  npm run preview
+
+================================================================================
+END OF SETUP INSTRUCTIONS
+================================================================================
+
+For complete documentation, see HANDOVER.txt (480+ lines)
+For version details, see CHECKPOINT.md
+
+Good luck!
