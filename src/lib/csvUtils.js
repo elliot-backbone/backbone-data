@@ -85,8 +85,8 @@ export const CSV_TEMPLATES = {
     example: 'seed,2000000,1500000,active,2024-06-30'
   },
   goals: {
-    headers: 'title,goal_type,target_value,current_value,target_date,is_on_track',
-    example: 'Hit $50k MRR,revenue,50000,35000,2024-12-31,true'
+    headers: 'title,goal_type,target_value,current_value,target_date',
+    example: 'Hit $50k MRR,revenue,50000,35000,2024-12-31'
   },
   deals: {
     headers: 'deal_stage,expected_amount,last_contact_date',

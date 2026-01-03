@@ -59,8 +59,6 @@ export async function importGeneratedData(portfolioCount = 12, stressLevel = 'de
     cash_on_hand: c.cashOnHand,
     monthly_burn: c.monthlyBurn,
     mrr: c.mrr,
-    arr: c.arr,
-    runway: c.runway,
     revenue_growth_rate: c.revenueGrowthRate,
     gross_margin: c.grossMargin,
     cac_payback: c.cacPayback,
@@ -98,7 +96,6 @@ export async function importGeneratedData(portfolioCount = 12, stressLevel = 'de
     current_value: g.currentValue,
     start_date: g.startDate,
     target_date: g.targetDate,
-    is_on_track: g.isOnTrack,
     last_updated_at: g.lastUpdatedAt,
   }));
 
