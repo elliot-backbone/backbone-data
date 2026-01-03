@@ -66,6 +66,9 @@ export async function importGeneratedData(portfolioCount = 12, stressLevel = 'de
     sector: c.sector,
     employee_count: c.employeeCount,
     last_material_update_at: c.lastMaterialUpdate_at,
+    cash_on_hand_updated_at: c.cashOnHandUpdated_at,
+    monthly_burn_updated_at: c.monthlyBurnUpdated_at,
+    mrr_updated_at: c.mrrUpdated_at,
   }));
 
   const { error: companiesError } = await supabase.from('companies').insert(companiesData);
@@ -97,6 +100,7 @@ export async function importGeneratedData(portfolioCount = 12, stressLevel = 'de
     start_date: g.startDate,
     target_date: g.targetDate,
     last_updated_at: g.lastUpdatedAt,
+    current_value_updated_at: g.currentValueUpdated_at,
   }));
 
   const { error: goalsError } = await supabase.from('goals').insert(goalsData);
@@ -111,6 +115,7 @@ export async function importGeneratedData(portfolioCount = 12, stressLevel = 'de
     expected_amount: d.expectedAmount,
     last_contact_date: d.lastContactDate,
     introduced_by_id: d.introducedBy_id,
+    stage_entry_date: d.stageEntry_date,
   }));
 
   const { error: dealsError } = await supabase.from('deals').insert(dealsData);

@@ -159,6 +159,7 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
     const founder = pick(founders);
 
     const mrr = randomInt(financials.mrr[0], financials.mrr[1]);
+    const dataStaleness = randomInt(profile.activityDays[0], profile.activityDays[1]);
 
     companies.push({
       id: uuid(),
@@ -176,7 +177,10 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
       stage,
       sector: pick(SECTORS),
       employeeCount: randomInt(financials.employees[0], financials.employees[1]),
-      lastMaterialUpdate_at: daysAgo(randomInt(profile.activityDays[0], profile.activityDays[1])),
+      lastMaterialUpdate_at: daysAgo(dataStaleness),
+      cashOnHandUpdated_at: daysAgo(randomInt(0, dataStaleness + 10)),
+      monthlyBurnUpdated_at: daysAgo(randomInt(0, dataStaleness + 10)),
+      mrrUpdated_at: daysAgo(randomInt(0, dataStaleness + 5)),
     });
   }
 
@@ -228,6 +232,7 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
       const daysLeft = randomInt(-30, 180);
       const startDate = daysAgo(randomInt(30, 180));
 
+      const goalLastUpdated = randomInt(0, 14);
       goals.push({
         id: uuid(),
         companyId: company.id,
@@ -240,7 +245,8 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
         title: goalType === 'fundraise' ? 'Close Series A' : goalType === 'revenue' ? `Hit $${(target/1000).toFixed(0)}k MRR` : goalType === 'hiring' ? `Hire ${target} engineers` : 'Launch v2',
         startDate,
         targetDate: daysLeft > 0 ? daysFromNow(daysLeft) : daysAgo(Math.abs(daysLeft)),
-        lastUpdatedAt: daysAgo(randomInt(0, 14)),
+        lastUpdatedAt: daysAgo(goalLastUpdated),
+        currentValueUpdated_at: daysAgo(goalLastUpdated),
       });
     }
   }
@@ -261,6 +267,11 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
                       stage === 'contacted' ? randomInt(7, 30) :
                       randomInt(14, 60);
 
+      const stageEntryDays = stage === 'closed' || stage === 'committed' ? recency :
+                             stage === 'term_sheet' ? randomInt(0, 14) :
+                             stage === 'diligence' ? randomInt(7, 30) :
+                             randomInt(14, 45);
+
       deals.push({
         id: uuid(),
         round_id: round.id,
@@ -270,6 +281,7 @@ export function generateDataset(portfolioCount = 12, stressLevel = 'default') {
         lastContactDate: daysAgo(recency),
         introducedBy_id: Math.random() > 0.3 ? pick(people).id : null,
         expectedAmount: stage === 'term_sheet' || stage === 'committed' || stage === 'closed' ? randomInt(50000, Math.round(round.targetAmount * 0.4)) : null,
+        stageEntry_date: daysAgo(stageEntryDays),
       });
     }
   }

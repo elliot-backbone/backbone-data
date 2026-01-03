@@ -97,13 +97,8 @@ export default function AdminQA() {
         if (g[field.value] != null && !g[field.timestamp]) count++;
       });
     });
-    const criticalDealFields = [
-      { value: 'time_in_stage', timestamp: 'stage_entry_date' }
-    ];
     deals?.forEach(d => {
-      criticalDealFields.forEach(field => {
-        if (d[field.value] != null && !d[field.timestamp]) count++;
-      });
+      if (d.deal_stage != null && !d.stage_entry_date) count++;
     });
     return count;
   }
