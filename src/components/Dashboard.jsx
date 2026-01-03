@@ -134,7 +134,7 @@ export default function Dashboard() {
       case 'deal-detail':
         return <DealDetail deal={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectPerson={(p) => handleSelectEntity('person', p)} onSelectFirm={(f) => handleSelectEntity('firm', f)} onSelectRound={(r) => handleSelectEntity('round', r)} />;
       case 'firms':
-        return <FirmsList rawData={rawData} onSelectFirm={(f) => handleSelectEntity('firm', f)} />;
+        return <FirmsList rawData={rawData} onSelectFirm={(f) => handleSelectEntity('firm', f)} portfolioInvestorsOnly={topNavView !== 'firms'} />;
       case 'firm-detail':
         return <FirmDetail firm={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectPerson={(p) => handleSelectEntity('person', p)} onSelectDeal={(d) => handleSelectEntity('deal', d)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'partners':
@@ -234,25 +234,28 @@ export default function Dashboard() {
 
           <div className="nav-section">
             <button
-              className={`nav-section-label clickable`}
-              onClick={() => {
-                setTopNavView('pipeline');
-                handleNavigation('pipeline-companies', 'pipeline');
-              }}
-            >
-              Pipeline
-            </button>
-          </div>
-
-          <div className="nav-section">
-            <button
-              className={`nav-section-label clickable`}
-              onClick={() => {
-                setTopNavView('firms');
-                handleNavigation('firms', 'firms');
-              }}
+              className={`nav-section-label clickable ${currentView === 'firms' || currentView === 'firm-detail' || currentView === 'partners' || currentView === 'person-detail' || currentView === 'firm-deals' || currentView === 'firm-rounds' ? 'active' : ''}`}
+              onClick={() => handleNavigation('firms', null)}
             >
               Firms
+            </button>
+            <button
+              className={`nav-item sub ${currentView === 'partners' || currentView === 'person-detail' ? 'active' : ''}`}
+              onClick={() => handleNavigation('partners', null)}
+            >
+              <span className="nav-label">Partners</span>
+            </button>
+            <button
+              className={`nav-item sub ${currentView === 'firm-deals' ? 'active' : ''}`}
+              onClick={() => handleNavigation('firm-deals', null)}
+            >
+              <span className="nav-label">Deals</span>
+            </button>
+            <button
+              className={`nav-item sub-sub ${currentView === 'firm-rounds' ? 'active' : ''}`}
+              onClick={() => handleNavigation('firm-rounds', null)}
+            >
+              <span className="nav-label">Rounds</span>
             </button>
           </div>
 
@@ -296,28 +299,26 @@ export default function Dashboard() {
       </nav>
 
       <div className="dashboard-main">
-        {topNavView && (
-          <div className="horizontal-nav">
-            <button
-              className={`horizontal-nav-item ${topNavView === 'pipeline' ? 'active' : ''}`}
-              onClick={() => {
-                setTopNavView('pipeline');
-                handleNavigation('pipeline-companies', 'pipeline');
-              }}
-            >
-              PIPELINE
-            </button>
-            <button
-              className={`horizontal-nav-item ${topNavView === 'firms' ? 'active' : ''}`}
-              onClick={() => {
-                setTopNavView('firms');
-                handleNavigation('firms', 'firms');
-              }}
-            >
-              FIRMS
-            </button>
-          </div>
-        )}
+        <div className="horizontal-nav">
+          <button
+            className={`horizontal-nav-item ${topNavView === 'pipeline' ? 'active' : ''}`}
+            onClick={() => {
+              setTopNavView('pipeline');
+              handleNavigation('pipeline-companies', 'pipeline');
+            }}
+          >
+            PIPELINE
+          </button>
+          <button
+            className={`horizontal-nav-item ${topNavView === 'firms' ? 'active' : ''}`}
+            onClick={() => {
+              setTopNavView('firms');
+              handleNavigation('firms', 'firms');
+            }}
+          >
+            FIRMS
+          </button>
+        </div>
 
         <header className="top-bar">
           <div className="top-bar-content">
@@ -335,7 +336,7 @@ export default function Dashboard() {
               {currentView === 'portfolio-deals' && 'Portfolio Deals'}
               {currentView === 'pipeline-deals' && 'Pipeline Deals'}
               {currentView === 'deal-detail' && 'Deal Details'}
-              {currentView === 'firms' && 'All Firms'}
+              {currentView === 'firms' && (topNavView === 'firms' ? 'All Firms' : 'Portfolio Investors')}
               {currentView === 'firm-detail' && selectedEntity?.entity?.name}
               {currentView === 'partners' && 'Partners'}
               {currentView === 'person-detail' && selectedEntity?.entity?.name}

@@ -9,7 +9,7 @@ const FIRM_TYPE_LABELS = {
   accelerator: 'Accelerator'
 };
 
-export default function FirmsList({ rawData, onSelectFirm }) {
+export default function FirmsList({ rawData, onSelectFirm, portfolioInvestorsOnly = false }) {
   const [searchTerm, setSearchTerm] = useState('');
   const firms = rawData.firms || [];
   const people = rawData.people || [];
@@ -57,7 +57,11 @@ export default function FirmsList({ rawData, onSelectFirm }) {
     };
   });
 
-  const filteredFirms = enrichedFirms.filter(firm =>
+  const relevantFirms = portfolioInvestorsOnly
+    ? enrichedFirms.filter(f => f.isExistingInvestor)
+    : enrichedFirms;
+
+  const filteredFirms = relevantFirms.filter(firm =>
     searchTerm === '' ||
     firm.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     FIRM_TYPE_LABELS[firm.firmType]?.toLowerCase().includes(searchTerm.toLowerCase())
