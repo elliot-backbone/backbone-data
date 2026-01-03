@@ -9,9 +9,9 @@ const ROLE_LABELS = {
   employee: 'Employee'
 };
 
-export default function PeopleList({ rawData, onSelectPerson, filterToInvestors = false }) {
+export default function PeopleList({ rawData, onSelectPerson, filterToInvestors = false, showAllFirms = false }) {
   const [searchTerm, setSearchTerm] = useState('');
-  const people = filterToInvestors
+  const allPeople = filterToInvestors
     ? (rawData.people || []).filter(p => p.role === 'investor')
     : (rawData.people || []);
   const firms = rawData.firms || [];
@@ -28,6 +28,14 @@ export default function PeopleList({ rawData, onSelectPerson, filterToInvestors 
   const deals = allDeals.filter(deal => {
     return portfolioRounds.some(r => r.id === deal.roundId);
   });
+
+  const portfolioRelevantFirmIds = new Set(
+    deals.map(d => d.firmId).filter(Boolean)
+  );
+
+  const people = showAllFirms
+    ? allPeople
+    : allPeople.filter(p => !p.firmId || portfolioRelevantFirmIds.has(p.firmId));
 
   const enrichedPeople = people.map(person => {
     const firm = firms.find(f => f.id === person.firmId);

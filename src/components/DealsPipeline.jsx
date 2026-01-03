@@ -13,7 +13,7 @@ const DEAL_STAGES = [
   { key: 'dropped', label: 'Dropped', color: '#ef4444' }
 ];
 
-export default function DealsPipeline({ rawData, onSelectDeal, pipelineOnly = false }) {
+export default function DealsPipeline({ rawData, onSelectDeal, pipelineOnly = false, showAllFirms = false }) {
   const [viewMode, setViewMode] = useState('list');
   const [searchTerm, setSearchTerm] = useState('');
   const deals = rawData.deals || [];
@@ -39,9 +39,11 @@ export default function DealsPipeline({ rawData, onSelectDeal, pipelineOnly = fa
     };
   });
 
-  const portfolioDeals = pipelineOnly
-    ? enrichedDeals.filter(d => !d.company?.isPortfolio)
-    : enrichedDeals.filter(d => d.company?.isPortfolio);
+  const portfolioDeals = showAllFirms
+    ? enrichedDeals
+    : pipelineOnly
+      ? enrichedDeals.filter(d => !d.company?.isPortfolio)
+      : enrichedDeals.filter(d => d.company?.isPortfolio);
 
   const filteredDeals = portfolioDeals.filter(deal =>
     searchTerm === '' ||

@@ -46,6 +46,8 @@ export default function FirmsList({ rawData, onSelectFirm, portfolioInvestorsOnl
     }, 0);
 
     const isExistingInvestor = uniquePortfolioCompanies.size > 0;
+    const hasActivePipeline = activeDeals.length > 0;
+    const isPortfolioRelevant = isExistingInvestor || hasActivePipeline;
 
     return {
       ...firm,
@@ -53,12 +55,13 @@ export default function FirmsList({ rawData, onSelectFirm, portfolioInvestorsOnl
       portfolioCompanies: uniquePortfolioCompanies.size,
       totalInvestedAmount: totalInvestedAmount,
       activeDeals: activeDeals.length,
-      isExistingInvestor
+      isExistingInvestor,
+      isPortfolioRelevant
     };
   });
 
   const relevantFirms = portfolioInvestorsOnly
-    ? enrichedFirms.filter(f => f.isExistingInvestor)
+    ? enrichedFirms.filter(f => f.isPortfolioRelevant)
     : enrichedFirms;
 
   const filteredFirms = relevantFirms.filter(firm =>

@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import './RoundsList.css';
 
-export default function RoundsList({ rawData, onSelectRound, pipelineOnly = false, firmPerspective = false }) {
+export default function RoundsList({ rawData, onSelectRound, pipelineOnly = false, firmPerspective = false, showAllFirms = false }) {
   const [searchTerm, setSearchTerm] = useState('');
   const allRounds = rawData.rounds || [];
   const companies = rawData.companies || [];
 
-  const relevantCompanies = pipelineOnly
-    ? companies.filter(c => !c.isPortfolio)
-    : companies.filter(c => c.isPortfolio);
+  const relevantCompanies = showAllFirms
+    ? companies
+    : pipelineOnly
+      ? companies.filter(c => !c.isPortfolio)
+      : companies.filter(c => c.isPortfolio);
 
   const rounds = allRounds.filter(round => {
     const companyId = round.companyId || round.company_id;
