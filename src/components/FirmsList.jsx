@@ -10,7 +10,7 @@ const FIRM_TYPE_LABELS = {
 };
 
 export default function FirmsList({ rawData, onSelectFirm }) {
-  const [filterType, setFilterType] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
   const firms = rawData.firms || [];
   const people = rawData.people || [];
   const allDeals = rawData.deals || [];
@@ -54,9 +54,11 @@ export default function FirmsList({ rawData, onSelectFirm }) {
     };
   });
 
-  const filteredFirms = filterType === 'all'
-    ? enrichedFirms
-    : enrichedFirms.filter(f => f.firmType === filterType);
+  const filteredFirms = enrichedFirms.filter(firm =>
+    searchTerm === '' ||
+    firm.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    FIRM_TYPE_LABELS[firm.firmType]?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const sortedFirms = [...filteredFirms].sort((a, b) => b.activeDeals - a.activeDeals);
 
@@ -69,26 +71,13 @@ export default function FirmsList({ rawData, onSelectFirm }) {
   return (
     <div className="firms-list">
       <div className="firms-controls">
-        <div className="filter-chips">
-          <button
-            className={`filter-chip ${filterType === 'all' ? 'active' : ''}`}
-            onClick={() => setFilterType('all')}
-          >
-            All Firms ({firms.length})
-          </button>
-          {Object.entries(FIRM_TYPE_LABELS).map(([type, label]) => {
-            const count = firms.filter(f => f.firmType === type).length;
-            return (
-              <button
-                key={type}
-                className={`filter-chip ${filterType === type ? 'active' : ''}`}
-                onClick={() => setFilterType(type)}
-              >
-                {label} ({count})
-              </button>
-            );
-          })}
-        </div>
+        <input
+          type="text"
+          placeholder="Search firms..."
+          className="search-input"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
 
       <div className="firms-grid">

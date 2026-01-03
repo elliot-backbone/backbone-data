@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import './RoundsList.css';
 
 export default function RoundsList({ rawData, onSelectRound }) {
+  const [searchTerm, setSearchTerm] = useState('');
   const allRounds = rawData.rounds || [];
   const companies = rawData.companies || [];
   const portfolioCompanies = companies.filter(c => c.isPortfolio);
@@ -16,12 +18,23 @@ export default function RoundsList({ rawData, onSelectRound }) {
     return company ? company.name : 'Unknown';
   };
 
-  const sortedRounds = [...rounds].sort((a, b) =>
+  const filteredRounds = rounds.filter(round => {
+    const companyName = getCompanyName(round);
+    const stage = round.stage || round.roundType || '';
+    const leadInvestor = round.leadInvestor || '';
+
+    return searchTerm === '' ||
+      companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      stage.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      leadInvestor.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
+  const sortedRounds = [...filteredRounds].sort((a, b) =>
     new Date(b.closeDate || b.targetCloseDate) - new Date(a.closeDate || a.targetCloseDate)
   );
 
-  const totalRaised = rounds.reduce((sum, r) => sum + (r.amount || r.targetAmount || 0), 0);
-  const avgRoundSize = rounds.length > 0 ? totalRaised / rounds.length : 0;
+  const totalRaised = filteredRounds.reduce((sum, r) => sum + (r.amount || r.targetAmount || 0), 0);
+  const avgRoundSize = filteredRounds.length > 0 ? totalRaised / filteredRounds.length : 0;
 
   const getStageColor = (stage) => {
     const normalized = (stage || '').toLowerCase().replace(/_/g, ' ');
@@ -42,7 +55,7 @@ export default function RoundsList({ rawData, onSelectRound }) {
       <div className="list-header">
         <div className="list-stats">
           <div className="stat-item">
-            <span className="stat-value">{rounds.length}</span>
+            <span className="stat-value">{filteredRounds.length}</span>
             <span className="stat-label">Total Rounds</span>
           </div>
           <div className="stat-item">
@@ -54,6 +67,16 @@ export default function RoundsList({ rawData, onSelectRound }) {
             <span className="stat-label">Avg Round</span>
           </div>
         </div>
+      </div>
+
+      <div className="rounds-controls">
+        <input
+          type="text"
+          placeholder="Search rounds..."
+          className="search-input"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
 
       <div className="rounds-table">
@@ -96,6 +119,10 @@ export default function RoundsList({ rawData, onSelectRound }) {
           })}
         </div>
       </div>
+
+      {sortedRounds.length === 0 && (
+        <div className="empty-state">No rounds found</div>
+      )}
     </div>
   );
 }

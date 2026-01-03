@@ -9,8 +9,7 @@ const ROLE_LABELS = {
   employee: 'Employee'
 };
 
-export default function PeopleList({ rawData, onSelectPerson, filterToInvestors = false, simpleSearch = false }) {
-  const [filterRole, setFilterRole] = useState(filterToInvestors ? 'investor' : 'all');
+export default function PeopleList({ rawData, onSelectPerson, filterToInvestors = false }) {
   const [searchTerm, setSearchTerm] = useState('');
   const people = filterToInvestors
     ? (rawData.people || []).filter(p => p.role === 'investor')
@@ -50,14 +49,13 @@ export default function PeopleList({ rawData, onSelectPerson, filterToInvestors 
     };
   });
 
-  const filtered = enrichedPeople
-    .filter(p => filterRole === 'all' || p.role === filterRole)
-    .filter(p =>
-      searchTerm === '' ||
-      `${p.firstName} ${p.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (p.firmName && p.firmName.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+  const filtered = enrichedPeople.filter(p =>
+    searchTerm === '' ||
+    `${p.firstName} ${p.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    p.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (p.firmName && p.firmName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    ROLE_LABELS[p.role]?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const sorted = [...filtered].sort((a, b) => {
     if (a.role === 'investor' && b.role === 'investor') {
@@ -79,33 +77,11 @@ export default function PeopleList({ rawData, onSelectPerson, filterToInvestors 
       <div className="people-controls">
         <input
           type="text"
-          placeholder=""
+          placeholder="Search people..."
           className="search-input"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        {!simpleSearch && (
-          <div className="filter-chips">
-            <button
-              className={`filter-chip ${filterRole === 'all' ? 'active' : ''}`}
-              onClick={() => setFilterRole('all')}
-            >
-              All ({people.length})
-            </button>
-            {Object.entries(ROLE_LABELS).map(([role, label]) => {
-              const count = people.filter(p => p.role === role).length;
-              return (
-                <button
-                  key={role}
-                  className={`filter-chip ${filterRole === role ? 'active' : ''}`}
-                  onClick={() => setFilterRole(role)}
-                >
-                  {label} ({count})
-                </button>
-              );
-            })}
-          </div>
-        )}
       </div>
 
       <div className="people-grid">

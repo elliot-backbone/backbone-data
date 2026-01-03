@@ -15,6 +15,7 @@ const DEAL_STAGES = [
 
 export default function DealsPipeline({ rawData, onSelectDeal }) {
   const [viewMode, setViewMode] = useState('list');
+  const [searchTerm, setSearchTerm] = useState('');
   const deals = rawData.deals || [];
   const rounds = rawData.rounds || [];
   const companies = rawData.companies || [];
@@ -40,12 +41,20 @@ export default function DealsPipeline({ rawData, onSelectDeal }) {
 
   const portfolioDeals = enrichedDeals.filter(d => d.company?.isPortfolio);
 
+  const filteredDeals = portfolioDeals.filter(deal =>
+    searchTerm === '' ||
+    deal.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    deal.investorName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    deal.firmName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    deal.roundType.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const stageCounts = DEAL_STAGES.map(stage => ({
     ...stage,
-    count: portfolioDeals.filter(d => d.dealStage === stage.key).length
+    count: filteredDeals.filter(d => d.dealStage === stage.key).length
   }));
 
-  const totalDeals = portfolioDeals.length;
+  const totalDeals = filteredDeals.length;
   const activeStages = stageCounts.filter(s => !['closed', 'dropped'].includes(s.key));
   const activeDealCount = activeStages.reduce((sum, s) => sum + s.count, 0);
   const closedCount = stageCounts.find(s => s.key === 'closed')?.count || 0;
@@ -53,7 +62,7 @@ export default function DealsPipeline({ rawData, onSelectDeal }) {
 
   const conversionRate = totalDeals > 0 ? (closedCount / totalDeals * 100).toFixed(1) : 0;
 
-  const activeDeals = portfolioDeals.filter(d =>
+  const activeDeals = filteredDeals.filter(d =>
     ['contacted', 'meeting_scheduled', 'meeting_held', 'diligence', 'term_sheet', 'committed'].includes(d.dealStage)
   );
 
@@ -99,6 +108,16 @@ export default function DealsPipeline({ rawData, onSelectDeal }) {
             List
           </button>
         </div>
+      </div>
+
+      <div className="deals-controls">
+        <input
+          type="text"
+          placeholder="Search deals..."
+          className="search-input"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
 
       {viewMode === 'funnel' ? (
@@ -181,7 +200,7 @@ export default function DealsPipeline({ rawData, onSelectDeal }) {
         </div>
       )}
 
-      {portfolioDeals.length === 0 && (
+      {filteredDeals.length === 0 && (
         <div className="empty-state">No deals found</div>
       )}
     </div>

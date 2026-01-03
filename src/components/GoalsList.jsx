@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import './GoalsList.css';
 
 export default function GoalsList({ rawData, onSelectGoal }) {
+  const [searchTerm, setSearchTerm] = useState('');
   const goals = rawData.goals || [];
   const companies = rawData.companies || [];
   const portfolioCompanies = companies.filter(c => c.isPortfolio);
@@ -16,16 +18,25 @@ export default function GoalsList({ rawData, onSelectGoal }) {
     return company ? company.name : 'Unknown';
   };
 
-  const onTrackGoals = portfolioGoals.filter(g => g.isOnTrack).length;
-  const offTrackGoals = portfolioGoals.filter(g => !g.isOnTrack).length;
-  const upcomingDeadlines = portfolioGoals.filter(g => {
+  const filteredGoals = portfolioGoals.filter(goal => {
+    const companyName = getCompanyName(goal);
+    const metric = goal.metric || goal.title || '';
+
+    return searchTerm === '' ||
+      companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      metric.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
+  const onTrackGoals = filteredGoals.filter(g => g.isOnTrack).length;
+  const offTrackGoals = filteredGoals.filter(g => !g.isOnTrack).length;
+  const upcomingDeadlines = filteredGoals.filter(g => {
     const deadline = new Date(g.deadline || g.targetDate);
     const now = new Date();
     const daysUntil = (deadline - now) / (1000 * 60 * 60 * 24);
     return daysUntil <= 30 && daysUntil > 0;
   }).length;
 
-  const sortedGoals = [...portfolioGoals].sort((a, b) => {
+  const sortedGoals = [...filteredGoals].sort((a, b) => {
     if (a.isOnTrack !== b.isOnTrack) return a.isOnTrack ? 1 : -1;
     return new Date(a.deadline || a.targetDate) - new Date(b.deadline || b.targetDate);
   });
@@ -50,7 +61,7 @@ export default function GoalsList({ rawData, onSelectGoal }) {
       <div className="list-header">
         <div className="list-stats">
           <div className="stat-item">
-            <span className="stat-value">{portfolioGoals.length}</span>
+            <span className="stat-value">{filteredGoals.length}</span>
             <span className="stat-label">Total Goals</span>
           </div>
           <div className="stat-item">
@@ -66,6 +77,16 @@ export default function GoalsList({ rawData, onSelectGoal }) {
             <span className="stat-label">Due Soon</span>
           </div>
         </div>
+      </div>
+
+      <div className="goals-controls">
+        <input
+          type="text"
+          placeholder="Search goals..."
+          className="search-input"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
 
       <div className="goals-grid">
@@ -132,6 +153,10 @@ export default function GoalsList({ rawData, onSelectGoal }) {
           );
         })}
       </div>
+
+      {sortedGoals.length === 0 && (
+        <div className="empty-state">No goals found</div>
+      )}
     </div>
   );
 }

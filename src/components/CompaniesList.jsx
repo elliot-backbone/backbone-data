@@ -1,13 +1,21 @@
+import { useState } from 'react';
 import { detectIssues, calculateHealth } from '../lib/derivations';
 import './CompaniesList.css';
 
 export default function CompaniesList({ rawData, onSelectCompany }) {
+  const [searchTerm, setSearchTerm] = useState('');
   const issues = detectIssues(rawData.companies || [], rawData.rounds || [], rawData.goals || [], []);
   const allCompanies = (rawData.companies || []).map(c => ({
     ...c,
     healthScore: calculateHealth(c, issues)
   }));
   const companies = allCompanies.filter(c => c.isPortfolio);
+
+  const filteredCompanies = companies.filter(company =>
+    searchTerm === '' ||
+    company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    company.sector?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const getHealthColor = (score) => {
     if (score >= 80) return '#10b981';
@@ -34,8 +42,18 @@ export default function CompaniesList({ rawData, onSelectCompany }) {
         </div>
       </div>
 
+      <div className="companies-controls">
+        <input
+          type="text"
+          placeholder="Search companies..."
+          className="search-input"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       <div className="companies-grid">
-        {companies.map(company => (
+        {filteredCompanies.map(company => (
           <div
             key={company.id}
             className="company-card"
@@ -82,6 +100,10 @@ export default function CompaniesList({ rawData, onSelectCompany }) {
           </div>
         ))}
       </div>
+
+      {filteredCompanies.length === 0 && (
+        <div className="empty-state">No companies found</div>
+      )}
     </div>
   );
 }
