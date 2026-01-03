@@ -318,6 +318,15 @@ export default function Dashboard() {
           >
             FIRMS
           </button>
+          <button
+            className={`horizontal-nav-item ${topNavView === 'people' ? 'active' : ''}`}
+            onClick={() => {
+              setTopNavView('people');
+              handleNavigation('directory', 'people');
+            }}
+          >
+            PEOPLE
+          </button>
         </div>
 
         <header className="top-bar">
