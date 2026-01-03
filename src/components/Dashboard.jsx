@@ -218,7 +218,7 @@ export default function Dashboard() {
               className={`nav-item sub ${currentView === 'companies' || currentView === 'company-detail' ? 'active' : ''}`}
               onClick={() => handleNavigation('companies', null)}
             >
-              <span className="nav-label">Companies</span>
+              <span className="nav-label">Health</span>
             </button>
             <button
               className={`nav-item sub-sub ${currentView === 'goals' || currentView === 'goal-detail' ? 'active' : ''}`}
