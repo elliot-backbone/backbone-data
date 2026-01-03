@@ -9,8 +9,8 @@ export function deriveCompanyMetrics(company) {
     ? company.monthlyBurn / company.mrr
     : null;
 
-  const daysSinceUpdate = company.lastMaterialUpdate_at
-    ? Math.floor((Date.now() - new Date(company.lastMaterialUpdate_at)) / 86400000)
+  const daysSinceUpdate = company.lastMaterialUpdateAt
+    ? Math.floor((Date.now() - new Date(company.lastMaterialUpdateAt)) / 86400000)
     : null;
 
   return { ...company, arr, runway, burnMultiple, daysSinceUpdate };
@@ -110,7 +110,7 @@ export function detectIssues(companies, rounds, goals, resolvedPriorities = []) 
   // Round-level issues
   for (const round of enrichedRounds) {
     if (round.status !== 'active' && round.status !== 'closing') continue;
-    const company = enrichedCompanies.find(c => c.id === round.company_id);
+    const company = enrichedCompanies.find(c => c.id === round.companyId);
     if (!company?.isPortfolio) continue;
 
     if (round.daysOpen > 45 && round.coverage < 0.3) {
@@ -131,7 +131,7 @@ export function detectIssues(companies, rounds, goals, resolvedPriorities = []) 
       }
     }
 
-    if (!round.leadInvestor_id && round.daysOpen > 30) {
+    if (!round.leadInvestorId && round.daysOpen > 30) {
       const title = `${round.roundType} needs lead, ${round.daysOpen}d open`;
       const category = 'market_access';
       if (!isResolved(company.id, category, title)) {
@@ -144,7 +144,7 @@ export function detectIssues(companies, rounds, goals, resolvedPriorities = []) 
           urgencyScore: Math.round(40 + round.daysOpen * 0.3),
           title,
           suggestedAction: 'Focus on lead-capable firms',
-          triggerCondition: `leadInvestor_id=null && daysOpen=${round.daysOpen} > 30`,
+          triggerCondition: `leadInvestorId=null && daysOpen=${round.daysOpen} > 30`,
         });
       }
     }
@@ -152,7 +152,7 @@ export function detectIssues(companies, rounds, goals, resolvedPriorities = []) 
 
   // Goal-level issues
   for (const goal of goals) {
-    const company = enrichedCompanies.find(c => c.id === goal.company_id);
+    const company = enrichedCompanies.find(c => c.id === goal.companyId);
     if (!company?.isPortfolio) continue;
 
     const progress = goal.targetValue > 0 ? goal.currentValue / goal.targetValue : 0;

@@ -13,10 +13,10 @@ export default function RelationshipsView({ rawData, onSelectRelationship }) {
     const relationships = [];
 
     deals.forEach(deal => {
-      const round = rounds.find(r => r.id === deal.round_id);
-      const company = companies.find(c => c.id === round?.company_id);
-      const person = people.find(p => p.id === deal.person_id);
-      const firm = firms.find(f => f.id === deal.firm_id);
+      const round = rounds.find(r => r.id === deal.roundId);
+      const company = companies.find(c => c.id === round?.companyId);
+      const person = people.find(p => p.id === deal.personId);
+      const firm = firms.find(f => f.id === deal.firmId);
 
       if (company && person && firm) {
         relationships.push({
@@ -26,7 +26,7 @@ export default function RelationshipsView({ rawData, onSelectRelationship }) {
           person,
           firm,
           dealStage: deal.dealStage,
-          introducedBy: deal.introducedBy_id ? people.find(p => p.id === deal.introducedBy_id) : null
+          introducedBy: deal.introducedById ? people.find(p => p.id === deal.introducedById) : null
         });
       }
     });

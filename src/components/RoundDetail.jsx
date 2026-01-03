@@ -2,7 +2,7 @@ import './RoundDetail.css';
 
 export default function RoundDetail({ round, rawData, onBack, onSelectCompany, onSelectDeal, onSelectFirm, onSelectPerson }) {
   const company = (rawData.companies || []).find(c => c.id === (round.companyId || round.company_id));
-  const deals = (rawData.deals || []).filter(d => d.round_id === round.id);
+  const deals = (rawData.deals || []).filter(d => d.roundId === round.id);
   const firms = rawData.firms || [];
   const people = rawData.people || [];
 
@@ -144,8 +144,8 @@ export default function RoundDetail({ round, rawData, onBack, onSelectCompany, o
             <h2 className="section-title">Associated Deals ({deals.length})</h2>
             <div className="deals-list">
               {deals.map(deal => {
-                const firm = firms.find(f => f.id === deal.firm_id);
-                const person = people.find(p => p.id === deal.person_id);
+                const firm = firms.find(f => f.id === deal.firmId);
+                const person = people.find(p => p.id === deal.personId);
                 return (
                   <div
                     key={deal.id}

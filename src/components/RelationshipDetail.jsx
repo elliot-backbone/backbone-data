@@ -4,8 +4,8 @@ export default function RelationshipDetail({ relationship, rawData, onBack }) {
   const { company, person, firm, dealStage, introducedBy } = relationship;
 
   const deals = (rawData.deals || []).filter(d =>
-    d.person_id === person.id &&
-    (rawData.rounds || []).find(r => r.id === d.round_id && r.company_id === company.id)
+    d.personId === person.id &&
+    (rawData.rounds || []).find(r => r.id === d.roundId && r.companyId === company.id)
   );
 
   const getStageColor = (stage) => {
@@ -161,7 +161,7 @@ export default function RelationshipDetail({ relationship, rawData, onBack }) {
             <h2 className="section-title">Interaction History ({deals.length})</h2>
             <div className="interactions-timeline">
               {deals.map(deal => {
-                const round = (rawData.rounds || []).find(r => r.id === deal.round_id);
+                const round = (rawData.rounds || []).find(r => r.id === deal.roundId);
                 const daysSinceContact = deal.lastContactDate
                   ? Math.floor((Date.now() - new Date(deal.lastContactDate)) / 86400000)
                   : null;

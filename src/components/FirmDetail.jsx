@@ -9,15 +9,15 @@ const FIRM_TYPE_LABELS = {
 };
 
 export default function FirmDetail({ firm, rawData, onBack, onSelectPerson, onSelectDeal, onSelectCompany }) {
-  const people = (rawData.people || []).filter(p => p.firm_id === firm.id);
-  const deals = (rawData.deals || []).filter(d => d.firm_id === firm.id);
+  const people = (rawData.people || []).filter(p => p.firmId === firm.id);
+  const deals = (rawData.deals || []).filter(d => d.firmId === firm.id);
   const rounds = rawData.rounds || [];
   const companies = rawData.companies || [];
 
   const enrichedDeals = deals.map(deal => {
-    const round = rounds.find(r => r.id === deal.round_id);
-    const company = companies.find(c => c.id === round?.company_id);
-    const person = people.find(p => p.id === deal.person_id);
+    const round = rounds.find(r => r.id === deal.roundId);
+    const company = companies.find(c => c.id === round?.companyId);
+    const person = people.find(p => p.id === deal.personId);
 
     return {
       ...deal,

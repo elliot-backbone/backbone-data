@@ -8,10 +8,10 @@ function calculateImpact(issue, companies, rounds, goals) {
   const unlocks = [];
   let score = 0;
 
-  const companyRounds = rounds.filter(r => r.company_id === company.id);
+  const companyRounds = rounds.filter(r => r.companyId === company.id);
   const activeRound = companyRounds.find(r => r.status === 'active' || r.status === 'closing');
 
-  const companyGoals = goals.filter(g => g.company_id === company.id);
+  const companyGoals = goals.filter(g => g.companyId === company.id);
   const blockedGoals = companyGoals.filter(g => {
     const progress = g.targetValue > 0 ? g.currentValue / g.targetValue : 0;
     return progress < 1;

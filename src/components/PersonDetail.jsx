@@ -21,14 +21,14 @@ const DEAL_STAGES = [
 ];
 
 export default function PersonDetail({ person, rawData, onBack, onSelectFirm, onSelectDeal, onSelectCompany, onSelectRound }) {
-  const firm = (rawData.firms || []).find(f => f.id === person.firm_id);
-  const deals = (rawData.deals || []).filter(d => d.person_id === person.id);
+  const firm = (rawData.firms || []).find(f => f.id === person.firmId);
+  const deals = (rawData.deals || []).filter(d => d.personId === person.id);
   const rounds = rawData.rounds || [];
   const companies = rawData.companies || [];
 
   const enrichedDeals = deals.map(deal => {
-    const round = rounds.find(r => r.id === deal.round_id);
-    const company = companies.find(c => c.id === round?.company_id);
+    const round = rounds.find(r => r.id === deal.roundId);
+    const company = companies.find(c => c.id === round?.companyId);
     const stageConfig = DEAL_STAGES.find(s => s.key === deal.dealStage);
 
     return {
@@ -46,7 +46,7 @@ export default function PersonDetail({ person, rawData, onBack, onSelectFirm, on
   const closedDeals = enrichedDeals.filter(d => d.dealStage === 'closed');
   const droppedDeals = enrichedDeals.filter(d => d.dealStage === 'dropped');
 
-  const introsProvided = (rawData.deals || []).filter(d => d.introducedBy_id === person.id);
+  const introsProvided = (rawData.deals || []).filter(d => d.introducedById === person.id);
 
   const daysSinceContact = person.lastContactedAt
     ? Math.floor((Date.now() - new Date(person.lastContactedAt)) / 86400000)

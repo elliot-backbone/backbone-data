@@ -24,19 +24,19 @@ export default function FirmsList({ rawData, onSelectFirm }) {
   });
 
   const deals = allDeals.filter(deal => {
-    return portfolioRounds.some(r => r.id === deal.round_id);
+    return portfolioRounds.some(r => r.id === deal.roundId);
   });
 
   const enrichedFirms = firms.map(firm => {
-    const investors = people.filter(p => p.firm_id === firm.id);
-    const firmDeals = deals.filter(d => d.firm_id === firm.id);
+    const investors = people.filter(p => p.firmId === firm.id);
+    const firmDeals = deals.filter(d => d.firmId === firm.id);
     const activeDeals = firmDeals.filter(d =>
       ['meeting_scheduled', 'meeting_held', 'diligence', 'term_sheet', 'committed'].includes(d.dealStage)
     );
 
     const uniquePortfolioCompanies = new Set(
       firmDeals.map(deal => {
-        const round = portfolioRounds.find(r => r.id === deal.round_id);
+        const round = portfolioRounds.find(r => r.id === deal.roundId);
         return round ? (round.companyId || round.company_id) : null;
       }).filter(Boolean)
     );

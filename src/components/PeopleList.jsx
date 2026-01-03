@@ -27,12 +27,12 @@ export default function PeopleList({ rawData, onSelectPerson, filterToInvestors 
   });
 
   const deals = allDeals.filter(deal => {
-    return portfolioRounds.some(r => r.id === deal.round_id);
+    return portfolioRounds.some(r => r.id === deal.roundId);
   });
 
   const enrichedPeople = people.map(person => {
-    const firm = firms.find(f => f.id === person.firm_id);
-    const personDeals = deals.filter(d => d.person_id === person.id);
+    const firm = firms.find(f => f.id === person.firmId);
+    const personDeals = deals.filter(d => d.personId === person.id);
     const activeDeals = personDeals.filter(d =>
       ['meeting_scheduled', 'meeting_held', 'diligence', 'term_sheet', 'committed'].includes(d.dealStage)
     );

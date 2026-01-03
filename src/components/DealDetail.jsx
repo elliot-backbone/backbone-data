@@ -13,12 +13,12 @@ const DEAL_STAGES = [
 ];
 
 export default function DealDetail({ deal, rawData, onBack, onSelectCompany, onSelectPerson, onSelectFirm, onSelectRound }) {
-  const round = (rawData.rounds || []).find(r => r.id === deal.round_id);
-  const company = (rawData.companies || []).find(c => c.id === round?.company_id);
-  const person = (rawData.people || []).find(p => p.id === deal.person_id);
-  const firm = (rawData.firms || []).find(f => f.id === deal.firm_id);
-  const introducedBy = deal.introducedBy_id
-    ? (rawData.people || []).find(p => p.id === deal.introducedBy_id)
+  const round = (rawData.rounds || []).find(r => r.id === deal.roundId);
+  const company = (rawData.companies || []).find(c => c.id === round?.companyId);
+  const person = (rawData.people || []).find(p => p.id === deal.personId);
+  const firm = (rawData.firms || []).find(f => f.id === deal.firmId);
+  const introducedBy = deal.introducedById
+    ? (rawData.people || []).find(p => p.id === deal.introducedById)
     : null;
 
   const stageConfig = DEAL_STAGES.find(s => s.key === deal.dealStage) || DEAL_STAGES[0];

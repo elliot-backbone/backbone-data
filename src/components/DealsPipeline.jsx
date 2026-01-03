@@ -22,10 +22,10 @@ export default function DealsPipeline({ rawData, onSelectDeal }) {
   const firms = rawData.firms || [];
 
   const enrichedDeals = deals.map(deal => {
-    const round = rounds.find(r => r.id === deal.round_id);
-    const company = companies.find(c => c.id === round?.company_id);
-    const person = people.find(p => p.id === deal.person_id);
-    const firm = firms.find(f => f.id === deal.firm_id);
+    const round = rounds.find(r => r.id === deal.roundId);
+    const company = companies.find(c => c.id === round?.companyId);
+    const person = people.find(p => p.id === deal.personId);
+    const firm = firms.find(f => f.id === deal.firmId);
 
     return {
       ...deal,
