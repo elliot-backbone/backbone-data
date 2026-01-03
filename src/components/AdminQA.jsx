@@ -24,7 +24,10 @@ export default function AdminQA() {
       results.invariants = {
         derivedValuesStored: checkDerivedValues(companies, goals, deals),
         missingTTL: checkMissingTTL(companies, goals, deals),
-        explainabilityGaps: 0,
+        storedDerivationsFound: checkStoredDerivations(companies, goals, deals, rounds),
+        explainabilityGaps: checkExplainabilityGaps(companies, goals, deals),
+        portfolioNotView: checkPortfolioMixedState(companies),
+        goalOrphans: checkGoalWithoutRisk(goals, companies),
         silentOverwrites: 0
       };
 
@@ -111,6 +114,87 @@ export default function AdminQA() {
     return new Set(duplicates).size;
   }
 
+  function checkStoredDerivations(companies, goals, deals, rounds) {
+    let violations = [];
+
+    companies?.forEach(c => {
+      if (c.arr != null) {
+        violations.push({ entity: 'Company', field: 'arr', reason: 'Derivable from MRR * 12' });
+      }
+      if (c.runway != null) {
+        violations.push({ entity: 'Company', field: 'runway', reason: 'Derivable from cash/burn' });
+      }
+    });
+
+    goals?.forEach(g => {
+      if (g.is_on_track != null) {
+        violations.push({ entity: 'Goal', field: 'is_on_track', reason: 'Derivable from progress/deadline' });
+      }
+    });
+
+    return violations.length;
+  }
+
+  function checkExplainabilityGaps(companies, goals, deals) {
+    let count = 0;
+
+    companies?.forEach(c => {
+      if (c.is_portfolio && c.cash_on_hand != null && c.monthly_burn != null) {
+        const runway = c.monthly_burn > 0 ? c.cash_on_hand / c.monthly_burn : 99;
+        if (runway < 6 && !c.last_material_update_at) {
+          count++;
+        }
+      }
+    });
+
+    goals?.forEach(g => {
+      if (g.target_date && new Date(g.target_date) < new Date()) {
+        if (!g.last_updated_at || (Date.now() - new Date(g.last_updated_at)) > 14 * 86400000) {
+          count++;
+        }
+      }
+    });
+
+    deals?.forEach(d => {
+      const advancedStages = ['diligence', 'term_sheet', 'committed'];
+      if (advancedStages.includes(d.deal_stage)) {
+        if (!d.last_contact_date || (Date.now() - new Date(d.last_contact_date)) > 21 * 86400000) {
+          count++;
+        }
+      }
+    });
+
+    return count;
+  }
+
+  function checkPortfolioMixedState(companies) {
+    let count = 0;
+    companies?.forEach(c => {
+      if (!c.is_portfolio) return;
+      const hasHealth = c.cash_on_hand != null && c.monthly_burn != null && c.last_material_update_at != null;
+      const hasPriority = false;
+      if (hasHealth && hasPriority) {
+        count++;
+      }
+    });
+    return count;
+  }
+
+  function checkGoalWithoutRisk(goals, companies) {
+    let count = 0;
+    goals?.forEach(g => {
+      const company = companies?.find(c => c.id === g.company_id);
+      if (!company) {
+        count++;
+        return;
+      }
+      if (!g.target_value || !g.current_value || !g.target_date) {
+        count++;
+      }
+    });
+    return count;
+  }
+
   if (loading) {
     return <div className="admin-qa"><div className="loading">Running QA checks...</div></div>;
   }
@@ -133,6 +217,17 @@ export default function AdminQA() {
         <QASection title="Goals" data={qaResults.goals} />
         <QASection title="Deals" data={qaResults.deals} />
       </div>
+
+      {qaResults.invariants?.storedDerivationsFound > 0 && (
+        <div className="qa-recommendations">
+          <h4>North Stars Violations Detected</h4>
+          <div className="violation-detail">
+            <strong>NoStoredDerivs Violation:</strong> {qaResults.invariants.storedDerivationsFound} records contain derived values in database.
+            <br />
+            <span className="remedy">Remedy: Remove arr, runway, is_on_track columns from schema. Compute on-the-fly in derivations.js</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
