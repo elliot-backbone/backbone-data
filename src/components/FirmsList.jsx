@@ -45,12 +45,15 @@ export default function FirmsList({ rawData, onSelectFirm }) {
       return sum + (deal.committedAmount || 0);
     }, 0);
 
+    const isExistingInvestor = uniquePortfolioCompanies.size > 0;
+
     return {
       ...firm,
       investorCount: investors.length,
       portfolioCompanies: uniquePortfolioCompanies.size,
       totalInvestedAmount: totalInvestedAmount,
-      activeDeals: activeDeals.length
+      activeDeals: activeDeals.length,
+      isExistingInvestor
     };
   });
 
@@ -84,11 +87,16 @@ export default function FirmsList({ rawData, onSelectFirm }) {
         {sortedFirms.map(firm => (
           <div
             key={firm.id}
-            className="firm-card"
+            className={`firm-card ${firm.isExistingInvestor ? 'existing-investor' : ''}`}
             onClick={() => onSelectFirm && onSelectFirm(firm)}
           >
             <div className="firm-header">
-              <h3 className="firm-name">{firm.name}</h3>
+              <div className="firm-name-section">
+                <h3 className="firm-name">{firm.name}</h3>
+                {firm.isExistingInvestor && (
+                  <span className="existing-badge">Portfolio Investor</span>
+                )}
+              </div>
               <span className="firm-type-badge">
                 {FIRM_TYPE_LABELS[firm.firmType] || firm.firmType}
               </span>

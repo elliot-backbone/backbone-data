@@ -7,6 +7,7 @@ import Snapshot from './Snapshot';
 import IssuesBreakdown from './IssuesBreakdown';
 import ImpactView from './ImpactView';
 import CompaniesList from './CompaniesList';
+import PipelineCompaniesList from './PipelineCompaniesList';
 import CompanyDetail from './CompanyDetail';
 import GoalsList from './GoalsList';
 import GoalDetail from './GoalDetail';
@@ -24,6 +25,7 @@ import Admin from './Admin';
 
 export default function Dashboard() {
   const [currentView, setCurrentView] = useState('priorities');
+  const [topNavView, setTopNavView] = useState(null);
   const [selectedEntity, setSelectedEntity] = useState(null);
   const [navigationHistory, setNavigationHistory] = useState([]);
   const [resolvedPriorities, setResolvedPriorities] = useState([]);
@@ -67,10 +69,13 @@ export default function Dashboard() {
     await loadData();
   };
 
-  const handleNavigation = (view) => {
+  const handleNavigation = (view, newTopNav = null) => {
     setCurrentView(view);
     setSelectedEntity(null);
     setNavigationHistory([]);
+    if (newTopNav !== null) {
+      setTopNavView(newTopNav);
+    }
   };
 
   const handleSelectEntity = (type, entity) => {
@@ -88,12 +93,12 @@ export default function Dashboard() {
     } else {
       const typeMap = {
         'priority-detail': 'priorities',
-        'company-detail': 'companies',
-        'round-detail': 'portfolio-rounds',
+        'company-detail': topNavView === 'pipeline' ? 'pipeline-companies' : 'companies',
+        'round-detail': topNavView === 'pipeline' ? 'pipeline-rounds' : (topNavView === 'firms' ? 'firm-rounds' : 'portfolio-rounds'),
         'goal-detail': 'goals',
-        'deal-detail': 'portfolio-deals',
+        'deal-detail': topNavView === 'pipeline' ? 'pipeline-deals' : (topNavView === 'firms' ? 'firm-deals' : 'portfolio-deals'),
         'firm-detail': 'firms',
-        'person-detail': 'directory',
+        'person-detail': topNavView === 'firms' ? 'partners' : 'directory',
         'relationship-detail': 'relationships'
       };
       setCurrentView(typeMap[currentView] || 'priorities');
@@ -109,6 +114,8 @@ export default function Dashboard() {
         return <PriorityDetail issue={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectGoal={(g) => handleSelectEntity('goal', g)} onResolved={handlePriorityResolved} onDataUpdate={handleDataUpdate} />;
       case 'companies':
         return <Snapshot rawData={rawData} resolvedPriorities={resolvedPriorities} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
+      case 'pipeline-companies':
+        return <PipelineCompaniesList rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'company-detail':
         return <CompanyDetail company={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectRound={(r) => handleSelectEntity('round', r)} onSelectGoal={(g) => handleSelectEntity('goal', g)} />;
       case 'goals':
@@ -116,11 +123,14 @@ export default function Dashboard() {
       case 'goal-detail':
         return <GoalDetail goal={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} />;
       case 'portfolio-rounds':
-        return <RoundsList rawData={rawData} onSelectRound={(r) => handleSelectEntity('round', r)} />;
+      case 'pipeline-rounds':
+        return <RoundsList rawData={rawData} onSelectRound={(r) => handleSelectEntity('round', r)} pipelineOnly={currentView === 'pipeline-rounds'} />;
       case 'round-detail':
         return <RoundDetail round={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectDeal={(d) => handleSelectEntity('deal', d)} onSelectFirm={(f) => handleSelectEntity('firm', f)} onSelectPerson={(p) => handleSelectEntity('person', p)} />;
       case 'portfolio-deals':
-        return <DealsPipeline rawData={rawData} onSelectDeal={(d) => handleSelectEntity('deal', d)} />;
+      case 'pipeline-deals':
+      case 'firm-deals':
+        return <DealsPipeline rawData={rawData} onSelectDeal={(d) => handleSelectEntity('deal', d)} pipelineOnly={currentView === 'pipeline-deals'} />;
       case 'deal-detail':
         return <DealDetail deal={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectPerson={(p) => handleSelectEntity('person', p)} onSelectFirm={(f) => handleSelectEntity('firm', f)} onSelectRound={(r) => handleSelectEntity('round', r)} />;
       case 'firms':
@@ -129,8 +139,6 @@ export default function Dashboard() {
         return <FirmDetail firm={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectPerson={(p) => handleSelectEntity('person', p)} onSelectDeal={(d) => handleSelectEntity('deal', d)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'partners':
         return <PeopleList rawData={rawData} onSelectPerson={(p) => handleSelectEntity('person', p)} filterToInvestors={true} />;
-      case 'firm-deals':
-        return <DealsPipeline rawData={rawData} onSelectDeal={(d) => handleSelectEntity('deal', d)} groupByFirm={true} />;
       case 'firm-rounds':
         return <RoundsList rawData={rawData} onSelectRound={(r) => handleSelectEntity('round', r)} firmPerspective={true} />;
       case 'person-detail':
@@ -142,11 +150,11 @@ export default function Dashboard() {
       case 'relationship-detail':
         return <RelationshipDetail relationship={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} />;
       case 'admin-data':
-        return <Admin onClose={() => handleNavigation('priorities')} initialTab="import-export" />;
+        return <Admin onClose={() => handleNavigation('priorities', null)} initialTab="import-export" />;
       case 'admin-qa':
-        return <Admin onClose={() => handleNavigation('priorities')} initialTab="qa" />;
+        return <Admin onClose={() => handleNavigation('priorities', null)} initialTab="qa" />;
       case 'admin-analyze':
-        return <Admin onClose={() => handleNavigation('priorities')} initialTab="analyze" />;
+        return <Admin onClose={() => handleNavigation('priorities', null)} initialTab="analyze" />;
       default:
         return <PriorityQueue rawData={rawData} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
     }
@@ -169,7 +177,7 @@ export default function Dashboard() {
         <div className="empty-state">
           <h2>No Data Available</h2>
           <p>Use Admin → Import/Export to load your data</p>
-          <button onClick={() => handleNavigation('admin-data')} className="primary-btn">
+          <button onClick={() => handleNavigation('admin-data', null)} className="primary-btn">
             Open Import/Export
           </button>
         </div>
@@ -186,7 +194,7 @@ export default function Dashboard() {
         <div className="sidebar-nav">
           <button
             className={`nav-item ${currentView === 'priorities' || currentView === 'priority-detail' ? 'active' : ''}`}
-            onClick={() => handleNavigation('priorities')}
+            onClick={() => handleNavigation('priorities', null)}
           >
             <span className="nav-label">Priorities</span>
           </button>
@@ -194,31 +202,31 @@ export default function Dashboard() {
           <div className="nav-section">
             <button
               className={`nav-section-label clickable ${currentView === 'companies' || currentView === 'company-detail' || currentView === 'goals' || currentView === 'goal-detail' || currentView === 'portfolio-rounds' || currentView === 'round-detail' || currentView === 'portfolio-deals' || currentView === 'deal-detail' ? 'active' : ''}`}
-              onClick={() => handleNavigation('companies')}
+              onClick={() => handleNavigation('companies', null)}
             >
               Portfolio
             </button>
             <button
               className={`nav-item sub ${currentView === 'companies' || currentView === 'company-detail' ? 'active' : ''}`}
-              onClick={() => handleNavigation('companies')}
+              onClick={() => handleNavigation('companies', null)}
             >
               <span className="nav-label">Companies</span>
             </button>
             <button
               className={`nav-item sub-sub ${currentView === 'goals' || currentView === 'goal-detail' ? 'active' : ''}`}
-              onClick={() => handleNavigation('goals')}
+              onClick={() => handleNavigation('goals', null)}
             >
               <span className="nav-label">Goals</span>
             </button>
             <button
               className={`nav-item sub-sub ${currentView === 'portfolio-rounds' || currentView === 'round-detail' ? 'active' : ''}`}
-              onClick={() => handleNavigation('portfolio-rounds')}
+              onClick={() => handleNavigation('portfolio-rounds', null)}
             >
               <span className="nav-label">Rounds</span>
             </button>
             <button
               className={`nav-item sub-sub-sub ${currentView === 'portfolio-deals' || currentView === 'deal-detail' ? 'active' : ''}`}
-              onClick={() => handleNavigation('portfolio-deals')}
+              onClick={() => handleNavigation('portfolio-deals', null)}
             >
               <span className="nav-label">Deals</span>
             </button>
@@ -226,41 +234,38 @@ export default function Dashboard() {
 
           <div className="nav-section">
             <button
-              className={`nav-section-label clickable ${currentView === 'firms' || currentView === 'firm-detail' || currentView === 'partners' || currentView === 'person-detail' || currentView === 'firm-deals' || currentView === 'firm-rounds' ? 'active' : ''}`}
-              onClick={() => handleNavigation('firms')}
+              className={`nav-section-label clickable`}
+              onClick={() => {
+                setTopNavView('pipeline');
+                handleNavigation('pipeline-companies', 'pipeline');
+              }}
+            >
+              Pipeline
+            </button>
+          </div>
+
+          <div className="nav-section">
+            <button
+              className={`nav-section-label clickable`}
+              onClick={() => {
+                setTopNavView('firms');
+                handleNavigation('firms', 'firms');
+              }}
             >
               Firms
-            </button>
-            <button
-              className={`nav-item sub ${currentView === 'partners' || currentView === 'person-detail' ? 'active' : ''}`}
-              onClick={() => handleNavigation('partners')}
-            >
-              <span className="nav-label">Partners</span>
-            </button>
-            <button
-              className={`nav-item sub ${currentView === 'firm-deals' ? 'active' : ''}`}
-              onClick={() => handleNavigation('firm-deals')}
-            >
-              <span className="nav-label">Deals</span>
-            </button>
-            <button
-              className={`nav-item sub-sub ${currentView === 'firm-rounds' ? 'active' : ''}`}
-              onClick={() => handleNavigation('firm-rounds')}
-            >
-              <span className="nav-label">Rounds</span>
             </button>
           </div>
 
           <div className="nav-section">
             <button
               className={`nav-section-label clickable ${currentView === 'relationships' || currentView === 'relationship-detail' || currentView === 'directory' ? 'active' : ''}`}
-              onClick={() => handleNavigation('relationships')}
+              onClick={() => handleNavigation('relationships', null)}
             >
               Network
             </button>
             <button
               className={`nav-item sub ${currentView === 'directory' ? 'active' : ''}`}
-              onClick={() => handleNavigation('directory')}
+              onClick={() => handleNavigation('directory', null)}
             >
               <span className="nav-label">Directory</span>
             </button>
@@ -270,19 +275,19 @@ export default function Dashboard() {
             <div className="nav-section-label">Admin</div>
             <button
               className={`nav-item sub ${currentView === 'admin-data' ? 'active' : ''}`}
-              onClick={() => handleNavigation('admin-data')}
+              onClick={() => handleNavigation('admin-data', null)}
             >
               <span className="nav-label">Data</span>
             </button>
             <button
               className={`nav-item sub ${currentView === 'admin-qa' ? 'active' : ''}`}
-              onClick={() => handleNavigation('admin-qa')}
+              onClick={() => handleNavigation('admin-qa', null)}
             >
               <span className="nav-label">QA</span>
             </button>
             <button
               className={`nav-item sub ${currentView === 'admin-analyze' ? 'active' : ''}`}
-              onClick={() => handleNavigation('admin-analyze')}
+              onClick={() => handleNavigation('admin-analyze', null)}
             >
               <span className="nav-label">Analyze</span>
             </button>
@@ -291,20 +296,46 @@ export default function Dashboard() {
       </nav>
 
       <div className="dashboard-main">
+        {topNavView && (
+          <div className="horizontal-nav">
+            <button
+              className={`horizontal-nav-item ${topNavView === 'pipeline' ? 'active' : ''}`}
+              onClick={() => {
+                setTopNavView('pipeline');
+                handleNavigation('pipeline-companies', 'pipeline');
+              }}
+            >
+              PIPELINE
+            </button>
+            <button
+              className={`horizontal-nav-item ${topNavView === 'firms' ? 'active' : ''}`}
+              onClick={() => {
+                setTopNavView('firms');
+                handleNavigation('firms', 'firms');
+              }}
+            >
+              FIRMS
+            </button>
+          </div>
+        )}
+
         <header className="top-bar">
           <div className="top-bar-content">
             <h1 className="page-title">
               {currentView === 'priorities' && 'Priority Queue'}
               {currentView === 'priority-detail' && 'Priority Detail'}
               {currentView === 'companies' && 'Portfolio Overview'}
+              {currentView === 'pipeline-companies' && 'Pipeline Companies'}
               {currentView === 'company-detail' && selectedEntity?.entity?.name}
               {currentView === 'goals' && 'Goals'}
               {currentView === 'goal-detail' && 'Goal Details'}
-              {currentView === 'portfolio-rounds' && 'Funding Rounds'}
+              {currentView === 'portfolio-rounds' && 'Portfolio Rounds'}
+              {currentView === 'pipeline-rounds' && 'Pipeline Rounds'}
               {currentView === 'round-detail' && 'Round Details'}
               {currentView === 'portfolio-deals' && 'Portfolio Deals'}
+              {currentView === 'pipeline-deals' && 'Pipeline Deals'}
               {currentView === 'deal-detail' && 'Deal Details'}
-              {currentView === 'firms' && 'Investor Relationships'}
+              {currentView === 'firms' && 'All Firms'}
               {currentView === 'firm-detail' && selectedEntity?.entity?.name}
               {currentView === 'partners' && 'Partners'}
               {currentView === 'person-detail' && selectedEntity?.entity?.name}
@@ -317,6 +348,60 @@ export default function Dashboard() {
               {currentView === 'admin-qa' && 'Quality Assurance'}
               {currentView === 'admin-analyze' && 'System Analysis'}
             </h1>
+            {topNavView && (
+              <div className="breadcrumb-nav">
+                {topNavView === 'pipeline' && (
+                  <>
+                    <button
+                      className={`breadcrumb-item ${currentView === 'pipeline-companies' || currentView === 'company-detail' ? 'active' : ''}`}
+                      onClick={() => handleNavigation('pipeline-companies', 'pipeline')}
+                    >
+                      Companies
+                    </button>
+                    <button
+                      className={`breadcrumb-item ${currentView === 'pipeline-rounds' || currentView === 'round-detail' ? 'active' : ''}`}
+                      onClick={() => handleNavigation('pipeline-rounds', 'pipeline')}
+                    >
+                      Rounds
+                    </button>
+                    <button
+                      className={`breadcrumb-item ${currentView === 'pipeline-deals' || currentView === 'deal-detail' ? 'active' : ''}`}
+                      onClick={() => handleNavigation('pipeline-deals', 'pipeline')}
+                    >
+                      Deals
+                    </button>
+                  </>
+                )}
+                {topNavView === 'firms' && (
+                  <>
+                    <button
+                      className={`breadcrumb-item ${currentView === 'firms' || currentView === 'firm-detail' ? 'active' : ''}`}
+                      onClick={() => handleNavigation('firms', 'firms')}
+                    >
+                      Firms
+                    </button>
+                    <button
+                      className={`breadcrumb-item ${currentView === 'partners' || currentView === 'person-detail' ? 'active' : ''}`}
+                      onClick={() => handleNavigation('partners', 'firms')}
+                    >
+                      Partners
+                    </button>
+                    <button
+                      className={`breadcrumb-item ${currentView === 'firm-deals' || currentView === 'deal-detail' ? 'active' : ''}`}
+                      onClick={() => handleNavigation('firm-deals', 'firms')}
+                    >
+                      Deals
+                    </button>
+                    <button
+                      className={`breadcrumb-item ${currentView === 'firm-rounds' || currentView === 'round-detail' ? 'active' : ''}`}
+                      onClick={() => handleNavigation('firm-rounds', 'firms')}
+                    >
+                      Rounds
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </header>
 

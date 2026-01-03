@@ -49,6 +49,15 @@
   transform: translateY(-2px);
 }
 
+.firm-card.existing-investor {
+  border-color: #10b981;
+}
+
+.firm-card.existing-investor:hover {
+  border-color: #10b981;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+}
+
 .firm-header {
   display: flex;
   justify-content: space-between;
@@ -57,12 +66,32 @@
   gap: 12px;
 }
 
+.firm-name-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
 .firm-name {
   font-size: 1.125rem;
   font-weight: 700;
   color: #f8fafc;
   margin: 0;
   line-height: 1.4;
+}
+
+.existing-badge {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  width: fit-content;
 }
 
 .firm-type-badge {
