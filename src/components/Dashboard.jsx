@@ -3,7 +3,7 @@ import { getResolvedPriorities, loadAllData } from '../lib/supabase';
 import './Dashboard.css';
 import PriorityQueue from './PriorityQueue';
 import PriorityDetail from './PriorityDetail';
-import Snapshot from './Snapshot';
+import PortfolioOverview from './PortfolioOverview';
 import IssuesBreakdown from './IssuesBreakdown';
 import ImpactView from './ImpactView';
 import CompaniesList from './CompaniesList';
@@ -113,7 +113,7 @@ export default function Dashboard() {
       case 'priority-detail':
         return <PriorityDetail issue={selectedEntity?.entity} rawData={rawData} onBack={handleBackToList} onSelectCompany={(c) => handleSelectEntity('company', c)} onSelectIssue={(i) => handleSelectEntity('priority', i)} onSelectGoal={(g) => handleSelectEntity('goal', g)} onResolved={handlePriorityResolved} onDataUpdate={handleDataUpdate} />;
       case 'companies':
-        return <Snapshot rawData={rawData} resolvedPriorities={resolvedPriorities} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
+        return <PortfolioOverview rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'pipeline-companies':
         return <PipelineCompaniesList rawData={rawData} onSelectCompany={(c) => handleSelectEntity('company', c)} />;
       case 'company-detail':
