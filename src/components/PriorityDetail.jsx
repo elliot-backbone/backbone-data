@@ -175,29 +175,25 @@ export default function PriorityDetail({ issue, rawData, onBack, onSelectCompany
   const goals = rawData.goals || [];
   const companyGoals = goals.filter(g => g.company_id === company?.id);
 
-  const getSeverityColor = (severity) => {
-    if (severity === 'critical') return '#ef4444';
-    if (severity === 'high') return '#f59e0b';
-    if (severity === 'medium') return '#3b82f6';
-    return '#64748b';
+  const getSeverityClass = (severity) => {
+    if (severity === 'critical') return 'severity-critical';
+    if (severity === 'high') return 'severity-high';
+    if (severity === 'medium') return 'severity-medium';
+    return 'severity-low';
   };
 
-  const getSeverityLabel = (severity) => {
-    return severity.toUpperCase();
+  const getImpactClass = (score) => {
+    if (score >= 80) return 'impact-critical';
+    if (score >= 60) return 'impact-high';
+    if (score >= 40) return 'impact-medium';
+    return 'impact-low';
   };
 
-  const getImpactColor = (score) => {
-    if (score >= 80) return '#dc2626';
-    if (score >= 60) return '#f97316';
-    if (score >= 40) return '#eab308';
-    return '#6b7280';
-  };
-
-  const getUnlockColor = (impact) => {
-    if (impact === 'critical') return '#dc2626';
-    if (impact === 'high') return '#f97316';
-    if (impact === 'medium') return '#3b82f6';
-    return '#6b7280';
+  const getUnlockImpactClass = (impact) => {
+    if (impact === 'critical') return 'unlock-critical';
+    if (impact === 'high') return 'unlock-high';
+    if (impact === 'medium') return 'unlock-medium';
+    return 'unlock-low';
   };
 
   const resolutionSummary = getResolutionSummary(issue);
@@ -206,12 +202,12 @@ export default function PriorityDetail({ issue, rawData, onBack, onSelectCompany
     return (
       <div className="priority-detail">
         <div className="resolve-interstitial">
-          <div className="interstitial-content">
+          <div className="interstitial-card">
             <div className="interstitial-icon">⚠️</div>
             <h2 className="interstitial-title">Confirm Resolution</h2>
             <p className="interstitial-subtitle">This action will modify underlying data and recalculate all priorities</p>
 
-            <div className="resolution-summary">
+            <div className="resolution-summary-box">
               <div className="resolution-label">Changes to be applied:</div>
               <div className="resolution-text">{resolutionSummary}</div>
             </div>
@@ -244,93 +240,74 @@ export default function PriorityDetail({ issue, rawData, onBack, onSelectCompany
         ← Back to Priorities
       </button>
 
-      <div className="detail-header-compact">
-        <div className="header-row">
+      <div className={`priority-hero ${getSeverityClass(issue.severity)}`}>
+        <div className="hero-top">
           <div
-            className="priority-company-link"
+            className="hero-company"
             onClick={() => company && onSelectCompany && onSelectCompany(company)}
-            style={{ cursor: company ? 'pointer' : 'default' }}
           >
             {company?.name || 'Unknown Company'}
           </div>
-          <div className="header-badges-inline">
-            <span className="entity-id">ID: {issue.id}</span>
-            <span
-              className="badge-compact"
-              style={{
-                background: `${getSeverityColor(issue.severity)}15`,
-                color: getSeverityColor(issue.severity)
-              }}
-            >
-              {getSeverityLabel(issue.severity)}
-            </span>
-            <span
-              className="badge-compact"
-              style={{
-                background: `${getImpactColor(impactScore)}15`,
-                color: getImpactColor(impactScore)
-              }}
-            >
-              IMPACT {impactScore}
-            </span>
-          </div>
+          <button
+            className="hero-resolve-btn"
+            onClick={handleResolveClick}
+            disabled={isResolving}
+          >
+            <span className="resolve-icon">✓</span>
+            Resolve
+          </button>
         </div>
-        <h1 className="detail-title-compact">{issue.title}</h1>
+
+        <h1 className="hero-title">{issue.title}</h1>
+
+        <div className="hero-description">
+          {issue.description || issue.title}
+        </div>
+
+        <div className="hero-action">
+          <div className="action-label">Recommended Action</div>
+          <div className="action-text">{issue.suggestedAction}</div>
+        </div>
       </div>
 
-      <div className="content-compact">
-        <div className="action-primary">
-          <span className="action-label">ACTION</span>
-          {issue.suggestedAction}
+      <div className="priority-body">
+        <div className={`entity-card company-card ${getImpactClass(impactScore)}`}>
+          <div className="card-shine"></div>
+          <div className="card-header">
+            <div className="card-title">Company Profile</div>
+            <div className="card-badge">{issue.type.replace(/_/g, ' ')}</div>
+          </div>
+          <div className="card-body">
+            <div className="card-name">{company?.name || 'Unknown'}</div>
+            <div className="card-stats">
+              <div className="stat-item">
+                <div className="stat-label">ARR</div>
+                <div className="stat-value">${(company?.arr / 1000000 || 0).toFixed(2)}M</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-label">Runway</div>
+                <div className="stat-value">{company?.runway?.toFixed(1) || 0}mo</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-label">Burn</div>
+                <div className="stat-value">${(company?.monthlyBurn / 1000 || 0).toFixed(0)}K</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-label">Growth</div>
+                <div className="stat-value">{((company?.revenueGrowthRate || 0) * 100).toFixed(0)}%</div>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <button
-          className="resolve-btn"
-          onClick={handleResolveClick}
-          disabled={isResolving}
-        >
-          Mark as Resolved
-        </button>
-
-        <div className="meta-grid">
-          <div className="meta-item">
-            <span className="meta-label">Type</span>
-            <span className="meta-value">{issue.type.replace(/_/g, ' ')}</span>
-          </div>
-          <div className="meta-item">
-            <span className="meta-label">Description</span>
-            <span className="meta-value">{issue.description || issue.title}</span>
-          </div>
-        </div>
-
-        {company && (
-          <div className="context-bar">
-            <span className="context-stat-inline">
-              <span className="stat-label">ARR</span>
-              <span className="stat-value">${(company.arr / 1000000).toFixed(2)}M</span>
-            </span>
-            <span className="context-stat-inline">
-              <span className="stat-label">Runway</span>
-              <span className="stat-value">{company.runway.toFixed(1)}mo</span>
-            </span>
-            <span className="context-stat-inline">
-              <span className="stat-label">Burn</span>
-              <span className="stat-value">${(company.monthlyBurn / 1000).toFixed(0)}K/mo</span>
-            </span>
-            <span className="context-stat-inline">
-              <span className="stat-label">Growth</span>
-              <span className="stat-value">{(company.revenueGrowthRate * 100).toFixed(0)}%</span>
-            </span>
-          </div>
-        )}
 
         {unlocks.length > 0 && (
-          <div className="section-compact">
-            <div className="section-header-compact">
+          <div className="ripple-section">
+            <div className="section-header">
               <span className="section-icon">⚡</span>
-              <span className="section-title-compact">Ripple Effect ({unlocks.length})</span>
+              <h3 className="section-title">Ripple Effect</h3>
+              <span className="section-count">{unlocks.length}</span>
             </div>
-            <div className="unlocks-compact">
+            <div className="ripple-grid">
               {unlocks.map((unlock, idx) => {
                 const linkedGoal = unlock.type === 'goal' && companyGoals.find(g =>
                   unlock.description.toLowerCase().includes(g.title.toLowerCase())
@@ -340,16 +317,12 @@ export default function PriorityDetail({ issue, rawData, onBack, onSelectCompany
                 return (
                   <div
                     key={idx}
-                    className={`unlock-compact ${isClickable ? 'clickable' : ''}`}
+                    className={`ripple-card ${getUnlockImpactClass(unlock.impact)} ${isClickable ? 'clickable' : ''}`}
                     onClick={() => isClickable && onSelectGoal(linkedGoal)}
-                    style={{ cursor: isClickable ? 'pointer' : 'default' }}
                   >
-                    <span
-                      className="unlock-dot"
-                      style={{ background: getUnlockColor(unlock.impact) }}
-                    />
-                    <span className="unlock-type-compact">{unlock.type}</span>
-                    <span className="unlock-text">{unlock.description}</span>
+                    <div className="ripple-card-shine"></div>
+                    <div className="ripple-type">{unlock.type}</div>
+                    <div className="ripple-description">{unlock.description}</div>
                   </div>
                 );
               })}
@@ -358,25 +331,24 @@ export default function PriorityDetail({ issue, rawData, onBack, onSelectCompany
         )}
 
         {companyIssues.length > 1 && (
-          <div className="section-compact">
-            <div className="section-header-compact">
+          <div className="related-section">
+            <div className="section-header">
               <span className="section-icon">🔗</span>
-              <span className="section-title-compact">Related Issues ({companyIssues.length - 1})</span>
+              <h3 className="section-title">Related Issues</h3>
+              <span className="section-count">{companyIssues.length - 1}</span>
             </div>
-            <div className="related-issues-compact">
+            <div className="related-grid">
               {companyIssues
                 .filter(i => i.id !== issue.id)
                 .map((relatedIssue, idx) => (
                   <div
                     key={idx}
-                    className="related-issue-compact clickable"
+                    className={`related-card ${getSeverityClass(relatedIssue.severity)} clickable`}
                     onClick={() => onSelectIssue && onSelectIssue(relatedIssue)}
                   >
-                    <span
-                      className="severity-dot"
-                      style={{ background: getSeverityColor(relatedIssue.severity) }}
-                    />
-                    <span className="related-text">{relatedIssue.title}</span>
+                    <div className="related-card-shine"></div>
+                    <div className="related-title">{relatedIssue.title}</div>
+                    <div className="related-type">{relatedIssue.type.replace(/_/g, ' ')}</div>
                   </div>
                 ))}
             </div>
